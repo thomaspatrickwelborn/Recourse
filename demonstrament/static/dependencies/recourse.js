@@ -1,53 +1,3 @@
-const defaultAccessor = ($target, $property) => {
-  if($property === undefined) { return $target }
-  else { return $target[$property] }
-};
-const getAccessor = ($target, $property) => {
-  if($property === undefined) { return $target }
-  else { return $target.get($property) }
-};
-var Accessors = {
-  default: defaultAccessor,
-  get: getAccessor,
-};
-
-function expandEvents($propEvents, $scopeKey = ':scope') {
-  if(
-    Array.isArray($propEvents) ||
-    $propEvents === undefined
-  ) { return $propEvents }
-  const propEvents = [];
-  for(const [
-    $propEventSettings, $propEventListener
-  ] of Object.entries($propEvents)) {
-    const propEventSettings = $propEventSettings.trim().split(' ');
-    let path, type, listener;
-    if(propEventSettings.length === 1) {
-      path = $scopeKey;
-      type = propEventSettings[0];
-    }
-    else if(propEventSettings.length > 1) {
-      path = propEventSettings[0];
-      type = propEventSettings[1];
-    }
-    if(Array.isArray($propEventListener)) {
-      listener = $propEventListener[0];
-      $propEventListener[1];
-    }
-    else {
-      listener = $propEventListener;
-    }
-    const propEvent = {
-      type,
-      path,
-      listener,
-      enable: false,
-    };
-    propEvents.push(propEvent);
-  }
-  return propEvents
-}
-
 const Primitives = {
   'string': String, 
   'number': Number, 
@@ -174,6 +124,24 @@ function expandTree($source, $property) {
   return target
 }
 
+function impandTree($source, $property) {
+  const typeOfProperty = typeOf($property);
+  const typeOfSource = typeOf($source);
+  if(
+    !['string', 'function'].includes(typeOfProperty) ||
+    !['array', 'object'].includes(typeOfSource)
+  ) { return $source }
+  let target = typedObjectLiteral($source);
+  for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
+    if(typeOfProperty === 'string') { target[$sourceKey] = get($property, $sourceValue); }
+    else if(typeOfProperty === 'function') { target[$sourceKey] = $property($sourceValue); }
+    if(target[$sourceKey] && typeof target[$sourceKey] === 'object') {
+      target[$sourceKey] = impandTree(target[$sourceKey], $property);
+    }
+  }
+  return target
+}
+
 var isArrayLike = ($source) => {
   let isArrayLike;
   const typeOfSource = typeOf($source);
@@ -195,23 +163,12 @@ var isArrayLike = ($source) => {
   return isArrayLike
 };
 
-function impandTree($source, $property) {
-  const typeOfProperty = typeOf($property);
-  const typeOfSource = typeOf($source);
-  if(
-    !['string', 'function'].includes(typeOfProperty) ||
-    !['array', 'object'].includes(typeOfSource)
-  ) { return $source }
-  let target = typedObjectLiteral($source);
-  for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
-    if(typeOfProperty === 'string') { target[$sourceKey] = get($property, $sourceValue); }
-    else if(typeOfProperty === 'function') { target[$sourceKey] = $property($sourceValue); }
-    if(target[$sourceKey] && typeof target[$sourceKey] === 'object') {
-      target[$sourceKey] = impandTree(target[$sourceKey], $property);
-    }
-  }
-  return target
-}
+const defaultAccessor = ($target, $property) => {
+  if($property === undefined) { return $target }
+  else { return $target[$property] }
+};
+var Accessors = {
+  default: defaultAccessor};
 
 const Options = {
   depth: 0,
@@ -355,5 +312,5 @@ function recursiveFreeze($target) {
   return Object.freeze($target)
 }
 
-export { Accessors as accessors, expandEvents, expandTree, impandTree, isArrayLike, propertyDirectory, recursiveAssign, recursiveAssignConcat, recursiveDefineProperties, recursiveDefineProperty, recursiveFreeze, recursiveGetOwnPropertyDescriptor, recursiveGetOwnPropertyDescriptors, regularExpressions, typeOf, typedObjectLiteral, index as variables };
+export { expandTree, impandTree, isArrayLike, propertyDirectory, recursiveAssign, recursiveAssignConcat, recursiveDefineProperties, recursiveDefineProperty, recursiveFreeze, recursiveGetOwnPropertyDescriptor, recursiveGetOwnPropertyDescriptors, regularExpressions, typeOf, typedObjectLiteral, index as variables };
 //# sourceMappingURL=recourse.js.map
