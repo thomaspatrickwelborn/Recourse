@@ -1,0 +1,20 @@
+{
+  "name": "recourse-demonstrament",
+  "license": "ISC",
+  "author": "Thomas Patrick Welborn",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "pm2 start ecosystem.config.cjs",
+    "restart": "pm2 restart ecosystem.config.cjs",
+    "stop": "pm2 stop ecosystem.config.cjs",
+    "delete": "pm2 delete ecosystem.config.cjs"
+  },
+  "dependencies": {
+    "document-process-manager": "^1.5.0"
+  },
+  "devDependencies": {
+    "chokidar": "^4.0.3",
+    "nodemon": "^3.1.9"
+  }
+}
