@@ -89,4 +89,102 @@ const objectAST = expandTree(object, ($value) => {
 }
 ```
 
+### `expandTree` Example 5
+```
+const object = {
+  propertyA: [
+    { propertyC: 3 },
+    { propertyC: 33 },
+    { propertyC: 333 },
+  ]
+}
+const objectAST = expandTree(object, 'value')
+```
+*objectAST*  
+```
+{
+  "propertyA": {
+    "value": [
+      {
+        "value": {
+          "propertyC": {
+            "value": 3
+          }
+        }
+      },
+      {
+        "value": {
+          "propertyC": {
+            "value": 33
+          }
+        }
+      },
+      {
+        "value": {
+          "propertyC": {
+            "value": 333
+          }
+        }
+      }
+    ]
+  }
+}
+```
 
+### `expandTree` Example 6
+```
+const object = {
+  propertyA: [
+    { propertyC: 3 },
+    { propertyC: 33 },
+    { propertyC: 333 },
+  ]
+}
+const objectAST = expandTree(object, ($value) => {
+  return { source: { value: $value } }
+})
+```
+*objectAST*  
+```
+{
+  "propertyA": {
+    "source": {
+      "value": [
+        {
+          "source": {
+            "value": {
+              "propertyC": {
+                "source": {
+                  "value": 3
+                }
+              }
+            }
+          }
+        },
+        {
+          "source": {
+            "value": {
+              "propertyC": {
+                "source": {
+                  "value": 33
+                }
+              }
+            }
+          }
+        },
+        {
+          "source": {
+            "value": {
+              "propertyC": {
+                "source": {
+                  "value": 333
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```

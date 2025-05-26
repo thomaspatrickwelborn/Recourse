@@ -106,19 +106,24 @@ function set($path, $source) {
   return target
 }
 
+const ValidPropertyTypes = ['string', 'function'];
 function expandTree($source, $property) {
   const typeOfProperty = typeOf($property);
   const typeOfSource = typeOf($source);
   if(
-    !['string', 'function'].includes(typeOfProperty) ||
-    !['array', 'object'].includes(typeOfSource)
+    !ValidPropertyTypes.includes(typeOfProperty) ||
+    !ObjectKeys.includes(typeOfSource)
   ) { return $source }
   let target = typedObjectLiteral($source);
   for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
-    if(typeOfProperty === 'string') { target[$sourceKey] = set($property, $sourceValue); }
-    else if(typeOfProperty === 'function') { target[$sourceKey] = $property($sourceValue); }
-    if(target[$sourceKey][$property] && typeof target[$sourceKey][$property] === 'object') {
-      target[$sourceKey][$property] = expandTree(target[$sourceKey][$property], $property);
+    const sourceValue = (
+      ObjectKeys.includes(typeOf($sourceValue))
+    ) ? expandTree($sourceValue, $property) : $sourceValue;
+    if(typeOfProperty === ValidPropertyTypes[0]) {
+      target[$sourceKey] = set($property, sourceValue);
+    }
+    else if(typeOfProperty === ValidPropertyTypes[1]) {
+      target[$sourceKey] = $property(sourceValue);
     }
   }
   return target
