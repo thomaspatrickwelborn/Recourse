@@ -13,7 +13,7 @@
  - `recursiveAssignConcat` Method
  - `recursiveDefineProperties` Method
  - `recursiveDefineProperty` Method
- - [`recursiveGetOwnPropertyDescriptors` Method](./document/methods/recursiveGetOwnPropertyDescriptors.md)
+ - [`recursiveGetOwnPropertyDescriptors` Method](./document/methods/recursive-get-own-property-descriptors.md)
  - `recursiveGetOwnPropertyDescriptor` Method
  - `regularExpressions` Method
  - `recursiveFreeze` Method
