@@ -5,6 +5,8 @@ const object = {
 const objectAST = expandTree(object, 'value')
 const objectString = JSON.stringify(object, null, 2)
 const objectASTString = JSON.stringify(objectAST, null, 2)
+console.log("-----------------------")
 console.log("Expand Tree | Example 1")
+console.log("-----------------------")
 console.log("object", objectString)
 console.log("objectAST", objectASTString)

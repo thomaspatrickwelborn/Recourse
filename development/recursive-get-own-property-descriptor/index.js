@@ -7,7 +7,7 @@ export default function recursiveGetOwnPropertyDescriptor($properties, $property
   const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey)
   if(options.type) { propertyDescriptor.type = typeOf(propertyDescriptor.value) }
   if(['array', 'object'].includes(typeOf(propertyDescriptor.value))) {
-    propertyDescriptor.value = recursiveGetOwnPropertyDescriptors(propertyDescriptor.value)
+    propertyDescriptor.value = recursiveGetOwnPropertyDescriptors(propertyDescriptor.value, options)
   }
   return propertyDescriptor
 }

@@ -7,6 +7,8 @@ const object = {
   ]
 }
 const objectAST = expandTree(object, 'value')
+console.log("-----------------------")
 console.log("Expand Tree | Example 5")
+console.log("-----------------------")
 console.log("object", JSON.stringify(object, null, 2))
 console.log("objectAST", JSON.stringify(objectAST, null, 2))

@@ -11,7 +11,7 @@ export default function recursiveDefineProperty($target, $propertyKey, $property
     const propertyValue = isArrayLike(Object.defineProperties(
       typedObjectLiteral(typeOfPropertyValue), $propertyDescriptor.value
     )) ? [] : {}
-    $propertyDescriptor.value = recursiveDefineProperties(propertyValue, $propertyDescriptor.value)
+    $propertyDescriptor.value = recursiveDefineProperties(propertyValue, $propertyDescriptor.value, options)
   }
   else if(
     options.typeCoercion && 

@@ -5,7 +5,7 @@ export default function recursiveDefineProperties($target, $propertyDescriptors,
   for(const [
     $propertyKey, $propertyDescriptor
   ] of Object.entries($propertyDescriptors)) {
-    recursiveDefineProperty($target, $propertyKey, $propertyDescriptor)
+    recursiveDefineProperty($target, $propertyKey, $propertyDescriptor, options)
   }
   return $target
 }

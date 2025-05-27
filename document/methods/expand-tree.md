@@ -1,7 +1,7 @@
-| [⁘ Recourse](../../README.md) | *`expandTree` Method* |
+| [⁘ Recourse](../../README.md) | *`expandTree`* |
 | :-- | :-- |
 
-# `expandTree` Method
+# `expandTree`
 Expand Object/Array property key/value pairs to abstract syntax tree (AST) where *source* property values become AST Node *target* property values. 
 
 ## `expandTree` Syntax
