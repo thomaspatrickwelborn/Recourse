@@ -1,1 +1,5 @@
-export default { type: false }
+export default {
+  parent: false,
+  path: false,
+  type: false,
+}

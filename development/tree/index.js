@@ -1,4 +1,3 @@
-import * as path from '../path/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import regularExpressions from '../regular-expressions/index.js'
 function get($path, $source) {
@@ -9,15 +8,17 @@ function get($path, $source) {
   return subtarget[key]
 }
 function set($path, $source) {
-  const {
-    keypaths, key, typeofRoot
-  } = path.parse($path)
-  const target = typedObjectLiteral(typeofRoot)
+  const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape))
+  const key = subpaths.pop()
+  const target = (key && !isNaN(key)) ? [] : {}
   let subtarget = target
-  for(const $subpath of keypaths) {
-    if(Number($subpath)) { subtarget[$subpath] = [] }
+  let subpathIndex = 0
+  while(subpathIndex < subpaths.length - 2) {
+    const $subpath = keypaths[subpathIndex]
+    if(isNaN($subpath)) { subtarget[$subpath] = {} }
     else { subtarget[$subpath] = {} }
     subtarget = subtarget[$subpath]
+    subpathIndex++
   }
   subtarget[key] = $source
   return target

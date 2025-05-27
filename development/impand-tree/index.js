@@ -1,5 +1,5 @@
 import * as Variables from '../variables/index.js'
-import * as Path from '../path/index.js'
+// import * as PropertyPath from '../property-path/index.js'
 import * as Tree from '../tree/index.js'
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'

@@ -11,7 +11,7 @@
  - `propertyDirectory` Method
  - `recursiveAssign` Method
  - `recursiveAssignConcat` Method
- - `recursiveDefineProperties` Method
+ - [`recursiveDefineProperties` Method](./document/methods/recursive-define-properties.md)
  - `recursiveDefineProperty` Method
  - [`recursiveGetOwnPropertyDescriptors` Method](./document/methods/recursive-get-own-property-descriptors.md)
  - `recursiveGetOwnPropertyDescriptor` Method

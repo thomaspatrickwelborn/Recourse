@@ -1,4 +1,4 @@
-| [⁘ Recourse](../../README.md) | *`expandTree`* |
+| [➲ Recourse](../../README.md) | *`expandTree`* |
 | :-- | :-- |
 
 # `expandTree`

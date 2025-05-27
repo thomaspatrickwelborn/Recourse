@@ -1,80 +1,73 @@
-| [➲ Recourse](../../README.md) | *`recursiveGetOwnPropertyDescriptors`* |
+| [➲ Recourse](../../README.md) | *`recursiveDefineProperties`* |
 | :-- | :-- |
 
-# `recursiveGetOwnPropertyDescriptors`
+# `recursiveDefineProperties`
 Returns object/array property descriptor abstract syntax tree (PDAST).  
 
 ## Syntax
 ```
-import { recursiveGetOwnPropertyDescriptors } from 'recourse'
-recursiveGetOwnPropertyDescriptors($source, $options)
+import { recursiveDefineProperties } from 'recourse'
+recursiveDefineProperties($target, $propertyDescriptors, $options)
 ```
-### `$source` Argument
+### `$target` Argument
 **Type**: `object`, `array`  
 **Required**: `true`  
-**Descript**: Object/Array property key/value pairs expand to AST.  
+**Descript**: Property definition target.  
+### `$propertyDescriptors` Argument
+**Type**: `object`, `array`  
+**Required**: `true`  
+**Descript**: Property descriptors.  
 ### `$options` Argument
 **Type**: `object`  
 ```
-{ type: false }
+{ typeCoercion: false }
 ```
-#### `$options.type`
+#### `$options.typeCoercion`
 **Type**: `boolean`  
 **Default**: `false`  
-**Descript**: When `$options.type` is:  
- - `true`: Property descriptor value's `type` stored.  
- - `false`: **No** property desccriptor value's `type` stored. 
-## `recursiveGetOwnPropertyDescriptors` Examples
-### `recursiveGetOwnPropertyDescriptors` Example 1
+**Descript**: When `$options.typeCoercion` is:  
+ - `true`: Property descriptor value stored as type.  
+ - `false`: Property descriptor value stored as provided. 
+## `recursiveDefineProperties` Examples
+### `recursiveDefineProperties` Example 1
 ```
-const object = {
-  propertyA: 1
-}
-const objectPropertyDescriptorAST = recursiveGetOwnPropertyDescriptors(object)
-```
-*objectAST*  
-```
-{
+const object = recursiveDefineProperties({}, {
   "propertyA": {
     "value": 1,
     "writable": true,
     "enumerable": true,
     "configurable": true
   }
-}
+})
 ```
-### `recursiveGetOwnPropertyDescriptors` Example 2
-```
-const objectPropertyDescriptorAST = recursiveGetOwnPropertyDescriptors(object, { type: true })
-const objectPropertyDescriptorASTString = JSON.stringify(objectPropertyDescriptorAST, null, 2)
-```
-*objectAST*  
+*object*  
 ```
 {
+  propertyA: 1
+}
+```
+### `recursiveDefineProperties` Example 2
+```
+const objectPropertyDescriptorAST = recursiveDefineProperties({}, {
   "propertyA": {
-    "value": 1,
+    "value": "1",
     "writable": true,
     "enumerable": true,
     "configurable": true,
     "type": "number"
   }
+}, { typeCoercion: true })
+```
+*object*  
+```
+{
+  propertyA: 1
 }
 ```
 
-### `recursiveGetOwnPropertyDescriptors` Example 3
+### `recursiveDefineProperties` Example 3
 ```
-const object = {
-  propertyA: [
-    { propertyC: 3 },
-    { propertyC: 33 },
-    { propertyC: 333 },
-  ]
-}
-const objectAST = recursiveGetOwnPropertyDescriptors(object)
-```
-*objectAST*  
-```
-{
+const object = recursiveDefineProperties({}, {
   "propertyA": {
     "value": {
       "0": {
@@ -127,30 +120,29 @@ const objectAST = recursiveGetOwnPropertyDescriptors(object)
     "enumerable": true,
     "configurable": true
   }
-}
+})
 ```
-
-
-### `recursiveGetOwnPropertyDescriptors` Example 4
+*object*  
 ```
-const object = {
+{
   propertyA: [
     { propertyC: 3 },
     { propertyC: 33 },
     { propertyC: 333 },
   ]
 }
-const objectAST = recursiveGetOwnPropertyDescriptors(object, { type: true })
 ```
-*objectAST*  
+
+
+### `recursiveDefineProperties` Example 4
 ```
-{
+const objectAST = recursiveDefineProperties({}, {
   "propertyA": {
     "value": {
       "0": {
         "value": {
           "propertyC": {
-            "value": 3,
+            "value": "3",
             "writable": true,
             "enumerable": true,
             "configurable": true,
@@ -165,7 +157,7 @@ const objectAST = recursiveGetOwnPropertyDescriptors(object, { type: true })
       "1": {
         "value": {
           "propertyC": {
-            "value": 33,
+            "value": "33",
             "writable": true,
             "enumerable": true,
             "configurable": true,
@@ -180,7 +172,7 @@ const objectAST = recursiveGetOwnPropertyDescriptors(object, { type: true })
       "2": {
         "value": {
           "propertyC": {
-            "value": 333,
+            "value": "333",
             "writable": true,
             "enumerable": true,
             "configurable": true,
@@ -205,5 +197,15 @@ const objectAST = recursiveGetOwnPropertyDescriptors(object, { type: true })
     "configurable": true,
     "type": "array"
   }
+}, { type: true })
+```
+*object*  
+```
+{
+  propertyA: [
+    { propertyC: 3 },
+    { propertyC: 33 },
+    { propertyC: 333 },
+  ]
 }
 ```
