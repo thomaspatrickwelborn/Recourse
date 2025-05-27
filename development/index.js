@@ -1,5 +1,3 @@
-// import accessors from './accessors/index.js'
-// import expandEvents from './expand-events/index.js'
 import expandTree from './expand-tree/index.js'
 import impandTree from './impand-tree/index.js'
 import isArrayLike from './is-array-like/index.js'
@@ -17,8 +15,6 @@ import typeOf from './type-of/index.js'
 import * as variables from './variables/index.js'
 
 export {
-  // accessors, 
-  // expandEvents, 
   expandTree, 
   impandTree, 
   isArrayLike, 

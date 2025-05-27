@@ -1,6 +1,6 @@
 {
   "name": "recourse",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Early Bird Gets The Wormhole",
   "homepage": "https://github.com/thomaspatrickwelborn/recourse#readme",
   "bugs": {
@@ -15,7 +15,9 @@
   "type": "module",
   "exports": {
     ".": "./distributement/recourse.js",
-    "./development": "./development/index.js"
+    "./development": "./development/index.js",
+    "./distributement/recourse.js": "./distributement/recourse.js",
+    "./distributement/recourse.js.map": "./distributement/recourse.js.map"
   },
   "scripts": {
     "demonstrate:start": "concurrently \"npm run start --workspace development\" \"npm run start --workspace demonstrament\"",

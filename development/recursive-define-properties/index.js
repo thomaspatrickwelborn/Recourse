@@ -1,5 +1,7 @@
 import recursiveDefineProperty from '../recursive-define-property/index.js'
-export default function recursiveDefineProperties($target, $propertyDescriptors) {
+import Options from './options.js'
+export default function recursiveDefineProperties($target, $propertyDescriptors, $options) {
+  const options = Object.assign({}, Options, $options)
   for(const [
     $propertyKey, $propertyDescriptor
   ] of Object.entries($propertyDescriptors)) {
