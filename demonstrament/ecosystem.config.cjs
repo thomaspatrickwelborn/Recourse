@@ -10,7 +10,7 @@ const EcosystemConfig = {
         "dpm.config.documents.js",
         "ecosystem.config.cjs",
         "../node_modules/document-process-manager/development",
-        "../distributement",
+        // "../distributement",
       ],
       ignoreWatch: [
         "!../node_modules/document-process-manager/development",
