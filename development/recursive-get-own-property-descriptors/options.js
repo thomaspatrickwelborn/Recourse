@@ -1,5 +1,7 @@
 export default {
-  parent: false,
+  delimiter: '.',
+  maxDepth: 10,
   path: false,
+  retrocursion: false,
   type: false,
 }

@@ -249,15 +249,29 @@ function recursiveAssignConcat($target, ...$sources) {
   return $target
 }
 
+var Settings = {
+  depth: 0,
+  path: null,
+  ancestors: [],
+};
+
 var Options$1 = {
-  parent: false,
+  delimiter: '.',
+  maxDepth: 10,
   path: false,
+  retrocursion: false,
   type: false,
 };
 
 function recursiveGetOwnPropertyDescriptor($properties, $propertyKey, $options) {
-  const options = Object.assign({}, Options$1, $options);
+  const options = Object.assign({}, Settings, Options$1, $options);
+  if(!options.ancestors.includes($properties)) { options.ancestors.unshift($properties); }
   const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey);
+  if(!options.retrocursion && options.ancestors.includes(propertyDescriptor.value)) { return }
+  if(options.path) {
+    options.path = (options.path) ? [options.path, $propertyKey].join(options.delimiter) : $propertyKey;
+    propertyDescriptor.path = options.path;
+  }
   if(options.type) { propertyDescriptor.type = typeOf(propertyDescriptor.value); }
   if(['array', 'object'].includes(typeOf(propertyDescriptor.value))) {
     propertyDescriptor.value = recursiveGetOwnPropertyDescriptors(propertyDescriptor.value, options);
@@ -266,10 +280,13 @@ function recursiveGetOwnPropertyDescriptor($properties, $propertyKey, $options) 
 }
 
 function recursiveGetOwnPropertyDescriptors($properties, $options) {
-  const options = Object.assign({}, Options$1, $options);
   const propertyDescriptors = {};
-  for(const $propertyKey of Object.keys(Object.getOwnPropertyDescriptors($properties))) {
-    propertyDescriptors[$propertyKey] = recursiveGetOwnPropertyDescriptor($properties, $propertyKey, options);
+  const options = Object.assign({}, Settings, Options$1, $options);
+  if(options.depth > options.maxDepth) { return propertyDescriptors }
+  else { options.depth++; }
+  for(const [$propertyKey, $propertyDescriptor] of Object.entries(Object.getOwnPropertyDescriptors($properties))) {
+    const propertyDescriptor = recursiveGetOwnPropertyDescriptor($properties, $propertyKey, options);
+    if(propertyDescriptor !== undefined) { propertyDescriptors[$propertyKey] = propertyDescriptor; }
   }
   return propertyDescriptors
 }
@@ -309,6 +326,7 @@ function recursiveDefineProperties($target, $propertyDescriptors, $options) {
 
 function recursiveFreeze($target) {
   for(const [$propertyKey, $propertyValue] of Object.entries($target)) {
+    if(Object.is($propertyValue, $target)) { continue }
     if($propertyValue && typeof $propertyValue === 'object') {
       recursiveFreeze($propertyValue);
     }

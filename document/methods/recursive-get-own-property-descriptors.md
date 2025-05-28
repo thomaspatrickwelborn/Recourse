@@ -18,25 +18,60 @@ recursiveGetOwnPropertyDescriptors($source, $options)
 ```
 { type: false }
 ```
-#### `$options.type`
+
+#### `$options.delimiter`
+**Type**: `string`  
+**Default**: `.`  
+**Descript**: Property path separator.  
+
+#### `$options.maxDepth`
+**Type**: `number`  
+**Default**: `10`  
+**Descript**: Maximum depth of subproperty descriptors.  
+
+#### `$options.path`
+**Type**: `boolean`  
+**Default**: `false`  
+**Descript**: When `$options.path` is:  
+ - `true`: Property descriptor value's `path` stored.  
+ - `false`: **No** property descriptor value's `path` stored. 
+
+#### `$options.retrocursion`
 **Type**: `boolean`  
 **Default**: `false`  
 **Descript**: When `$options.type` is:  
  - `true`: Property descriptor value's `type` stored.  
- - `false`: **No** property desccriptor value's `type` stored. 
+ - `false`: **No** property descriptor value's `type` stored. 
+
+#### `$options.type`
+**Type**: `boolean`  
+**Default**: `true`  
+**Descript**: When `$options.type` is:  
+ - `true`: Property descriptor value's `type` stored.  
+ - `false`: **No** property descriptor value's `type` stored. 
+
 ## `recursiveGetOwnPropertyDescriptors` Examples
 ### `recursiveGetOwnPropertyDescriptors` Example 1
 ```
 const object = {
-  propertyA: 1
+  propertyA: {
+    propertyB: "2"
+  }
 }
-const objectPropertyDescriptorAST = recursiveGetOwnPropertyDescriptors(object)
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object)
 ```
-*objectAST*  
+*objectPDAST*  
 ```
 {
   "propertyA": {
-    "value": 1,
+    "value": {
+      "propertyB": {
+        "value": "2",
+        "writable": true,
+        "enumerable": true,
+        "configurable": true
+      }
+    },
     "writable": true,
     "enumerable": true,
     "configurable": true
@@ -45,18 +80,27 @@ const objectPropertyDescriptorAST = recursiveGetOwnPropertyDescriptors(object)
 ```
 ### `recursiveGetOwnPropertyDescriptors` Example 2
 ```
-const objectPropertyDescriptorAST = recursiveGetOwnPropertyDescriptors(object, { type: true })
-const objectPropertyDescriptorASTString = JSON.stringify(objectPropertyDescriptorAST, null, 2)
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  type: true
+})
 ```
-*objectAST*  
+*objectPDAST*  
 ```
 {
   "propertyA": {
-    "value": 1,
+    "value": {
+      "propertyB": {
+        "value": "2",
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "type": "string"
+      }
+    },
     "writable": true,
     "enumerable": true,
     "configurable": true,
-    "type": "number"
+    "type": "object"
   }
 }
 ```
@@ -70,79 +114,11 @@ const object = {
     { propertyC: 333 },
   ]
 }
-const objectAST = recursiveGetOwnPropertyDescriptors(object)
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  type: true, 
+})
 ```
-*objectAST*  
-```
-{
-  "propertyA": {
-    "value": {
-      "0": {
-        "value": {
-          "propertyC": {
-            "value": 3,
-            "writable": true,
-            "enumerable": true,
-            "configurable": true
-          }
-        },
-        "writable": true,
-        "enumerable": true,
-        "configurable": true
-      },
-      "1": {
-        "value": {
-          "propertyC": {
-            "value": 33,
-            "writable": true,
-            "enumerable": true,
-            "configurable": true
-          }
-        },
-        "writable": true,
-        "enumerable": true,
-        "configurable": true
-      },
-      "2": {
-        "value": {
-          "propertyC": {
-            "value": 333,
-            "writable": true,
-            "enumerable": true,
-            "configurable": true
-          }
-        },
-        "writable": true,
-        "enumerable": true,
-        "configurable": true
-      },
-      "length": {
-        "value": 3,
-        "writable": true,
-        "enumerable": false,
-        "configurable": false
-      }
-    },
-    "writable": true,
-    "enumerable": true,
-    "configurable": true
-  }
-}
-```
-
-
-### `recursiveGetOwnPropertyDescriptors` Example 4
-```
-const object = {
-  propertyA: [
-    { propertyC: 3 },
-    { propertyC: 33 },
-    { propertyC: 333 },
-  ]
-}
-const objectAST = recursiveGetOwnPropertyDescriptors(object, { type: true })
-```
-*objectAST*  
+*objectPDAST*  
 ```
 {
   "propertyA": {
@@ -204,6 +180,246 @@ const objectAST = recursiveGetOwnPropertyDescriptors(object, { type: true })
     "enumerable": true,
     "configurable": true,
     "type": "array"
+  }
+}
+```
+
+
+### `recursiveGetOwnPropertyDescriptors` Example 4
+```
+const object = {
+  propertyA: [
+    { propertyC: 3 },
+    { propertyC: 33 },
+    { propertyC: 333 },
+  ]
+}
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  path: true,
+  type: true
+})
+```
+*objectPDAST*  
+```
+{
+  "propertyA": {
+    "value": {
+      "0": {
+        "value": {
+          "propertyC": {
+            "value": 3,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "true.propertyA.0.propertyC",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "true.propertyA.0",
+        "type": "object"
+      },
+      "1": {
+        "value": {
+          "propertyC": {
+            "value": 33,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "true.propertyA.1.propertyC",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "true.propertyA.1",
+        "type": "object"
+      },
+      "2": {
+        "value": {
+          "propertyC": {
+            "value": 333,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "true.propertyA.2.propertyC",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "true.propertyA.2",
+        "type": "object"
+      },
+      "length": {
+        "value": 3,
+        "writable": true,
+        "enumerable": false,
+        "configurable": false,
+        "path": "true.propertyA.length",
+        "type": "number"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "true.propertyA",
+    "type": "array"
+  }
+}
+```
+
+### `recursiveGetOwnPropertyDescriptors` Example 5
+```
+const object = {
+  propertyA: {
+    propertyB: 2,
+  }
+}
+object.propertyA.propertyC = object.propertyA
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  path: true,
+  type: true,
+  retrocursion: false,
+})
+```
+*objectPDAST*  
+```
+{
+  "propertyA": {
+    "value": {
+      "propertyB": {
+        "value": 2,
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "true.propertyA.propertyB",
+        "type": "number"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "true.propertyA",
+    "type": "object"
+  }
+}
+```
+
+### `recursiveGetOwnPropertyDescriptors` Example 6
+```
+const object = {
+  propertyA: {
+    propertyB: 2,
+  }
+}
+object.propertyA.propertyC = object.propertyA
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  path: true,
+  type: true,
+  retrocursion: true,
+  maxDepth: 5,
+})
+```
+*objectPDAST*  
+```
+{
+  "propertyA": {
+    "value": {
+      "propertyB": {
+        "value": 2,
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "true.propertyA.propertyB",
+        "type": "number"
+      },
+      "propertyC": {
+        "value": {
+          "propertyB": {
+            "value": 2,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "true.propertyA.propertyC.propertyB",
+            "type": "number"
+          },
+          "propertyC": {
+            "value": {
+              "propertyB": {
+                "value": 2,
+                "writable": true,
+                "enumerable": true,
+                "configurable": true,
+                "path": "true.propertyA.propertyC.propertyC.propertyB",
+                "type": "number"
+              },
+              "propertyC": {
+                "value": {
+                  "propertyB": {
+                    "value": 2,
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "true.propertyA.propertyC.propertyC.propertyC.propertyB",
+                    "type": "number"
+                  },
+                  "propertyC": {
+                    "value": {
+                      "propertyB": {
+                        "value": 2,
+                        "writable": true,
+                        "enumerable": true,
+                        "configurable": true,
+                        "path": "true.propertyA.propertyC.propertyC.propertyC.propertyC.propertyB",
+                        "type": "number"
+                      },
+                      "propertyC": {
+                        "value": {},
+                        "writable": true,
+                        "enumerable": true,
+                        "configurable": true,
+                        "path": "true.propertyA.propertyC.propertyC.propertyC.propertyC.propertyC",
+                        "type": "object"
+                      }
+                    },
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "true.propertyA.propertyC.propertyC.propertyC.propertyC",
+                    "type": "object"
+                  }
+                },
+                "writable": true,
+                "enumerable": true,
+                "configurable": true,
+                "path": "true.propertyA.propertyC.propertyC.propertyC",
+                "type": "object"
+              }
+            },
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "true.propertyA.propertyC.propertyC",
+            "type": "object"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "true.propertyA.propertyC",
+        "type": "object"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "true.propertyA",
+    "type": "object"
   }
 }
 ```
