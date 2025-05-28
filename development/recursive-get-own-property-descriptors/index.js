@@ -4,7 +4,7 @@ import Options from './options.js'
 export default function recursiveGetOwnPropertyDescriptors($properties, $options) {
   const propertyDescriptors = {}
   const options = Object.assign({}, Settings, Options, $options)
-  if(options.depth > options.maxDepth) { return propertyDescriptors }
+  if(options.depth >= options.maxDepth) { return propertyDescriptors }
   else { options.depth++ }
   for(const [$propertyKey, $propertyDescriptor] of Object.entries(Object.getOwnPropertyDescriptors($properties))) {
     const propertyDescriptor = recursiveGetOwnPropertyDescriptor($properties, $propertyKey, options)

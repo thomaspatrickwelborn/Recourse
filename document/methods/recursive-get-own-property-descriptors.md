@@ -16,7 +16,13 @@ recursiveGetOwnPropertyDescriptors($source, $options)
 ### `$options` Argument
 **Type**: `object`  
 ```
-{ type: false }
+{
+  delimiter: '.',
+  maxDepth: 10,
+  path: false,
+  retrocursion: false,
+  type: false,
+}
 ```
 
 #### `$options.delimiter`
@@ -80,6 +86,11 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object)
 ```
 ### `recursiveGetOwnPropertyDescriptors` Example 2
 ```
+const object = {
+  propertyA: {
+    propertyB: "2"
+  }
+}
 const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
   type: true
 })
@@ -181,7 +192,6 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
     "configurable": true,
     "type": "array"
   }
-}
 ```
 
 
@@ -211,14 +221,14 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
             "writable": true,
             "enumerable": true,
             "configurable": true,
-            "path": "true.propertyA.0.propertyC",
+            "path": "propertyA.0.propertyC",
             "type": "number"
           }
         },
         "writable": true,
         "enumerable": true,
         "configurable": true,
-        "path": "true.propertyA.0",
+        "path": "propertyA.0",
         "type": "object"
       },
       "1": {
@@ -228,14 +238,14 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
             "writable": true,
             "enumerable": true,
             "configurable": true,
-            "path": "true.propertyA.1.propertyC",
+            "path": "propertyA.1.propertyC",
             "type": "number"
           }
         },
         "writable": true,
         "enumerable": true,
         "configurable": true,
-        "path": "true.propertyA.1",
+        "path": "propertyA.1",
         "type": "object"
       },
       "2": {
@@ -245,14 +255,14 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
             "writable": true,
             "enumerable": true,
             "configurable": true,
-            "path": "true.propertyA.2.propertyC",
+            "path": "propertyA.2.propertyC",
             "type": "number"
           }
         },
         "writable": true,
         "enumerable": true,
         "configurable": true,
-        "path": "true.propertyA.2",
+        "path": "propertyA.2",
         "type": "object"
       },
       "length": {
@@ -260,14 +270,14 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
         "writable": true,
         "enumerable": false,
         "configurable": false,
-        "path": "true.propertyA.length",
+        "path": "propertyA.length",
         "type": "number"
       }
     },
     "writable": true,
     "enumerable": true,
     "configurable": true,
-    "path": "true.propertyA",
+    "path": "propertyA",
     "type": "array"
   }
 }
@@ -297,14 +307,14 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
         "writable": true,
         "enumerable": true,
         "configurable": true,
-        "path": "true.propertyA.propertyB",
+        "path": "propertyA.propertyB",
         "type": "number"
       }
     },
     "writable": true,
     "enumerable": true,
     "configurable": true,
-    "path": "true.propertyA",
+    "path": "propertyA",
     "type": "object"
   }
 }
@@ -335,7 +345,7 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
         "writable": true,
         "enumerable": true,
         "configurable": true,
-        "path": "true.propertyA.propertyB",
+        "path": "propertyA.propertyB",
         "type": "number"
       },
       "propertyC": {
@@ -345,7 +355,7 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
             "writable": true,
             "enumerable": true,
             "configurable": true,
-            "path": "true.propertyA.propertyC.propertyB",
+            "path": "propertyA.propertyC.propertyB",
             "type": "number"
           },
           "propertyC": {
@@ -355,7 +365,7 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
                 "writable": true,
                 "enumerable": true,
                 "configurable": true,
-                "path": "true.propertyA.propertyC.propertyC.propertyB",
+                "path": "propertyA.propertyC.propertyC.propertyB",
                 "type": "number"
               },
               "propertyC": {
@@ -365,60 +375,348 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
                     "writable": true,
                     "enumerable": true,
                     "configurable": true,
-                    "path": "true.propertyA.propertyC.propertyC.propertyC.propertyB",
+                    "path": "propertyA.propertyC.propertyC.propertyC.propertyB",
                     "type": "number"
                   },
                   "propertyC": {
-                    "value": {
-                      "propertyB": {
-                        "value": 2,
-                        "writable": true,
-                        "enumerable": true,
-                        "configurable": true,
-                        "path": "true.propertyA.propertyC.propertyC.propertyC.propertyC.propertyB",
-                        "type": "number"
-                      },
-                      "propertyC": {
-                        "value": {},
-                        "writable": true,
-                        "enumerable": true,
-                        "configurable": true,
-                        "path": "true.propertyA.propertyC.propertyC.propertyC.propertyC.propertyC",
-                        "type": "object"
-                      }
-                    },
+                    "value": {},
                     "writable": true,
                     "enumerable": true,
                     "configurable": true,
-                    "path": "true.propertyA.propertyC.propertyC.propertyC.propertyC",
+                    "path": "propertyA.propertyC.propertyC.propertyC.propertyC",
                     "type": "object"
                   }
                 },
                 "writable": true,
                 "enumerable": true,
                 "configurable": true,
-                "path": "true.propertyA.propertyC.propertyC.propertyC",
+                "path": "propertyA.propertyC.propertyC.propertyC",
                 "type": "object"
               }
             },
             "writable": true,
             "enumerable": true,
             "configurable": true,
-            "path": "true.propertyA.propertyC.propertyC",
+            "path": "propertyA.propertyC.propertyC",
             "type": "object"
           }
         },
         "writable": true,
         "enumerable": true,
         "configurable": true,
-        "path": "true.propertyA.propertyC",
+        "path": "propertyA.propertyC",
         "type": "object"
       }
     },
     "writable": true,
     "enumerable": true,
     "configurable": true,
-    "path": "true.propertyA",
+    "path": "propertyA",
+    "type": "object"
+  }
+}
+```
+
+### `recursiveGetOwnPropertyDescriptors` Example 7
+```
+const object = {
+  propertyA: {
+    propertyB: 2,
+  },
+  propertyC: {
+    propertyD: 4
+  }
+}
+object.propertyA.propertyC = object.propertyC
+object.propertyC.propertyA = object.propertyA
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  path: true,
+  type: true,
+  retrocursion: false,
+  maxDepth: 5,
+})
+const objectPDASTString = JSON.stringify(objectPDAST, null, 2)
+```
+***objectPDAST***  
+```
+{
+  "propertyA": {
+    "value": {
+      "propertyB": {
+        "value": 2,
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.propertyB",
+        "type": "number"
+      },
+      "propertyC": {
+        "value": {
+          "propertyD": {
+            "value": 4,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyA.propertyC.propertyD",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.propertyC",
+        "type": "object"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "propertyA",
+    "type": "object"
+  },
+  "propertyC": {
+    "value": {
+      "propertyD": {
+        "value": 4,
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyC.propertyD",
+        "type": "number"
+      },
+      "propertyA": {
+        "value": {
+          "propertyB": {
+            "value": 2,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyC.propertyA.propertyB",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyC.propertyA",
+        "type": "object"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "propertyC",
+    "type": "object"
+  }
+}
+```
+
+### `recursiveGetOwnPropertyDescriptors` Example 8
+```
+const object = {
+  propertyA: {},
+}
+object.propertyA.root = object // NO
+object.propertyA.parent = object.propertyA // No
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  path: true,
+  type: true,
+  retrocursion: false,
+  maxDepth: 5,
+})
+```
+***objectPDAST***  
+```
+{
+  "propertyA": {
+    "value": {},
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "propertyA",
+    "type": "object"
+  }
+}
+```
+
+### `recursiveGetOwnPropertyDescriptors` Example 9
+```
+const object = {
+  propertyA: {},
+}
+object.propertyA.root = object
+object.propertyA.parent = object.propertyA
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  path: true,
+  type: true,
+  retrocursion: true,
+  maxDepth: 5,
+})
+```
+***objectPDAST***  
+```
+{
+  "propertyA": {
+    "value": {
+      "root": {
+        "value": {
+          "propertyA": {
+            "value": {
+              "root": {
+                "value": {
+                  "propertyA": {
+                    "value": {},
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "propertyA.root.propertyA.root.propertyA",
+                    "type": "object"
+                  }
+                },
+                "writable": true,
+                "enumerable": true,
+                "configurable": true,
+                "path": "propertyA.root.propertyA.root",
+                "type": "object"
+              },
+              "parent": {
+                "value": {
+                  "root": {
+                    "value": {},
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "propertyA.root.propertyA.parent.root",
+                    "type": "object"
+                  },
+                  "parent": {
+                    "value": {},
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "propertyA.root.propertyA.parent.parent",
+                    "type": "object"
+                  }
+                },
+                "writable": true,
+                "enumerable": true,
+                "configurable": true,
+                "path": "propertyA.root.propertyA.parent",
+                "type": "object"
+              }
+            },
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyA.root.propertyA",
+            "type": "object"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.root",
+        "type": "object"
+      },
+      "parent": {
+        "value": {
+          "root": {
+            "value": {
+              "propertyA": {
+                "value": {
+                  "root": {
+                    "value": {},
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "propertyA.parent.root.propertyA.root",
+                    "type": "object"
+                  },
+                  "parent": {
+                    "value": {},
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "propertyA.parent.root.propertyA.parent",
+                    "type": "object"
+                  }
+                },
+                "writable": true,
+                "enumerable": true,
+                "configurable": true,
+                "path": "propertyA.parent.root.propertyA",
+                "type": "object"
+              }
+            },
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyA.parent.root",
+            "type": "object"
+          },
+          "parent": {
+            "value": {
+              "root": {
+                "value": {
+                  "propertyA": {
+                    "value": {},
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "propertyA.parent.parent.root.propertyA",
+                    "type": "object"
+                  }
+                },
+                "writable": true,
+                "enumerable": true,
+                "configurable": true,
+                "path": "propertyA.parent.parent.root",
+                "type": "object"
+              },
+              "parent": {
+                "value": {
+                  "root": {
+                    "value": {},
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "propertyA.parent.parent.parent.root",
+                    "type": "object"
+                  },
+                  "parent": {
+                    "value": {},
+                    "writable": true,
+                    "enumerable": true,
+                    "configurable": true,
+                    "path": "propertyA.parent.parent.parent.parent",
+                    "type": "object"
+                  }
+                },
+                "writable": true,
+                "enumerable": true,
+                "configurable": true,
+                "path": "propertyA.parent.parent.parent",
+                "type": "object"
+              }
+            },
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyA.parent.parent",
+            "type": "object"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.parent",
+        "type": "object"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "propertyA",
     "type": "object"
   }
 }

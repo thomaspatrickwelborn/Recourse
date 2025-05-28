@@ -14,3 +14,20 @@ console.log("Recursive Get Own Property Descriptors | Example 2")
 console.log("--------------------------------------------------")
 console.log('object', objectString)
 console.log("objectPDASTString", objectPDASTString)
+console.log("pass", `{
+  "propertyA": {
+    "value": {
+      "propertyB": {
+        "value": "2",
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "type": "string"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "type": "object"
+  }
+}` === objectPDASTString)

@@ -6,14 +6,84 @@ const object = {
     { propertyC: 333 },
   ]
 }
-const PDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
   path: true,
   type: true
 })
 const objectString = JSON.stringify(object, null, 2)
-const PDASTString = JSON.stringify(PDAST, null, 2)
+const objectPDASTString = JSON.stringify(objectPDAST, null, 2)
 console.log("--------------------------------------------------")
 console.log("Recursive Get Own Property Descriptors | Example 4")
 console.log("--------------------------------------------------")
 console.log('object', objectString)
-console.log("PDASTString", PDASTString)
+console.log("objectPDASTString", objectPDASTString)
+console.log("pass", `{
+  "propertyA": {
+    "value": {
+      "0": {
+        "value": {
+          "propertyC": {
+            "value": 3,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyA.0.propertyC",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.0",
+        "type": "object"
+      },
+      "1": {
+        "value": {
+          "propertyC": {
+            "value": 33,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyA.1.propertyC",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.1",
+        "type": "object"
+      },
+      "2": {
+        "value": {
+          "propertyC": {
+            "value": 333,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyA.2.propertyC",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.2",
+        "type": "object"
+      },
+      "length": {
+        "value": 3,
+        "writable": true,
+        "enumerable": false,
+        "configurable": false,
+        "path": "propertyA.length",
+        "type": "number"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "propertyA",
+    "type": "array"
+  }
+}` === objectPDASTString)
