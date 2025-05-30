@@ -1,4 +1,4 @@
-import { recursiveFreeze, recursiveGetOwnPropertyDescriptors } from '/dependencies/recourse.js'
+import { recursiveGetOwnPropertyDescriptors } from '/dependencies/recourse.js'
 const object = {
   propertyA: {},
 }

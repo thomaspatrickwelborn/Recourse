@@ -8,6 +8,7 @@ export default function recursiveGetOwnPropertyDescriptor($properties, $property
     ancestors: Object.assign([], $options.ancestors)
   })
   const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey)
+  if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
   if(!options.ancestors.includes($properties)) { options.ancestors.unshift($properties) }
   if(!options.retrocursion && options.ancestors.includes(propertyDescriptor.value)) { return }
   if(options.path) {
@@ -15,6 +16,8 @@ export default function recursiveGetOwnPropertyDescriptor($properties, $property
     propertyDescriptor.path = options.path
   }
   if(options.type) { propertyDescriptor.type = typeOf(propertyDescriptor.value) }
+  if(options.frozen) { propertyDescriptor.frozen = Object.isFrozen(propertyDescriptor.value) }
+  if(options.sealed) { propertyDescriptor.sealed = Object.isSealed(propertyDescriptor.value) }
   if(['array', 'object'].includes(typeOf(propertyDescriptor.value))) {
     propertyDescriptor.value = recursiveGetOwnPropertyDescriptors(propertyDescriptor.value, options)
   }

@@ -22,5 +22,7 @@ export default function recursiveDefineProperty($target, $propertyKey, $property
     propertyDescriptor.value = Variables.Primitives[propertyDescriptor.type](propertyDescriptor.value)
   }
   Object.defineProperty($target, $propertyKey, propertyDescriptor)
+  if($propertyDescriptor.sealed) { Object.seal($target[$propertyKey]) }
+  if($propertyDescriptor.frozen) { Object.freeze($target[$propertyKey]) }
   return $target
 }

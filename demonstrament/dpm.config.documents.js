@@ -3,7 +3,7 @@ import certificates from './certificates.js'
 export default {
   name: "Recourse | Demonstrament",
   inspector: {
-    port: 9245,
+    port: 9247,
     host: "127.0.0.1",
   },
   server: {

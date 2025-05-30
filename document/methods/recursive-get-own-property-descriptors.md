@@ -19,8 +19,10 @@ recursiveGetOwnPropertyDescriptors($source, $options)
 {
   delimiter: '.',
   maxDepth: 10,
+  nonenumerable: true,
   path: false,
   retrocursion: false,
+  sealed: false,
   type: false,
 }
 ```
@@ -30,31 +32,50 @@ recursiveGetOwnPropertyDescriptors($source, $options)
 **Default**: `.`  
 **Descript**: Property path separator.  
 
+#### `$options.frozen`
+**Type**: `boolean`  
+**Default**: `false`  
+**Descript**: When `$options.frozen` is:  
+ - `true`: Property descriptor value's `isSealed` state stored.  
+ - `false`: Property descriptor value's `isSealed` state **NOT** stored. 
+
 #### `$options.maxDepth`
 **Type**: `number`  
 **Default**: `10`  
-**Descript**: Maximum depth of subproperty descriptors.  
+**Descript**: Maximum depth of subproperty descriptors. 
+
+#### `$options.nonenumerable`
+**Type**: `boolean`  
+**Default**: `true`  
+**Descript**: Include nonenumerable properties.  
 
 #### `$options.path`
 **Type**: `boolean`  
 **Default**: `false`  
 **Descript**: When `$options.path` is:  
  - `true`: Property descriptor value's `path` stored.  
- - `false`: **No** property descriptor value's `path` stored. 
+ - `false`: Property descriptor value's `path` **NOT** stored. 
 
 #### `$options.retrocursion`
 **Type**: `boolean`  
 **Default**: `false`  
 **Descript**: When `$options.type` is:  
- - `true`: Property descriptor value's `type` stored.  
- - `false`: **No** property descriptor value's `type` stored. 
+ - `true`: Ancestor object property descriptors included in property descriptor tree.  
+ - `false`: Ancestor object property descriptors **NOT** included in property descriptor tree. 
+
+#### `$options.sealed`
+**Type**: `boolean`  
+**Default**: `false`  
+**Descript**: When `$options.sealed` is:  
+ - `true`: Property descriptor value's `isSealed` state stored.  
+ - `false`: Property descriptor value's `isSealed` state **NOT** stored. 
 
 #### `$options.type`
 **Type**: `boolean`  
 **Default**: `true`  
 **Descript**: When `$options.type` is:  
  - `true`: Property descriptor value's `type` stored.  
- - `false`: **No** property descriptor value's `type` stored. 
+ - `false`: Property descriptor value's `type` **NOT** stored. 
 
 ## `recursiveGetOwnPropertyDescriptors` Examples
 ### `recursiveGetOwnPropertyDescriptors` Example 1
@@ -718,6 +739,105 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
     "configurable": true,
     "path": "propertyA",
     "type": "object"
+  }
+}
+```
+
+### `recursiveGetOwnPropertyDescriptors` Example 10
+```
+const object = {
+  propertyA: [
+    { propertyC: 3 },
+    { propertyC: 33 },
+    { propertyC: 333 },
+  ]
+}
+Object.seal(object.propertyA[0])
+Object.freeze(object.propertyA[2])
+const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+  frozen: true,
+  sealed: true,
+  path: true,
+})
+```
+***objectPDAST***  
+```
+{
+  "propertyA": {
+    "value": {
+      "0": {
+        "value": {
+          "propertyC": {
+            "value": 3,
+            "writable": true,
+            "enumerable": true,
+            "configurable": false,
+            "path": "propertyA.0.propertyC",
+            "frozen": true,
+            "sealed": true
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.0",
+        "frozen": false,
+        "sealed": true
+      },
+      "1": {
+        "value": {
+          "propertyC": {
+            "value": 33,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyA.1.propertyC",
+            "frozen": true,
+            "sealed": true
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.1",
+        "frozen": false,
+        "sealed": false
+      },
+      "2": {
+        "value": {
+          "propertyC": {
+            "value": 333,
+            "writable": false,
+            "enumerable": true,
+            "configurable": false,
+            "path": "propertyA.2.propertyC",
+            "frozen": true,
+            "sealed": true
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyA.2",
+        "frozen": true,
+        "sealed": true
+      },
+      "length": {
+        "value": 3,
+        "writable": true,
+        "enumerable": false,
+        "configurable": false,
+        "path": "propertyA.length",
+        "frozen": true,
+        "sealed": true
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "propertyA",
+    "frozen": false,
+    "sealed": false
   }
 }
 ```
