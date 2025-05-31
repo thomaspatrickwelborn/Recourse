@@ -8,5 +8,12 @@ const objectAST = expandTree(object, ($value) => {
 console.log("-----------------------")
 console.log("Expand Tree | Example 3")
 console.log("-----------------------")
-console.log("object", JSON.stringify(object, null, 2))
-console.log("objectAST", JSON.stringify(objectAST, null, 2))
+const objectString = JSON.stringify(object, null, 2)
+const objectASTString = JSON.stringify(objectAST, null, 2)
+console.log("object", objectString)
+console.log("objectAST", objectASTString)
+console.log("pass", `{
+  "propertyA": {
+    "value": 1
+  }
+}` === objectASTString)

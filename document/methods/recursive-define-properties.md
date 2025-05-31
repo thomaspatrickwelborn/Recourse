@@ -1,13 +1,13 @@
-| [➲ Recourse](../../README.md) | *`recursiveDefineProperties`* |
+| [➲ Recourse](../../README.md) | *`defineProperties`* |
 | :-- | :-- |
 
-# `recursiveDefineProperties`
+# `defineProperties`
 Returns object/array property descriptor abstract syntax tree (PDAST).  
 
 ## Syntax
 ```
-import { recursiveDefineProperties } from 'recourse'
-recursiveDefineProperties($target, $propertyDescriptors, $options)
+import { defineProperties } from 'recourse'
+defineProperties($target, $propertyDescriptors, $options)
 ```
 ### `$target` Argument
 **Type**: `object`, `array`  
@@ -16,7 +16,38 @@ recursiveDefineProperties($target, $propertyDescriptors, $options)
 ### `$propertyDescriptors` Argument
 **Type**: `object`, `array`  
 **Required**: `true`  
-**Descript**: Property descriptors.  
+**Descript**: Property descriptors with extra detail.  
+```
+{
+  [$propertyDescriptor]: {
+    configurable: false,
+    enumerable: false,
+    frozen: false,
+    sealed: false,
+    writable: false,
+  }
+}
+```
+#### `$propertyDescriptor.configurable`
+**Type**: `boolean`  
+**Default**: `false`  
+**Descript**: [$propertyDescriptor.configurable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#configurable)
+#### `$propertyDescriptor.enumerable`
+**Type**: `boolean`  
+**Default**: `false`  
+**Descript**: [$propertyDescriptor.enumerable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#enumerable)
+#### `$propertyDescriptor.frozen`
+**Type**: `boolean`  
+**Default**: `false`  
+#### `$propertyDescriptor.sealed`
+**Type**: `boolean`  
+**Default**: `false`  
+**Descript**: Properties defined with sealed.  
+#### `$propertyDescriptor.writable`
+**Type**: `boolean`  
+**Default**: `false`  
+**Descript**: [$propertyDescriptor.writable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#writable)
+
 ### `$options` Argument
 **Type**: `object`  
 ```
@@ -28,10 +59,11 @@ recursiveDefineProperties($target, $propertyDescriptors, $options)
 **Descript**: When `$options.typeCoercion` is:  
  - `true`: Property descriptor value stored as type.  
  - `false`: Property descriptor value stored as provided. 
-## `recursiveDefineProperties` Examples
-### `recursiveDefineProperties` Example 1
+
+## `defineProperties` Examples
+### `defineProperties` Example 1
 ```
-const object = recursiveDefineProperties({}, {
+const object = defineProperties({}, {
   "propertyA": {
     "value": 1,
     "writable": true,
@@ -46,9 +78,9 @@ const object = recursiveDefineProperties({}, {
   propertyA: 1
 }
 ```
-### `recursiveDefineProperties` Example 2
+### `defineProperties` Example 2
 ```
-const objectPropertyDescriptorAST = recursiveDefineProperties({}, {
+const objectPropertyDescriptorAST = defineProperties({}, {
   "propertyA": {
     "value": "1",
     "writable": true,
@@ -65,9 +97,9 @@ const objectPropertyDescriptorAST = recursiveDefineProperties({}, {
 }
 ```
 
-### `recursiveDefineProperties` Example 3
+### `defineProperties` Example 3
 ```
-const object = recursiveDefineProperties({}, {
+const object = defineProperties({}, {
   "propertyA": {
     "value": {
       "0": {
@@ -134,78 +166,52 @@ const object = recursiveDefineProperties({}, {
 ```
 
 
-### `recursiveDefineProperties` Example 4
+### `defineProperties` Example 4
 ```
-const objectAST = recursiveDefineProperties({}, {
+const object = {
+  propertyA: {
+    propertyB: 2,
+  }
+}
+const objectString = JSON.stringify(object, null, 2)
+object.propertyA.propertyC = object.propertyA
+object.propertyD = object
+const objectPDAST = getOwnPropertyDescriptors(object, {
+  path: true,
+  type: true,
+})
+object.propertyA.propertyB = String(object.propertyA.propertyB)
+const objectDefinedProperties = defineProperties({}, objectPDAST, {
+  typeCoercion: true, 
+})
+```
+*objectPDAST*  
+```
+{
   "propertyA": {
     "value": {
-      "0": {
-        "value": {
-          "propertyC": {
-            "value": "3",
-            "writable": true,
-            "enumerable": true,
-            "configurable": true,
-            "type": "number"
-          }
-        },
+      "propertyB": {
+        "value": "2",
         "writable": true,
         "enumerable": true,
         "configurable": true,
-        "type": "object"
-      },
-      "1": {
-        "value": {
-          "propertyC": {
-            "value": "33",
-            "writable": true,
-            "enumerable": true,
-            "configurable": true,
-            "type": "number"
-          }
-        },
-        "writable": true,
-        "enumerable": true,
-        "configurable": true,
-        "type": "object"
-      },
-      "2": {
-        "value": {
-          "propertyC": {
-            "value": "333",
-            "writable": true,
-            "enumerable": true,
-            "configurable": true,
-            "type": "number"
-          }
-        },
-        "writable": true,
-        "enumerable": true,
-        "configurable": true,
-        "type": "object"
-      },
-      "length": {
-        "value": 3,
-        "writable": true,
-        "enumerable": false,
-        "configurable": false,
+        "path": "propertyA.propertyB",
         "type": "number"
       }
     },
     "writable": true,
     "enumerable": true,
     "configurable": true,
-    "type": "array"
+    "path": "propertyA",
+    "type": "object"
   }
-}, { type: true })
+}
 ```
 *object*  
 ```
 {
-  propertyA: [
-    { propertyC: 3 },
-    { propertyC: 33 },
-    { propertyC: 333 },
-  ]
+  "propertyA": {
+    "propertyB": 2
+  }
 }
 ```

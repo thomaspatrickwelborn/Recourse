@@ -1,22 +1,22 @@
 # ➲&ensp;Recourse
 **Used By**  
-[&emsp;⁘&emsp;Core-Plex](https://npmjs.org/core-plex)  
-[&emsp;❂&emsp;Objecture](https://npmjs.org/objecture)  
-[&emsp;⁜&emsp;MVC Framework](https://npmjs.org/mvc-framework)  
+&emsp;⁘&emsp;[Core-Plex](https://npmjs.org/core-plex)  
+&emsp;❂&emsp;[Objecture](https://npmjs.org/objecture)  
+&emsp;⁜&emsp;[MVC Framework](https://npmjs.org/mvc-framework)  
 
 ## Methods
  - [`expandTree` Method](./document/methods/expand-tree.md)
  - `impandTree` Method
  - `isArrayLike` Method
  - `propertyDirectory` Method
- - `recursiveAssign` Method
- - `recursiveAssignConcat` Method
- - [`recursiveDefineProperties` Method](./document/methods/recursive-define-properties.md)
- - `recursiveDefineProperty` Method
- - [`recursiveGetOwnPropertyDescriptors` Method](./document/methods/recursive-get-own-property-descriptors.md)
- - `recursiveGetOwnPropertyDescriptor` Method
+ - `assign` Method
+ - `assignConcat` Method
+ - [`defineProperties` Method](./document/methods/define-properties.md)
+ - `defineProperty` Method
+ - [`getOwnPropertyDescriptors` Method](./document/methods/get-own-property-descriptors.md)
+ - `getOwnPropertyDescriptor` Method
  - `regularExpressions` Method
- - `recursiveFreeze` Method
+ - `freeze` Method
  - `typedObjectLiteral` Method
  - `typeOf` Method
  - `variables` Method

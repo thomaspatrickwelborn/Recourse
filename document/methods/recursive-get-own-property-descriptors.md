@@ -1,13 +1,13 @@
-| [➲ Recourse](../../README.md) | *`recursiveGetOwnPropertyDescriptors`* |
+| [➲ Recourse](../../README.md) | *`getOwnPropertyDescriptors`* |
 | :-- | :-- |
 
-# `recursiveGetOwnPropertyDescriptors`
+# `getOwnPropertyDescriptors`
 Returns object/array property descriptor abstract syntax tree (PDAST).  
 
 ## Syntax
 ```
-import { recursiveGetOwnPropertyDescriptors } from 'recourse'
-recursiveGetOwnPropertyDescriptors($source, $options)
+import { getOwnPropertyDescriptors } from 'recourse'
+getOwnPropertyDescriptors($source, $options)
 ```
 ### `$source` Argument
 **Type**: `object`, `array`  
@@ -18,10 +18,10 @@ recursiveGetOwnPropertyDescriptors($source, $options)
 ```
 {
   delimiter: '.',
+  frozen: false,
   maxDepth: 10,
   nonenumerable: true,
   path: false,
-  retrocursion: false,
   sealed: false,
   type: false,
 }
@@ -56,13 +56,6 @@ recursiveGetOwnPropertyDescriptors($source, $options)
  - `true`: Property descriptor value's `path` stored.  
  - `false`: Property descriptor value's `path` **NOT** stored. 
 
-#### `$options.retrocursion`
-**Type**: `boolean`  
-**Default**: `false`  
-**Descript**: When `$options.type` is:  
- - `true`: Ancestor object property descriptors included in property descriptor tree.  
- - `false`: Ancestor object property descriptors **NOT** included in property descriptor tree. 
-
 #### `$options.sealed`
 **Type**: `boolean`  
 **Default**: `false`  
@@ -77,15 +70,15 @@ recursiveGetOwnPropertyDescriptors($source, $options)
  - `true`: Property descriptor value's `type` stored.  
  - `false`: Property descriptor value's `type` **NOT** stored. 
 
-## `recursiveGetOwnPropertyDescriptors` Examples
-### `recursiveGetOwnPropertyDescriptors` Example 1
+## `getOwnPropertyDescriptors` Examples
+### `getOwnPropertyDescriptors` Example 1
 ```
 const object = {
   propertyA: {
     propertyB: "2"
   }
 }
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object)
+const objectPDAST = getOwnPropertyDescriptors(object)
 ```
 *objectPDAST*  
 ```
@@ -105,14 +98,14 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object)
   }
 }
 ```
-### `recursiveGetOwnPropertyDescriptors` Example 2
+### `getOwnPropertyDescriptors` Example 2
 ```
 const object = {
   propertyA: {
     propertyB: "2"
   }
 }
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = getOwnPropertyDescriptors(object, {
   type: true
 })
 ```
@@ -137,7 +130,7 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
 }
 ```
 
-### `recursiveGetOwnPropertyDescriptors` Example 3
+### `getOwnPropertyDescriptors` Example 3
 ```
 const object = {
   propertyA: [
@@ -146,7 +139,7 @@ const object = {
     { propertyC: 333 },
   ]
 }
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = getOwnPropertyDescriptors(object, {
   type: true, 
 })
 ```
@@ -213,10 +206,11 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
     "configurable": true,
     "type": "array"
   }
+}
 ```
 
 
-### `recursiveGetOwnPropertyDescriptors` Example 4
+### `getOwnPropertyDescriptors` Example 4
 ```
 const object = {
   propertyA: [
@@ -225,7 +219,7 @@ const object = {
     { propertyC: 333 },
   ]
 }
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = getOwnPropertyDescriptors(object, {
   path: true,
   type: true
 })
@@ -304,7 +298,7 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
 }
 ```
 
-### `recursiveGetOwnPropertyDescriptors` Example 5
+### `getOwnPropertyDescriptors` Example 5
 ```
 const object = {
   propertyA: {
@@ -312,10 +306,9 @@ const object = {
   }
 }
 object.propertyA.propertyC = object.propertyA
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
-  retrocursion: false,
 })
 ```
 *objectPDAST*  
@@ -341,19 +334,21 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
 }
 ```
 
-### `recursiveGetOwnPropertyDescriptors` Example 6
+### `getOwnPropertyDescriptors` Example 6
 ```
 const object = {
   propertyA: {
     propertyB: 2,
+  },
+  propertyC: {
+    propertyD: 4
   }
 }
-object.propertyA.propertyC = object.propertyA
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+object.propertyA.propertyC = object.propertyC
+object.propertyC.propertyA = object.propertyA
+const objectPDAST = getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
-  retrocursion: true,
-  maxDepth: 5,
 })
 ```
 *objectPDAST*  
@@ -371,55 +366,13 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
       },
       "propertyC": {
         "value": {
-          "propertyB": {
-            "value": 2,
+          "propertyD": {
+            "value": 4,
             "writable": true,
             "enumerable": true,
             "configurable": true,
-            "path": "propertyA.propertyC.propertyB",
+            "path": "propertyA.propertyC.propertyD",
             "type": "number"
-          },
-          "propertyC": {
-            "value": {
-              "propertyB": {
-                "value": 2,
-                "writable": true,
-                "enumerable": true,
-                "configurable": true,
-                "path": "propertyA.propertyC.propertyC.propertyB",
-                "type": "number"
-              },
-              "propertyC": {
-                "value": {
-                  "propertyB": {
-                    "value": 2,
-                    "writable": true,
-                    "enumerable": true,
-                    "configurable": true,
-                    "path": "propertyA.propertyC.propertyC.propertyC.propertyB",
-                    "type": "number"
-                  },
-                  "propertyC": {
-                    "value": {},
-                    "writable": true,
-                    "enumerable": true,
-                    "configurable": true,
-                    "path": "propertyA.propertyC.propertyC.propertyC.propertyC",
-                    "type": "object"
-                  }
-                },
-                "writable": true,
-                "enumerable": true,
-                "configurable": true,
-                "path": "propertyA.propertyC.propertyC.propertyC",
-                "type": "object"
-              }
-            },
-            "writable": true,
-            "enumerable": true,
-            "configurable": true,
-            "path": "propertyA.propertyC.propertyC",
-            "type": "object"
           }
         },
         "writable": true,
@@ -434,11 +387,45 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
     "configurable": true,
     "path": "propertyA",
     "type": "object"
+  },
+  "propertyC": {
+    "value": {
+      "propertyD": {
+        "value": 4,
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyC.propertyD",
+        "type": "number"
+      },
+      "propertyA": {
+        "value": {
+          "propertyB": {
+            "value": 2,
+            "writable": true,
+            "enumerable": true,
+            "configurable": true,
+            "path": "propertyC.propertyA.propertyB",
+            "type": "number"
+          }
+        },
+        "writable": true,
+        "enumerable": true,
+        "configurable": true,
+        "path": "propertyC.propertyA",
+        "type": "object"
+      }
+    },
+    "writable": true,
+    "enumerable": true,
+    "configurable": true,
+    "path": "propertyC",
+    "type": "object"
   }
 }
 ```
 
-### `recursiveGetOwnPropertyDescriptors` Example 7
+### `getOwnPropertyDescriptors` Example 7
 ```
 const object = {
   propertyA: {
@@ -450,10 +437,9 @@ const object = {
 }
 object.propertyA.propertyC = object.propertyC
 object.propertyC.propertyA = object.propertyA
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
-  retrocursion: false,
   maxDepth: 5,
 })
 const objectPDASTString = JSON.stringify(objectPDAST, null, 2)
@@ -532,17 +518,16 @@ const objectPDASTString = JSON.stringify(objectPDAST, null, 2)
 }
 ```
 
-### `recursiveGetOwnPropertyDescriptors` Example 8
+### `getOwnPropertyDescriptors` Example 8
 ```
 const object = {
   propertyA: {},
 }
 object.propertyA.root = object // NO
 object.propertyA.parent = object.propertyA // No
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
-  retrocursion: false,
   maxDepth: 5,
 })
 ```
@@ -560,17 +545,16 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
 }
 ```
 
-### `recursiveGetOwnPropertyDescriptors` Example 9
+### `getOwnPropertyDescriptors` Example 9
 ```
 const object = {
   propertyA: {},
 }
 object.propertyA.root = object
 object.propertyA.parent = object.propertyA
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
-  retrocursion: true,
   maxDepth: 5,
 })
 ```
@@ -743,7 +727,7 @@ const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
 }
 ```
 
-### `recursiveGetOwnPropertyDescriptors` Example 10
+### `getOwnPropertyDescriptors` Example 10
 ```
 const object = {
   propertyA: [
@@ -754,7 +738,7 @@ const object = {
 }
 Object.seal(object.propertyA[0])
 Object.freeze(object.propertyA[2])
-const objectPDAST = recursiveGetOwnPropertyDescriptors(object, {
+const objectPDAST = getOwnPropertyDescriptors(object, {
   frozen: true,
   sealed: true,
   path: true,
