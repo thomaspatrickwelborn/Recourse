@@ -1,7 +1,7 @@
 {
   "name": "recourse",
-  "version": "1.1.0",
-  "description": "Early Bird Gets The Wormhole",
+  "version": "1.1.1",
+  "description": "Recursive coutility methods, convenience methods/properties.",
   "homepage": "https://github.com/thomaspatrickwelborn/recourse#readme",
   "bugs": {
     "url": "https://github.com/thomaspatrickwelborn/recourse/issues"
@@ -33,5 +33,19 @@
   "workspaces": [
     "demonstrament",
     "development"
+  ],
+  "keywords": [
+    "abstract syntax tree",
+    "abstract syntax tree structures",
+    "expand syntax tree",
+    "impand syntax tree",
+    "property directory",
+    "recursive assign",
+    "recursive define properties",
+    "recursive get own property descriptors",
+    "recursive freeze",
+    "recursive seal",
+    "property descriptor tree",
+    "property path tree"
   ]
 }
