@@ -1,10 +1,9 @@
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
-import Settings from '../get-own-property-descriptors/settings.js'
 import Options from '../get-own-property-descriptors/options.js'
 export default function getOwnPropertyDescriptor($properties, $propertyKey, $options) {
-  const options = Object.assign({}, Settings, Options, $options, {
+  const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
   const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey)

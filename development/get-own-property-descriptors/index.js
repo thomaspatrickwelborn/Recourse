@@ -1,9 +1,8 @@
 import getOwnPropertyDescriptor from '../get-own-property-descriptor/index.js'
-import Settings from './settings.js'
 import Options from './options.js'
 export default function getOwnPropertyDescriptors($properties, $options) {
   const propertyDescriptors = {}
-  const options = Object.assign({}, Settings, Options, $options)
+  const options = Object.assign({}, Options, $options)
   if(options.depth >= options.maxDepth) { return propertyDescriptors }
   else { options.depth++ }
   for(const [$propertyKey, $propertyDescriptor] of Object.entries(Object.getOwnPropertyDescriptors($properties))) {
