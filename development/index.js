@@ -1,7 +1,7 @@
 import expandTree from './expand-tree/index.js'
 import impandTree from './impand-tree/index.js'
 import isArrayLike from './is-array-like/index.js'
-import propertyDirectory from './property-directory/index.js'
+import compandTree from './compand-tree/index.js'
 import assign from './assign/index.js'
 import assignConcat from './assign-concat/index.js'
 import getOwnPropertyDescriptors from './get-own-property-descriptors/index.js'
@@ -18,7 +18,7 @@ export {
   expandTree, 
   impandTree, 
   isArrayLike, 
-  propertyDirectory, 
+  compandTree, 
   assign, 
   assignConcat, 
   defineProperties, 
