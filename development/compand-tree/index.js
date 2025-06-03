@@ -4,45 +4,46 @@ const Options = {
   maxDepth: 10,
   accessors: [Accessors.default],
   ancestors: [],
+  values: false,
 }
-export default function compandTree($object, $options) {
-  const _compandTree = []
+export default function compandTree($target, $options) {
+  const target = []
   const options = Object.assign({}, Options, $options, {
     ancestors: [].concat($options.ancestors)
   })
   options.depth++
-  if(options.depth > options.maxDepth) { return _compandTree }
+  if(options.depth > options.maxDepth) { return target }
   iterateAccessors: 
   for(const $accessor of options.accessors) {
-    const accessor = $accessor.bind($object)
-    const object = accessor($object)
-    if(!object) { continue iterateAccessors }
-    if(!options.ancestors.includes(object)) { options.ancestors.unshift(object) }
+    const accessor = $accessor.bind($target)
+    const target = accessor($target)
+    if(!target) { continue iterateAccessors }
+    if(!options.ancestors.includes(target)) { options.ancestors.unshift(target) }
     iterateObjectProperties: 
-    for(const [$key, $value] of Object.entries(object)) {
-      if(!options.values) { _compandTree.push($key) }
-      else if(options.values) { _compandTree.push([$key, $value]) }
+    for(const [$key, $value] of Object.entries(target)) {
+      if(!options.values) { target.push($key) }
+      else if(options.values) { target.push([$key, $value]) }
       if(
-        typeof $value === 'object' &&
+        typeof $value === 'target' &&
         $value !== null &&
-        !Object.is($value, object) && 
+        !Object.is($value, target) && 
         !options.ancestors.includes($value)
       ) {
         const subtargets = compandTree($value, options)
         if(!options.values) {
           for(const $subtarget of subtargets) {
             const path = [$key, $subtarget].join('.')
-            _compandTree.push(path)
+            target.push(path)
           }
         }
         else if(options.values) {
           for(const [$subtargetKey, $subtarget] of subtargets) {
             const path = [$key, $subtargetKey].join('.')
-            _compandTree.push([path, $subtarget])
+            target.push([path, $subtarget])
           }
         }
       }
     }
   }
-  return _compandTree
+  return target
 }

@@ -3,20 +3,20 @@ import * as Variables from '../variables/index.js'
 import * as Tree from '../tree/index.js'
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
-export default function impandTree($source, $property) {
+export default function impandTree($target, $property) {
   const typeOfProperty = typeOf($property)
-  const typeOfSource = typeOf($source)
+  const typeOfTarget = typeOf($target)
   if(
     !['string', 'function'].includes(typeOfProperty) ||
-    !['array', 'object'].includes(typeOfSource)
-  ) { return $source }
-  let target = typedObjectLiteral($source)
-  iterateSourceEntries: 
-  for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
-    if(typeOfProperty === 'string') { target[$sourceKey] = Tree.get($property, $sourceValue) }
-    else if(typeOfProperty === 'function') { target[$sourceKey] = $property($sourceValue) }
-    if(target[$sourceKey] && typeof target[$sourceKey] === 'object') {
-      target[$sourceKey] = impandTree(target[$sourceKey], $property)
+    !['array', 'object'].includes(typeOfTarget)
+  ) { return $target }
+  let target = typedObjectLiteral($target)
+  iterateTargetEntries: 
+  for(const [$targetKey, $targetValue] of Object.entries($target)) {
+    if(typeOfProperty === 'string') { target[$targetKey] = Tree.get($property, $targetValue) }
+    else if(typeOfProperty === 'function') { target[$targetKey] = $property($targetValue) }
+    if(target[$targetKey] && typeof target[$targetKey] === 'object') {
+      target[$targetKey] = impandTree(target[$targetKey], $property)
     }
   }
   return target

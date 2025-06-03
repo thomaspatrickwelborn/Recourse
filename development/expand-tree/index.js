@@ -3,24 +3,24 @@ import * as Tree from '../tree/index.js'
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 const ValidPropertyTypes = ['string', 'function']
-export default function expandTree($source, $property) {
+export default function expandTree($target, $property) {
   const typeOfProperty = typeOf($property)
-  const typeOfSource = typeOf($source)
+  const typeOfTarget = typeOf($target)
   if(
     !ValidPropertyTypes.includes(typeOfProperty) ||
-    !ObjectKeys.includes(typeOfSource)
-  ) { return $source }
-  let target = typedObjectLiteral($source)
-  iterateSourceEntries: 
-  for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
-    const sourceValue = (
-      ObjectKeys.includes(typeOf($sourceValue))
-    ) ? expandTree($sourceValue, $property) : $sourceValue
+    !ObjectKeys.includes(typeOfTarget)
+  ) { return $target }
+  let target = typedObjectLiteral($target)
+  iterateTargetEntries: 
+  for(const [$targetKey, $targetValue] of Object.entries($target)) {
+    const targetValue = (
+      ObjectKeys.includes(typeOf($targetValue))
+    ) ? expandTree($targetValue, $property) : $targetValue
     if(typeOfProperty === ValidPropertyTypes[0]) {
-      target[$sourceKey] = Tree.set($property, sourceValue)
+      target[$targetKey] = Tree.set($property, targetValue)
     }
     else if(typeOfProperty === ValidPropertyTypes[1]) {
-      target[$sourceKey] = $property(sourceValue)
+      target[$targetKey] = $property(targetValue)
     }
   }
   return target
