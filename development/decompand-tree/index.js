@@ -1,10 +1,8 @@
-import * as Tree from '../tree/index.js'
 import regularExpressions from '../regular-expressions/index.js'
 const Options = {
   values: false
 }
 export default function decompandTree($target, $options) {
-  let target
   const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape))
   const key = subpaths.pop()
   const target = (key && !isNaN(key)) ? [] : {}
@@ -19,6 +17,5 @@ export default function decompandTree($target, $options) {
     subpathIndex++
   }
   subtarget[key] = $target
-  // return target
   return target
 }
