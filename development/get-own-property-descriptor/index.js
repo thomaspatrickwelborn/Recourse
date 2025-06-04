@@ -11,7 +11,9 @@ export default function getOwnPropertyDescriptor($properties, $propertyKey, $opt
   if(!options.ancestors.includes($properties)) { options.ancestors.unshift($properties) }
   if(options.ancestors.includes(propertyDescriptor.value)) { return }
   if(options.path) {
-    options.path = (typeOf(options.path) === 'string') ? [options.path, $propertyKey].join(options.delimiter) : $propertyKey
+    options.path = (
+      typeOf(options.path) === 'string'
+    ) ? [options.path, $propertyKey].join(options.delimiter) : $propertyKey
     propertyDescriptor.path = options.path
   }
   if(options.type) { propertyDescriptor.type = typeOf(propertyDescriptor.value) }

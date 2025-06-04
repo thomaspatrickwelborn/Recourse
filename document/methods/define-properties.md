@@ -6,8 +6,7 @@ Returns object/array property descriptor abstract syntax tree (PDAST).
 
 ## Syntax
 ```
-import { defineProperties } from 'recourse'
-defineProperties($target, $propertyDescriptors, $options)
+Recourse.defineProperties($target, $propertyDescriptors, $options)
 ```
 ### `$target` Argument
 **Type**: `object`, `array`  
@@ -63,7 +62,7 @@ defineProperties($target, $propertyDescriptors, $options)
 ## `defineProperties` Examples
 ### `defineProperties` Example 1
 ```
-const object = defineProperties({}, {
+const object = Recourse.defineProperties({}, {
   "propertyA": {
     "value": 1,
     "writable": true,
@@ -80,7 +79,7 @@ const object = defineProperties({}, {
 ```
 ### `defineProperties` Example 2
 ```
-const objectPropertyDescriptorAST = defineProperties({}, {
+const objectPropertyDescriptorAST = Recourse.defineProperties({}, {
   "propertyA": {
     "value": "1",
     "writable": true,
@@ -99,7 +98,7 @@ const objectPropertyDescriptorAST = defineProperties({}, {
 
 ### `defineProperties` Example 3
 ```
-const object = defineProperties({}, {
+const object = Recourse.defineProperties({}, {
   "propertyA": {
     "value": {
       "0": {
@@ -181,7 +180,7 @@ const objectPDAST = getOwnPropertyDescriptors(object, {
   type: true,
 })
 object.propertyA.propertyB = String(object.propertyA.propertyB)
-const objectDefinedProperties = defineProperties({}, objectPDAST, {
+const objectDefinedProperties = Recourse.defineProperties({}, objectPDAST, {
   typeCoercion: true, 
 })
 ```

@@ -1,5 +1,5 @@
 # ➲&ensp;Recourse
-## `expandTree` Method
+## `Expand` Method
 Expand Object/Array property key/value pairs to abstract syntax tree (AST) where property values become AST Node property value. 
 ```
 const object = {
@@ -17,7 +17,7 @@ const object = {
     propertyG: 777777777,
   }]
 }
-const objectAST = expandTree(object, 'value')
+const objectAST = expand(object, 'value')
 console.log("object", object)
 console.log("objectAST", objectAST)
 ```

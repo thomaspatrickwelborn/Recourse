@@ -7,8 +7,10 @@
 Recursive coutility methods, convenience methods/properties. 
 
 ## Methods
- - [`expandTree` Method](./document/methods/expand-tree.md)
- - `impandTree` Method
+ - [`expand` Method](./document/methods/expand.md)
+ - [`impand` Method](./document/methods/impand.md)
+ - [`compand` Method](./document/methods/compand.md)
+ - `decompand` Method
  - `isArrayLike` Method
  - `propertyDirectory` Method
  - `assign` Method

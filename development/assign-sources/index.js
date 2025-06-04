@@ -1,6 +1,8 @@
 import typeOf from '../type-of/index.js'
+const Options = { }
 export default function assignSources($target, $type, ...$sources) {
   if(!$target) { return $target}
+  const typeOfTarget = typeOf($target)
   iterateSources: 
   for(const $source of $sources) {
     if(!$source) continue iterateSources
@@ -8,23 +10,19 @@ export default function assignSources($target, $type, ...$sources) {
     for(const [
       $sourcePropertyKey, $sourcePropertyValue
     ] of Object.entries($source)) {
-      const typeOfTargetPropertyValue = typeOf($target[$sourcePropertyKey])
+      const targetPropertyValue = $target[$sourcePropertyKey]
+      const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
       const typeOfSourcePropertyValue = typeOf($sourcePropertyValue)
-      if( 
-        typeOfTargetPropertyValue === 'object' &&
-        typeOfSourcePropertyValue === 'object'
-      ) {
-        $target[$sourcePropertyKey] = assignConcat($target[$sourcePropertyKey], $sourcePropertyValue)
-      }
-      else if(
-        $type === 'assignConcat' &&
-        typeOfTargetPropertyValue === 'array' &&
-        typeOfSourcePropertyValue === 'array'
-      ) {
-        $target[$sourcePropertyKey] = $target[$sourcePropertyKey].concat($sourcePropertyValue)
+      if(typeOfTarget === 'array' && $type === 'assignConcat') {
+        $target.push($sourcePropertyValue)
       }
       else {
-        $target[$sourcePropertyKey] = $sourcePropertyValue
+        if(['array', 'object'].includes(typeOfTargetPropertyValue)) {
+          assignSources(targetPropertyValue, $type, $sourcePropertyValue)
+        }
+        else {
+          Object.assign($target, { [$sourcePropertyKey]: $sourcePropertyValue })
+        }
       }
     }
   }

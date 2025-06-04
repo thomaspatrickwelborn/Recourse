@@ -6,8 +6,7 @@ Returns object/array property descriptor abstract syntax tree (PDAST).
 
 ## Syntax
 ```
-import { getOwnPropertyDescriptors } from 'recourse'
-getOwnPropertyDescriptors($source, $options)
+Recourse.getOwnPropertyDescriptors($source, $options)
 ```
 ### `$source` Argument
 **Type**: `object`, `array`  
@@ -78,7 +77,7 @@ const object = {
     propertyB: "2"
   }
 }
-const objectPDAST = getOwnPropertyDescriptors(object)
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object)
 ```
 *objectPDAST*  
 ```
@@ -105,7 +104,7 @@ const object = {
     propertyB: "2"
   }
 }
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   type: true
 })
 ```
@@ -139,7 +138,7 @@ const object = {
     { propertyC: 333 },
   ]
 }
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   type: true, 
 })
 ```
@@ -219,7 +218,7 @@ const object = {
     { propertyC: 333 },
   ]
 }
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   path: true,
   type: true
 })
@@ -306,7 +305,7 @@ const object = {
   }
 }
 object.propertyA.propertyC = object.propertyA
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
 })
@@ -346,7 +345,7 @@ const object = {
 }
 object.propertyA.propertyC = object.propertyC
 object.propertyC.propertyA = object.propertyA
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
 })
@@ -437,7 +436,7 @@ const object = {
 }
 object.propertyA.propertyC = object.propertyC
 object.propertyC.propertyA = object.propertyA
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
   maxDepth: 5,
@@ -525,7 +524,7 @@ const object = {
 }
 object.propertyA.root = object // NO
 object.propertyA.parent = object.propertyA // No
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
   maxDepth: 5,
@@ -552,7 +551,7 @@ const object = {
 }
 object.propertyA.root = object
 object.propertyA.parent = object.propertyA
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
   maxDepth: 5,
@@ -738,7 +737,7 @@ const object = {
 }
 Object.seal(object.propertyA[0])
 Object.freeze(object.propertyA[2])
-const objectPDAST = getOwnPropertyDescriptors(object, {
+const objectPDAST = Recourse.getOwnPropertyDescriptors(object, {
   frozen: true,
   sealed: true,
   path: true,

@@ -1,0 +1,8 @@
+Recourse
+
+Static Methods
+ - Manage object/array property values directly.  
+
+Instance Methods
+ - Manage object/array property values through scoped Recourse instances
+ - Constructor method `$target` property becomes constructor `target` property.  
