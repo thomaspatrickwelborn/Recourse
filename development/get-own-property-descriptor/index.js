@@ -1,17 +1,21 @@
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
-import Options from '../get-own-property-descriptors/options.js'
-export default function getOwnPropertyDescriptor($properties, $propertyKey, $options) {
+import Options from './options.js'
+export default function getOwnPropertyDescriptor($properties, $propertyKey, $options = {}) {
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
+    ancestors: Object.assign([], $options.ancestors),
   })
+  if(options.depth >= options.maxDepth) { return }
+  else { options.depth++ }
   const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey)
   if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
   if(!options.ancestors.includes($properties)) { options.ancestors.unshift($properties) }
   if(options.ancestors.includes(propertyDescriptor.value)) { return }
   if(options.path) {
-    options.path = (typeOf(options.path) === 'string') ? [options.path, $propertyKey].join(options.delimiter) : $propertyKey
+    options.path = (
+      typeOf(options.path) === 'string'
+    ) ? [options.path, $propertyKey].join(options.delimiter) : $propertyKey
     propertyDescriptor.path = options.path
   }
   if(options.type) { propertyDescriptor.type = typeOf(propertyDescriptor.value) }

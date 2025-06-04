@@ -5,13 +5,14 @@ const Options = {
   maxDepth: 10,
   enumerable: true,
   nonenumerable: false,
+  recurse: true,
 }
-export default function entities($target, $type, $options) {
+export default function entities($target, $type, $options = {}) {
   const _entities = []
   const options = Object.assign({}, Options, $options, {
     ancestors: [].concat($options.ancestors)
   })
-  const { ancestors, maxDepth, nonenumerable } = options
+  const { ancestors, maxDepth, nonenumerable, recurse } = options
   if(options.depth >= maxDepth) { return _entities }
   options.depth++
   if(!ancestors.includes($target)) { ancestors.push($target) }
@@ -21,6 +22,7 @@ export default function entities($target, $type, $options) {
   })) {
     const typeOfValue = typeOf($value)
     if(
+      recurse && 
       ['array', 'object'].includes(typeOfValue) && 
       !ancestors.includes($value)
     ) {

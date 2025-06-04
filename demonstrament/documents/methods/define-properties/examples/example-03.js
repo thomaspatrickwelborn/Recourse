@@ -1,6 +1,7 @@
-import {
+import { Recourse } from '/dependencies/recourse.js'
+const {
   defineProperties, getOwnPropertyDescriptors
-} from '/dependencies/recourse.js'
+} = Recourse
 const object = {
   propertyA: [
     { propertyC: 3 },

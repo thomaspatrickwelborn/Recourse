@@ -1,4 +1,4 @@
-export default ($data) => Object
+export default ($operand) => Object
   .prototype
   .toString
-  .call($data).slice(8, -1).toLowerCase()
+  .call($operand).slice(8, -1).toLowerCase()

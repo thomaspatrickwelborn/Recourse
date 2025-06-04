@@ -1,8 +1,16 @@
-function seal($target) {
+import typeOf from '../type-of/index.js'
+const Options = { ancestors: [] }
+function seal($target, $options) {
+  const { ancestors } = Object.assign({}, Options, $options, {
+    ancestors: Object.assign([], $options.ancestors)
+  })
+  if(!options.ancestors.includes($target)) { options.ancestors.unshift($target) }
+  iterateTargetProperties: 
   for(const [$propertyKey, $propertyValue] of Object.entries($target)) {
-    if(Object.is($propertyValue, $target)) { continue }
-    if($propertyValue && typeof $propertyValue === 'object') {
-      seal($propertyValue)
+    const typeOfPropertyValue = typeOf($propertyValue)
+    if(options.ancestors.includes($propertyValue)) { continue iterateTargetProperties }
+    if(['array', 'object'].includes(typeOfPropertyValue)) {
+      seal($propertyValue, options)
     }
   }
   return Object.seal($target)

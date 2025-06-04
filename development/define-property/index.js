@@ -3,23 +3,32 @@ import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import defineProperties from '../define-properties/index.js'
 import * as Variables from '../variables/index.js'
-import Options from '../define-properties/options.js'
+import Options from './options.js'
 export default function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
   const propertyDescriptor = Object.assign({}, $propertyDescriptor)
+  let propertyDescriptorValue = propertyDescriptor.value
   const options = Object.assign({}, Options, $options)
-  const typeOfPropertyValue = typeOf(propertyDescriptor.value)
-  if(['array', 'object'].includes(typeOfPropertyValue)) {
-    const propertyValue = isArrayLike(Object.defineProperties(
-      typedObjectLiteral(typeOfPropertyValue), propertyDescriptor.value
-    )) ? [] : {}
-    propertyDescriptor.value = defineProperties(propertyValue, propertyDescriptor.value, options)
+  const typeOfPropertyDescriptorValue = typeOf(propertyDescriptor.value)
+  const targetPropertyValue = $target[$propertyKey]
+  const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
+  const validObjects = ['array', 'object']
+  if(validObjects.includes(typeOfPropertyDescriptorValue)) {
+    if(validObjects.includes(typeOfTargetPropertyValue)) {
+      propertyDescriptor.value = defineProperties(targetPropertyValue, propertyDescriptorValue, options)
+    }
+    else {
+      const propertyValueTarget = typedObjectLiteral(isArrayLike(
+        Object.defineProperties({}, propertyDescriptorValue)
+      ) ? 'array' : 'object')
+      propertyDescriptor.value = defineProperties(propertyValueTarget, propertyDescriptorValue, options)
+    }
   }
   else if(
     options.typeCoercion && 
     Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined &&
-    !['undefined', 'null'].includes(typeOfPropertyValue)
+    !['undefined', 'null'].includes(typeOfPropertyDescriptorValue)
   ) {
-    propertyDescriptor.value = Variables.Primitives[propertyDescriptor.type](propertyDescriptor.value)
+    propertyDescriptor.value = Variables.Primitives[propertyDescriptor.type](propertyDescriptorValue)
   }
   Object.defineProperty($target, $propertyKey, propertyDescriptor)
   if($propertyDescriptor.sealed) { Object.seal($target[$propertyKey]) }

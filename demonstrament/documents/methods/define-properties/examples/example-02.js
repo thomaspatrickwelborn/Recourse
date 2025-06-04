@@ -1,4 +1,4 @@
-import { defineProperties } from '/dependencies/recourse.js'
+import { Recourse } from '/dependencies/recourse.js'
 const objectAST = {
   "propertyA": {
     "value": {
@@ -16,7 +16,7 @@ const objectAST = {
     "type": "object"
   }
 }
-const object = defineProperties({}, objectAST, {
+const object = Recourse.defineProperties({}, objectAST, {
   typeCoercion: true
 })
 const objectString = JSON.stringify(object, null, 2)
