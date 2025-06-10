@@ -15,14 +15,16 @@ import regularExpressions from './regular-expressions/index.js'
 import typedObjectLiteral from './typed-object-literal/index.js'
 import typeOf from './type-of/index.js'
 import isArrayLike from './is-array-like/index.js'
+import isEntries from './is-entries/index.js'
 import * as variables from './variables/index.js'
 import keys from './keys/index.js'
 import values from './values/index.js'
 import entries from './entries/index.js'
 import entities from './entities/index.js'
-import numerableEntries from './numerable-entries/index.js'
 import getOwnPropertyDescriptors from './get-own-property-descriptors/index.js'
 import getOwnPropertyDescriptor from './get-own-property-descriptor/index.js'
+import toString from './to-string/index.js'
+import valueOf from './value-of/index.js'
 
 class Recourse extends EventTarget {
   static compand = compand
@@ -33,7 +35,6 @@ class Recourse extends EventTarget {
   static values = values
   static entries = entries
   static entities = entities
-  static numerableEntries = numerableEntries
   static get = getProperty
   static set = setProperty
   static delete = deleteProperty
@@ -46,7 +47,10 @@ class Recourse extends EventTarget {
   static getOwnPropertyDescriptors = getOwnPropertyDescriptors
   static getOwnPropertyDescriptor = getOwnPropertyDescriptor
   static isArrayLike = isArrayLike
+  static isEntries = isEntries
   static typeOf = typeOf
+  static toString = toString
+  static valueOf = valueOf
 
   constructor($target) {
     super()
@@ -54,14 +58,14 @@ class Recourse extends EventTarget {
     for(const [$staticMethodName, $staticMethod] of Object.entries({
       compand: Recourse.compand, decompand: Recourse.decompand, 
       expand: Recourse.expand, impand: Recourse.impand,
+      entities: Recourse.entities,
       keys: Recourse.keys, values: Recourse.values, entries: Recourse.entries, 
-      entities: Recourse.entities, numerableEntries: Recourse.numerableEntries,
       get: Recourse.get, set: Recourse.set, delete: Recourse.delete,
       assign: Recourse.assign, assignConcat: Recourse.assignConcat, 
       defineProperties: Recourse.defineProperties, defineProperty: Recourse.defineProperty,
       freeze: Recourse.freeze, seal: Recourse.seal,
       getOwnPropertyDescriptors: Recourse.getOwnPropertyDescriptors, getOwnPropertyDescriptor: Recourse.getOwnPropertyDescriptor,
-      isArrayLike: Recourse.isArrayLike, typeOf: Recourse.typeOf,
+      isArrayLike: Recourse.isArrayLike, isEntries: Recourse.isEntries, typeOf: Recourse.typeOf,
     })) {
       Object.defineProperty(this, $staticMethodName, {
         value: $staticMethod.bind(this, $target)
@@ -71,14 +75,14 @@ class Recourse extends EventTarget {
 }
 export {
   Recourse, 
-  getProperty, setProperty, deleteProperty,
+  getProperty as get, setProperty as set, deleteProperty as delete,
   expand, impand, compand, decompand,
   assign, assignConcat,
   defineProperties, defineProperty,
   freeze, seal,
   keys, values, entries,
-  entities, numerableEntries,
+  entities, 
   getOwnPropertyDescriptors, getOwnPropertyDescriptor,
-  isArrayLike, typeOf,
+  isArrayLike, isEntries, typeOf,
   typedObjectLiteral, regularExpressions, variables,
 }

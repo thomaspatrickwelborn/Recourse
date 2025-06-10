@@ -27,9 +27,10 @@ const objectString = JSON.stringify(object, null, 2)
 const objectCompand = Recourse.compand(object, {
   values: true
 })
+const objectCompandString = JSON.stringify(objectCompand, null, 2)
 const objectDecompand = Recourse.decompand(objectCompand)
 console.log(objectDecompand)
 const objectDecompandString = JSON.stringify(objectDecompand, null, 2)
-console.log("objectString", objectString)
+// console.log("objectCompand", objectCompandString)
 console.log("objectDecompand", objectDecompandString)
 console.log("pass", objectDecompandString === objectString)

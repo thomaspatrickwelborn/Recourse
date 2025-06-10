@@ -46,6 +46,7 @@
     "recursive freeze",
     "recursive seal",
     "property descriptor tree",
-    "property path tree"
+    "property path tree",
+    "recursive get", "recursive set", "recursive delete"
   ]
 }

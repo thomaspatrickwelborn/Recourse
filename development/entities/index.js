@@ -1,40 +1,47 @@
-import numerableEntries from '../numerable-entries/index.js'
+import { Cessors, Accessors } from '../cessors/index.js'
 import typeOf from '../type-of/index.js'
+import { ObjectKeys } from '../variables/index.js'
 const Options = {
-  depth: 0,
-  maxDepth: 10,
-  enumerable: true,
-  nonenumerable: false,
+  accessors: [Accessors.default],
+  ancestors: [],
+  depth: 0, maxDepth: 10,
+  enumerable: true, nonenumerable: false,
   recurse: true,
 }
-export default function entities($target, $type, $options = {}) {
-  const _entities = []
+export default function entities($source, $type, $options) {
+  const sourceEntities = []
   const options = Object.assign({}, Options, $options, {
-    ancestors: [].concat($options.ancestors)
+    ancestors: [].concat($options.ancestors || [])
   })
-  const { ancestors, maxDepth, nonenumerable, recurse } = options
-  if(options.depth >= maxDepth) { return _entities }
+  const source = new Cessors([Accessors.default]).cess($source)
+  const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
+  if(options.depth >= maxDepth) { return sourceEntities }
   options.depth++
-  if(!ancestors.includes($target)) { ancestors.push($target) }
-  iterateObjectEntries: 
-  for(const [$key, $value] of numerableEntries($target, {
-    enumerable: true, nonenumerable
-  })) {
-    const typeOfValue = typeOf($value)
+  if(!ancestors.includes($source)) { ancestors.push($source) }
+  for(const [$key, $propertyDescriptor] of Object.entries(
+    Object.getOwnPropertyDescriptors($source)
+  )) {
     if(
-      recurse && 
-      ['array', 'object'].includes(typeOfValue) && 
-      !ancestors.includes($value)
+      enumerable && $propertyDescriptor.enumerable ||
+      nonenumerable && !$propertyDescriptor.enumerable
     ) {
-      if($type === 'entries') { _entities.push([$key, entities($value, $type, options)]) }
-      else if($type === 'values') { _entities.push(entities($value, $type, options)) }
-      else if($type === 'keys') { _entities.push($key, entities($value, $type, options)) }
-    }
-    else {
-      if($type === 'entries') { _entities.push([$key, $value]) }
-      else if($type === 'values') { _entities.push($value) }
-      else if($type === 'keys') { _entities.push($key) }
+      const $value = $propertyDescriptor.value
+      const typeOfValue = typeOf($value)
+      if(
+        recurse && 
+        ObjectKeys.includes(typeOfValue) && 
+        !ancestors.includes($value)
+      ) {
+        if($type === 'entries') { sourceEntities.push([$key, entities($value, $type, options)]) }
+        else if($type === 'values') { sourceEntities.push(entities($value, $type, options)) }
+        else if($type === 'keys') { sourceEntities.push($key, entities($value, $type, options)) }
+      }
+      else {
+        if($type === 'entries') { sourceEntities.push([$key, $value]) }
+        else if($type === 'values') { sourceEntities.push($value) }
+        else if($type === 'keys') { sourceEntities.push($key) }
+      }
     }
   }
-  return _entities
+  return sourceEntities
 }

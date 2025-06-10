@@ -3,7 +3,7 @@ import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import defineProperties from '../define-properties/index.js'
 import * as Variables from '../variables/index.js'
-import Options from './options.js'
+const Options = { typeCoercion: false }
 export default function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
   const propertyDescriptor = Object.assign({}, $propertyDescriptor)
   let propertyDescriptorValue = propertyDescriptor.value
@@ -11,9 +11,8 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
   const typeOfPropertyDescriptorValue = typeOf(propertyDescriptor.value)
   const targetPropertyValue = $target[$propertyKey]
   const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
-  const validObjects = ['array', 'object']
-  if(validObjects.includes(typeOfPropertyDescriptorValue)) {
-    if(validObjects.includes(typeOfTargetPropertyValue)) {
+  if(Variables.ObjectKeys.includes(typeOfPropertyDescriptorValue)) {
+    if(Variables.ObjectKeys.includes(typeOfTargetPropertyValue)) {
       propertyDescriptor.value = defineProperties(targetPropertyValue, propertyDescriptorValue, options)
     }
     else {

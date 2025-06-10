@@ -1,7 +1,7 @@
 import entities from '../entities/index.js'
 import typeOf from '../type-of/index.js'
 const Options = { strict: true }
-export default ($source, $options) => {
+export default function isArrayLike($source, $options) {
   const options = Object.assign({}, Options, $options)
   let isArrayLike
   const typeOfSource = typeOf($source)

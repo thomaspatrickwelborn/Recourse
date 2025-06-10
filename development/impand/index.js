@@ -1,4 +1,3 @@
-import * as Variables from '../variables/index.js'
 import getProperty from '../get-property/index.js'
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'

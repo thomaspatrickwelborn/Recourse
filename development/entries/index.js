@@ -1,4 +1,2 @@
 import entities from '../entities/index.js'
-export default function entries($target, $options) {
-  return entities($target, 'entries', $options)
-}
+export default ($target, $options) => entities($target, 'entries', $options)

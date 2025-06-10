@@ -1,5 +1,5 @@
 import typeOf from '../type-of/index.js'
-const Options = { }
+import { ObjectKeys } from '../variables/index.js'
 export default function assignSources($target, $type, ...$sources) {
   if(!$target) { return $target}
   const typeOfTarget = typeOf($target)
@@ -17,7 +17,7 @@ export default function assignSources($target, $type, ...$sources) {
         $target.push($sourcePropertyValue)
       }
       else {
-        if(['array', 'object'].includes(typeOfTargetPropertyValue)) {
+        if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
           assignSources(targetPropertyValue, $type, $sourcePropertyValue)
         }
         else {

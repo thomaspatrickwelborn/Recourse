@@ -2,65 +2,61 @@ var regularExpressions = {
   quotationEscape: /\.(?=(?:[^"]*"[^"]*")*[^"]*$)/,
 };
 
-function getProperty() {
-  const [$target, $path] = [...arguments];
-  if($path === undefined) return arguments[0]
-  const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
-  let subtarget = $target;
-  for(const $subpath of subpaths) {
-    try { subtarget = subtarget[$subpath]; }
-    catch($err) { subtarget = undefined; }
-  }
-  return subtarget
-}
-
 var typeOf = ($operand) => Object
   .prototype
   .toString
   .call($operand).slice(8, -1).toLowerCase();
 
-function typedObjectLiteral($value) {
-  let _typedObjectLiteral;
-  const typeOfValue = typeOf($value);
-  if(typeOfValue === 'string') {
-    const value = $value.toLowerCase();
-    if(value === 'object') { _typedObjectLiteral = {}; }
-    else if(value === 'array') { _typedObjectLiteral = []; }
+class Cessors extends EventTarget {
+  constructor($cessors) {
+    super();
+    const cessors = Object.assign([], $cessors);
+    Object.defineProperties(this, {
+      'cess': { value: function cess() {
+        let cessValue;
+        iterateAccessors: 
+        for(const $cessor of cessors) {
+          cessValue = $cessor(...arguments);
+          if(cessValue !== undefined) { break iterateAccessors }
+        }
+        return cessValue
+      } },
+    });
   }
-  else  {
-    if(typeOfValue === 'object') { _typedObjectLiteral = {}; }
-    else if(typeOfValue === 'array') { _typedObjectLiteral = []; }
-  }
-  return _typedObjectLiteral
 }
-
-function setProperty() {
-  const $target = arguments[0];
-  const properties = (typeOf(arguments[1]) === 'string')
-    ? { [arguments[1]]: arguments[2] }
-    : arguments[1];
-  for(const [$path, $value] of Object.entries(properties)) {
-    const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
-    const key = subpaths.pop();
-    let subtarget = $target;
-    for(const $subpath of subpaths) {
-      subtarget[$subpath] = subtarget[$subpath] || (
-        isNaN($subpath) ? {} : []
-      );
-      subtarget = subtarget[$subpath];
-    }
-    subtarget[key] = $value;
+const Accessors = { default: function($target, $property) {
+  if($property === undefined) { return $target }
+  else { return $target[$property] }
+} };
+const Processors = { default: function() {
+  if(typeOf(arguments[1]) === 'string') {
+    const [$target, $property, $value, $options] = [...arguments];
+    $target[$property] = $value;
+    return $target[$property]
   }
-  return $target
-}
+  else {
+    let [$target, $value, $options] = [...arguments];
+    return $value
+  }
+} };
 
-function deleteProperty($target, $path) {
+const Options$c = { accessors: [Accessors.default] };
+function getProperty() {
+  const [$target, $path, $options] = [...arguments];
+  const options = Object.assign ({}, Options$c, $options);
+  if($path === undefined) return arguments[0]
+  const accessors = new Cessors(options.accessors);
   const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
-  const key = subpaths.pop();
   let subtarget = $target;
-  for(const $subpath of subpaths) { subtarget = subtarget[$subpath]; }
-  delete subtarget[key];
-  return
+  iterateSubpaths: 
+  for(const $subpath of subpaths) {
+    try {
+      subtarget = accessors.cess(subtarget, $subpath);
+      if(subtarget === undefined) { break iterateSubpaths } 
+    }
+    catch($err) { break iterateSubpaths }
+  }
+  return subtarget
 }
 
 const Primitives = {
@@ -101,70 +97,116 @@ var index = /*#__PURE__*/Object.freeze({
   Types: Types
 });
 
-const Options$9 = { enumerable: true, nonenumerable: true };
-function numerableEntries($target, $options) {
-  const _numerableEntries = [];
-  const options = Object.assign({}, Options$9, $options);
-  const { enumerable, nonenumerable } = options;
-  if(!enumerable && !nonenumerable) return []
-  const propertyDescriptors = Object.getOwnPropertyDescriptors($target);
-  for(const [$property, $propertyDescriptor] of Object.entries(propertyDescriptors)) {
+const Options$b = {
+  accessors: [Accessors.default],
+  ancestors: [],
+  depth: 0, maxDepth: 10,
+  enumerable: true, nonenumerable: false,
+  recurse: true,
+};
+function entities($source, $type, $options) {
+  const sourceEntities = [];
+  const options = Object.assign({}, Options$b, $options, {
+    ancestors: [].concat($options.ancestors || [])
+  });
+  new Cessors([Accessors.default]).cess($source);
+  const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options;
+  if(options.depth >= maxDepth) { return sourceEntities }
+  options.depth++;
+  if(!ancestors.includes($source)) { ancestors.push($source); }
+  for(const [$key, $propertyDescriptor] of Object.entries(
+    Object.getOwnPropertyDescriptors($source)
+  )) {
     if(
       enumerable && $propertyDescriptor.enumerable ||
       nonenumerable && !$propertyDescriptor.enumerable
-    ) { _numerableEntries.push([$property, $propertyDescriptor.value]); }
-  }
-  return _numerableEntries
-}
-
-const Options$8 = {
-  depth: 0,
-  maxDepth: 10,
-  enumerable: true,
-  nonenumerable: false,
-  recurse: true,
-};
-function entities($target, $type, $options = {}) {
-  const _entities = [];
-  const options = Object.assign({}, Options$8, $options, {
-    ancestors: [].concat($options.ancestors)
-  });
-  const { ancestors, maxDepth, nonenumerable, recurse } = options;
-  if(options.depth >= maxDepth) { return _entities }
-  options.depth++;
-  if(!ancestors.includes($target)) { ancestors.push($target); }
-  for(const [$key, $value] of numerableEntries($target, {
-    enumerable: true, nonenumerable
-  })) {
-    const typeOfValue = typeOf($value);
-    if(
-      recurse && 
-      ['array', 'object'].includes(typeOfValue) && 
-      !ancestors.includes($value)
     ) {
-      if($type === 'entries') { _entities.push([$key, entities($value, $type, options)]); }
-      else if($type === 'values') { _entities.push(entities($value, $type, options)); }
-      else if($type === 'keys') { _entities.push($key, entities($value, $type, options)); }
-    }
-    else {
-      if($type === 'entries') { _entities.push([$key, $value]); }
-      else if($type === 'values') { _entities.push($value); }
-      else if($type === 'keys') { _entities.push($key); }
+      const $value = $propertyDescriptor.value;
+      const typeOfValue = typeOf($value);
+      if(
+        recurse && 
+        ObjectKeys.includes(typeOfValue) && 
+        !ancestors.includes($value)
+      ) {
+        if($type === 'entries') { sourceEntities.push([$key, entities($value, $type, options)]); }
+        else if($type === 'values') { sourceEntities.push(entities($value, $type, options)); }
+        else if($type === 'keys') { sourceEntities.push($key, entities($value, $type, options)); }
+      }
+      else {
+        if($type === 'entries') { sourceEntities.push([$key, $value]); }
+        else if($type === 'values') { sourceEntities.push($value); }
+        else if($type === 'keys') { sourceEntities.push($key); }
+      }
     }
   }
-  return _entities
+  return sourceEntities
 }
 
-function entries($target, $options) {
-  return entities($target, 'entries', $options)
+function typedObjectLiteral($value) {
+  let _typedObjectLiteral;
+  const typeOfValue = typeOf($value);
+  if(typeOfValue === 'string') {
+    const value = $value.toLowerCase();
+    if(value === 'object') { _typedObjectLiteral = {}; }
+    else if(value === 'array') { _typedObjectLiteral = []; }
+  }
+  else  {
+    if(typeOfValue === 'object') { _typedObjectLiteral = {}; }
+    else if(typeOfValue === 'array') { _typedObjectLiteral = []; }
+  }
+  return _typedObjectLiteral
 }
 
-const Options$7 = { ancestors: [], nonenumerable: false };
+const Options$a = {
+  enumerable: true, nonenumerable: false,
+  accessors: [Accessors.default], 
+  processors: [Processors.default],
+};
+function setProperty() {
+  const $arguments = [...arguments];
+  if(typeOf($arguments[1]) === 'string') {
+    const [$target, $path, $value, $options] = $arguments;
+    const options = Object.assign({}, Options$a, $options);
+    const accessors = new Cessors(options.accessors);
+    const processors = new Cessors(options.processors);
+    const { enumerable, nonenumerable } = options;
+    const target = accessors.cess($target);
+    const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
+    const key = subpaths.pop();
+    let subtarget = target;
+    for(const $subpath of subpaths) {
+      subtarget = accessors.cess(subtarget, $subpath, options) || processors.cess(
+        subtarget, $subpath, isNaN($subpath) ? {} : [], options
+      );
+    }
+    processors.cess(subtarget, key, $value);
+    return $target
+  }
+  else {
+    const [$target, $value] = $arguments;
+    return $target
+  }
+}
+
+function deleteProperty($target, $path) {
+  const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
+  const key = subpaths.pop();
+  let subtarget = $target;
+  for(const $subpath of subpaths) { subtarget = subtarget[$subpath]; }
+  delete subtarget[key];
+  return
+}
+
+var entries = ($target, $options) => entities($target, 'entries', $options);
+
+const Options$9 = { ancestors: [], nonenumerable: false };
 const ValidPathTypes = ['string', 'function'];
 function expand($source, $path, $options = {}) {
-  const options = Object.assign({}, Options$7, $options, {
-    ancestors: [].concat($options.ancestors)
+  const options = Object.assign({}, Options$9, $options, {
+    ancestors: [].concat($options.ancestors || []),
+    // accessors: [Acessors.default],
   });
+  // throw options
   const { ancestors } = options;
   const typeOfPath = typeOf($path);
   const typeOfSource = typeOf($source);
@@ -186,7 +228,8 @@ function expand($source, $path, $options = {}) {
       !Object.is($sourceValue, $source) && 
       !ancestors.includes($sourceValue)
     ) {
-      target[$sourceKey] = setProperty({}, $path, targetValue);
+      // throw [target, $sourceKey, $path, targetValue, options]
+      target[$sourceKey] = setProperty({}, $path, targetValue, options);
     }
     else if(typeOfPath === ValidPathTypes[1]) {
       target[$sourceKey] = $path(targetValue);
@@ -195,9 +238,9 @@ function expand($source, $path, $options = {}) {
   return target
 }
 
-const Options$6 = {};
+const Options$8 = {};
 function impand($source, $property, $options) {
-  const options = Object.assign({}, Options$6, $options);
+  const options = Object.assign({}, Options$8, $options);
   const typeOfProperty = typeOf($property);
   let target = typedObjectLiteral($source);
   for(const [$sourceKey, $sourceValue] of entries(
@@ -212,57 +255,44 @@ function impand($source, $property, $options) {
   return target
 }
 
-const defaultAccessor = ($target, $property) => {
-  if($property === undefined) { return $target }
-  else { return $target[$property] }
-};
-var Accessors = {
-  default: defaultAccessor};
-
-var Options$5 = {
+const Options$7 = {
   accessors: [Accessors.default],
   ancestors: [],
-  depth: 0,
-  maxDepth: 10,
-  nonenumerable: false, 
+  depth: 0, maxDepth: 10,
+  enumerable: true, nonenumerable: false, 
   values: false,
 };
-
 function compand($source, $options) {
   const target = [];
-  const options = Object.assign({}, Options$5, $options, {
-    ancestors: [].concat($options.ancestors)
+  const options = Object.assign({}, Options$7, $options, {
+    ancestors: [].concat($options.ancestors || [])
   });
-  const { accessors, ancestors, nonenumerable, values } = options;
+  const { ancestors, nonenumerable, values } = options;
   options.depth++;
   if(options.depth > options.maxDepth) { return target }
-  iterateAccessors: 
-  for(const $accessor of accessors) {
-    const source = $accessor($source);
-    if(!source) { continue iterateAccessors }
-    if(!ancestors.includes(source)) { ancestors.unshift(source); }
-    const objectProperties = entries(source, { nonenumerable, recurse: false });  
-    for(const [$key, $value] of objectProperties) {
-      if(!values) { target.push($key); }
-      else if(values) { target.push([$key, $value]); }
-      if(
-        typeof $value === 'object' &&
-        $value !== null &&
-        !Object.is($value, source) && 
-        !ancestors.includes($value)
-      ) {
-        const subsources = compand($value, options);
-        if(!values) {
-          for(const $subsource of subsources) {
-            const path = [$key, $subsource].join('.');
-            target.push(path);
-          }
+  const source = new Cessors(options.accessors).cess($source);
+  if(!ancestors.includes(source)) { ancestors.unshift(source); }
+  const objectProperties = entities(source, 'entries', { nonenumerable, recurse: false });  
+  for(const [$key, $value] of objectProperties) {
+    if(!values) { target.push($key); }
+    else if(values) { target.push([$key, $value]); }
+    if(
+      typeof $value === 'object' &&
+      $value !== null &&
+      !Object.is($value, source) && 
+      !ancestors.includes($value)
+    ) {
+      const subsources = compand($value, options);
+      if(!values) {
+        for(const $subsource of subsources) {
+          const path = [$key, $subsource].join('.');
+          target.push(path);
         }
-        else if(values) {
-          for(const [$subsourceKey, $subsource] of subsources) {
-            const path = [$key, $subsourceKey].join('.');
-            target.push([path, $subsource]);
-          }
+      }
+      else if(values) {
+        for(const [$subsourceKey, $subsource] of subsources) {
+          const path = [$key, $subsourceKey].join('.');
+          target.push([path, $subsource]);
         }
       }
     }
@@ -270,12 +300,17 @@ function compand($source, $options) {
   return target
 }
 
+const Options$6 = {
+  processors: [Processors.default],
+  values: false,
+};
 function decompand($source, $options) {
+  const options = Object.assign({}, Options$6, $options);
   const sourceEntries = (typeOf($source) === 'object') ? Object.entries($source) : $source;
   if(!sourceEntries) { return }
   const target = (isNaN(sourceEntries[0][0])) ? {} : [];
   for(const [$propertyPath, $propertyValue] of sourceEntries) {
-    setProperty(target, $propertyPath, $propertyValue);
+    setProperty(target, $propertyPath, $propertyValue, options);
   }
   return target
 }
@@ -296,7 +331,7 @@ function assignSources($target, $type, ...$sources) {
         $target.push($sourcePropertyValue);
       }
       else {
-        if(['array', 'object'].includes(typeOfTargetPropertyValue)) {
+        if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
           assignSources(targetPropertyValue, $type, $sourcePropertyValue);
         }
         else {
@@ -308,17 +343,13 @@ function assignSources($target, $type, ...$sources) {
   return $target
 }
 
-function assign($target, ...$sources) {
-  return assignSources($target, 'assign', ...$sources)
-}
+var assign = ($target, ...$sources) => assignSources($target, 'assign', ...$sources);
 
-function assignConcat($target, ...$sources) {
-  return assignSources($target, 'assignConcat', ...$sources)
-}
+var assignConcat = ($target, ...$sources) => assignSources($target, 'assignConcat', ...$sources);
 
-const Options$4 = { strict: true };
-var isArrayLike = ($source, $options) => {
-  const options = Object.assign({}, Options$4, $options);
+const Options$5 = { strict: true };
+function isArrayLike($source, $options) {
+  const options = Object.assign({}, Options$5, $options);
   let isArrayLike;
   const typeOfSource = typeOf($source);
   if(typeOfSource === 'array') { isArrayLike = true; }
@@ -346,22 +377,18 @@ var isArrayLike = ($source, $options) => {
   }
   else { isArrayLike = false; }
   return isArrayLike
-};
+}
 
-var Options$3 = {
-  typeCoercion: false,
-};
-
+const Options$4 = { typeCoercion: false };
 function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
   const propertyDescriptor = Object.assign({}, $propertyDescriptor);
   let propertyDescriptorValue = propertyDescriptor.value;
-  const options = Object.assign({}, Options$3, $options);
+  const options = Object.assign({}, Options$4, $options);
   const typeOfPropertyDescriptorValue = typeOf(propertyDescriptor.value);
   const targetPropertyValue = $target[$propertyKey];
   const typeOfTargetPropertyValue = typeOf(targetPropertyValue);
-  const validObjects = ['array', 'object'];
-  if(validObjects.includes(typeOfPropertyDescriptorValue)) {
-    if(validObjects.includes(typeOfTargetPropertyValue)) {
+  if(ObjectKeys.includes(typeOfPropertyDescriptorValue)) {
+    if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
       propertyDescriptor.value = defineProperties(targetPropertyValue, propertyDescriptorValue, options);
     }
     else {
@@ -393,8 +420,25 @@ function defineProperties($target, $propertyDescriptors, $options) {
   return $target
 }
 
-const Options$2 = { ancestors: [] };
+const Options$3 = { ancestors: [] };
 function freeze($target, $options) {
+  const { ancestors } = Object.assign({}, Options$3, $options, {
+    ancestors: Object.assign([], $options.ancestors)
+  });
+  if(!options.ancestors.includes($target)) { options.ancestors.unshift($target); }
+  iterateTargetProperties: 
+  for(const [$propertyKey, $propertyValue] of Object.entries($target)) {
+    const typeOfPropertyValue = typeOf($propertyValue);
+    if(options.ancestors.includes($propertyValue)) { continue iterateTargetProperties }
+    if(ObjectKeys.includes(typeOfPropertyValue)) {
+      freeze($propertyValue, options);
+    }
+  }
+  return Object.freeze($target)
+}
+
+const Options$2 = { ancestors: [] };
+function seal($target, $options) {
   const { ancestors } = Object.assign({}, Options$2, $options, {
     ancestors: Object.assign([], $options.ancestors)
   });
@@ -403,39 +447,43 @@ function freeze($target, $options) {
   for(const [$propertyKey, $propertyValue] of Object.entries($target)) {
     const typeOfPropertyValue = typeOf($propertyValue);
     if(options.ancestors.includes($propertyValue)) { continue iterateTargetProperties }
-    if(['array', 'object'].includes(typeOfPropertyValue)) {
-      freeze($propertyValue, options);
-    }
-  }
-  return Object.freeze($target)
-}
-
-const Options$1 = { ancestors: [] };
-function seal($target, $options) {
-  const { ancestors } = Object.assign({}, Options$1, $options, {
-    ancestors: Object.assign([], $options.ancestors)
-  });
-  if(!options.ancestors.includes($target)) { options.ancestors.unshift($target); }
-  iterateTargetProperties: 
-  for(const [$propertyKey, $propertyValue] of Object.entries($target)) {
-    const typeOfPropertyValue = typeOf($propertyValue);
-    if(options.ancestors.includes($propertyValue)) { continue iterateTargetProperties }
-    if(['array', 'object'].includes(typeOfPropertyValue)) {
+    if(ObjectKeys.includes(typeOfPropertyValue)) {
       seal($propertyValue, options);
     }
   }
   return Object.seal($target)
 }
 
-function keys($target, $options) {
-  return entities($target, 'keys', $options)
+const Options$1 = { strict: true, isArrayLike: false };
+function isEntries($source, $options) {
+  const options = Object.assign({}, Options$1, $options);
+  if(typeOf($source) !== 'array') {
+    if(options.isArrayLike && isArrayLike($source, {
+      strict: options.strict
+    })) { $source = Array.from($source); }
+    else { return false }
+  }
+  if(!options.strict && !$source.length) { return true }
+  else {
+    let isEntries;
+    iterateSourceEntities: 
+    for(const $soureEntity of $source) {
+      isEntries = (
+        typeOf($soureEntity) === 'array' &&
+        $soureEntity.length === 2 &&
+        ['string', 'number', 'symbol'].includes(typeOf($soureEntity[0]))
+      );
+      if(isEntries === false) { break iterateSourceEntities }
+    }
+    return isEntries
+  }
 }
 
-function values($target, $options) {
-  return entities($target, 'values', $options)
-}
+var keys = ($target, $options) => entities($target, 'keys', $options);
 
-var Options = {
+var values = ($target, $options) => entities($target, 'values', $options);
+
+const Options = {
   accessors: [Accessors.default],
   ancestors: [],
   delimiter: '.',
@@ -447,30 +495,32 @@ var Options = {
   sealed: false,
   type: false,
 };
-
 function getOwnPropertyDescriptor($properties, $propertyKey, $options = {}) {
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors),
   });
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++; }
-  const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey);
-  if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
-  if(!options.ancestors.includes($properties)) { options.ancestors.unshift($properties); }
-  if(options.ancestors.includes(propertyDescriptor.value)) { return }
-  if(options.path) {
-    options.path = (
-      typeOf(options.path) === 'string'
-    ) ? [options.path, $propertyKey].join(options.delimiter) : $propertyKey;
-    propertyDescriptor.path = options.path;
+  const propertyValue = new Cessors(options.accessors).cess($properties, $propertyKey);
+  if(propertyValue) {
+    const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey);
+    if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
+    if(!options.ancestors.includes($properties)) { options.ancestors.unshift($properties); }
+    if(options.ancestors.includes(/*propertyValue*/propertyValue)) { return }
+    if(options.path) {
+      options.path = (
+        typeOf(options.path) === 'string'
+      ) ? [options.path, $propertyKey].join(options.delimiter) : $propertyKey;
+      propertyDescriptor.path = options.path;
+    }
+    if(options.type) { propertyDescriptor.type = typeOf(propertyValue); }
+    if(options.frozen) { propertyDescriptor.frozen = Object.isFrozen(propertyValue); }
+    if(options.sealed) { propertyDescriptor.sealed = Object.isSealed(propertyValue); }
+    if(ObjectKeys.includes(typeOf(propertyValue))) {
+      propertyDescriptor.value = getOwnPropertyDescriptors(propertyValue, options);
+    }
+    return propertyDescriptor
   }
-  if(options.type) { propertyDescriptor.type = typeOf(propertyDescriptor.value); }
-  if(options.frozen) { propertyDescriptor.frozen = Object.isFrozen(propertyDescriptor.value); }
-  if(options.sealed) { propertyDescriptor.sealed = Object.isSealed(propertyDescriptor.value); }
-  if(['array', 'object'].includes(typeOf(propertyDescriptor.value))) {
-    propertyDescriptor.value = getOwnPropertyDescriptors(propertyDescriptor.value, options);
-  }
-  return propertyDescriptor
 }
 
 function getOwnPropertyDescriptors($target, $options) {
@@ -482,6 +532,10 @@ function getOwnPropertyDescriptors($target, $options) {
   return propertyDescriptors
 }
 
+function toString($target, $options) {}
+
+function valueOf($target, $options) {}
+
 class Recourse extends EventTarget {
   static compand = compand
   static decompand = decompand
@@ -491,7 +545,6 @@ class Recourse extends EventTarget {
   static values = values
   static entries = entries
   static entities = entities
-  static numerableEntries = numerableEntries
   static get = getProperty
   static set = setProperty
   static delete = deleteProperty
@@ -504,21 +557,24 @@ class Recourse extends EventTarget {
   static getOwnPropertyDescriptors = getOwnPropertyDescriptors
   static getOwnPropertyDescriptor = getOwnPropertyDescriptor
   static isArrayLike = isArrayLike
+  static isEntries = isEntries
   static typeOf = typeOf
+  static toString = toString
+  static valueOf = valueOf
 
   constructor($target) {
     super();
     for(const [$staticMethodName, $staticMethod] of Object.entries({
       compand: Recourse.compand, decompand: Recourse.decompand, 
       expand: Recourse.expand, impand: Recourse.impand,
+      entities: Recourse.entities,
       keys: Recourse.keys, values: Recourse.values, entries: Recourse.entries, 
-      entities: Recourse.entities, numerableEntries: Recourse.numerableEntries,
       get: Recourse.get, set: Recourse.set, delete: Recourse.delete,
       assign: Recourse.assign, assignConcat: Recourse.assignConcat, 
       defineProperties: Recourse.defineProperties, defineProperty: Recourse.defineProperty,
       freeze: Recourse.freeze, seal: Recourse.seal,
       getOwnPropertyDescriptors: Recourse.getOwnPropertyDescriptors, getOwnPropertyDescriptor: Recourse.getOwnPropertyDescriptor,
-      isArrayLike: Recourse.isArrayLike, typeOf: Recourse.typeOf,
+      isArrayLike: Recourse.isArrayLike, isEntries: Recourse.isEntries, typeOf: Recourse.typeOf,
     })) {
       Object.defineProperty(this, $staticMethodName, {
         value: $staticMethod.bind(this, $target)
@@ -527,5 +583,5 @@ class Recourse extends EventTarget {
   }
 }
 
-export { Recourse, assign, assignConcat, compand, decompand, defineProperties, defineProperty, deleteProperty, entities, entries, expand, freeze, getOwnPropertyDescriptor, getOwnPropertyDescriptors, getProperty, impand, isArrayLike, keys, numerableEntries, regularExpressions, seal, setProperty, typeOf, typedObjectLiteral, values, index as variables };
+export { Recourse, assign, assignConcat, compand, decompand, defineProperties, defineProperty, deleteProperty as delete, entities, entries, expand, freeze, getProperty as get, getOwnPropertyDescriptor, getOwnPropertyDescriptors, impand, isArrayLike, isEntries, keys, regularExpressions, seal, setProperty as set, typeOf, typedObjectLiteral, values, index as variables };
 //# sourceMappingURL=recourse.js.map

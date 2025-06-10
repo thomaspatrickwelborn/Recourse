@@ -1,4 +1,2 @@
 import assignSources from '../assign-sources/index.js'
-export default function assign($target, ...$sources) {
-  return assignSources($target, 'assign', ...$sources)
-}
+export default ($target, ...$sources) => assignSources($target, 'assign', ...$sources)
