@@ -1,6 +1,7 @@
 import getProperty from './get-property/index.js'
 import setProperty from './set-property/index.js'
 import deleteProperty from './delete-property/index.js'
+import * as cessors from './cessors/index.js'
 import expand from './expand/index.js'
 import impand from './impand/index.js'
 import compand from './compand/index.js'
@@ -74,7 +75,7 @@ class Recourse extends EventTarget {
   }
 }
 export {
-  Recourse, 
+  Recourse, cessors, 
   getProperty as get, setProperty as set, deleteProperty as delete,
   expand, impand, compand, decompand,
   assign, assignConcat,

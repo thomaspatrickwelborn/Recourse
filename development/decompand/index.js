@@ -1,9 +1,9 @@
-import { Cessors, Processors } from '../cessors/index.js'
+import { Cessors, Setters } from '../cessors/index.js'
 import typeOf from '../type-of/index.js'
 import setProperty from '../set-property/index.js'
 import entries from '../entries/index.js'
 const Options = {
-  processors: [Processors.default],
+  setters: [Setters.Object],
   values: false,
 }
 export default function decompand($source, $options) {
