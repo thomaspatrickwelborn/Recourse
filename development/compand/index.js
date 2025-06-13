@@ -1,10 +1,12 @@
-import { Cessors, Accessors } from '../cessors/index.js'
+import { Cessors, Getters } from '../cessors/index.js'
 import entities from '../entities/index.js'
 const Options = {
-  accessors: [Accessors.default],
   ancestors: [],
-  depth: 0, maxDepth: 10,
-  enumerable: true, nonenumerable: false, 
+  depth: 0, 
+  enumerable: true,
+  getters: [Getters.Object, Getters.Map],
+  maxDepth: 10,
+  nonenumerable: false, 
   values: false,
 }
 export default function compand($source, $options) {
@@ -15,7 +17,7 @@ export default function compand($source, $options) {
   const { ancestors, nonenumerable, values } = options
   options.depth++
   if(options.depth > options.maxDepth) { return target }
-  const source = new Cessors(options.accessors).cess($source)
+  const source = new Cessors(options.getters).cess($source)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
   const objectProperties = entities(source, 'entries', { nonenumerable, recurse: false })  
   iterateObjectProperties: 

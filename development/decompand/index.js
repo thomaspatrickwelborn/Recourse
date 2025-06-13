@@ -1,14 +1,15 @@
-import { Cessors, Processors } from '../cessors/index.js'
+import { Cessors, Setters } from '../cessors/index.js'
 import typeOf from '../type-of/index.js'
 import setProperty from '../set-property/index.js'
-import entries from '../entries/index.js'
+import entities from '../entities/index.js'
 const Options = {
-  processors: [Processors.default],
-  values: false,
+  setters: [Setters.Object],
 }
 export default function decompand($source, $options) {
   const options = Object.assign({}, Options, $options)
-  const sourceEntries = (typeOf($source) === 'object') ? Object.entries($source) : $source
+  const sourceEntries = (
+    typeOf($source) === 'object'
+  ) ? entities($source, 'entries', options) : $source
   if(!sourceEntries) { return }
   const target = (isNaN(sourceEntries[0][0])) ? {} : []
   iterateSourceEntries: 

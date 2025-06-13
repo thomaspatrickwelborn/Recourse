@@ -1,8 +1,8 @@
-import { Cessors, Accessors } from '../cessors/index.js'
+import { Cessors, Getters } from '../cessors/index.js'
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
-  accessors: [Accessors.default],
+  getters: [Getters.Object, Getters.Map],
   ancestors: [],
   depth: 0, maxDepth: 10,
   enumerable: true, nonenumerable: false,
@@ -13,13 +13,13 @@ export default function entities($source, $type, $options) {
   const options = Object.assign({}, Options, $options, {
     ancestors: [].concat($options.ancestors || [])
   })
-  const source = new Cessors([Accessors.default]).cess($source)
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
-  if(options.depth >= maxDepth) { return sourceEntities }
-  options.depth++
+  if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.push($source) }
+  const source = new Cessors(options.getters).cess($source)
+  options.depth++
   for(const [$key, $propertyDescriptor] of Object.entries(
-    Object.getOwnPropertyDescriptors($source)
+    Object.getOwnPropertyDescriptors(source)
   )) {
     if(
       enumerable && $propertyDescriptor.enumerable ||

@@ -1,0 +1,51 @@
+import typeOf from '../../type-of/index.js'
+// Object Getter
+function Getter() {
+  const $target = arguments[0]
+  if(!['object', 'array'].includes(typeOf($target))) { return }
+  if(typeOf(arguments[1]) === 'string') {
+    const $property = arguments[1]
+    return $target[$property]
+  }
+  else {
+    return $target
+  }
+}
+// Object Setter
+function Setter() {
+  const $arguments = [...arguments]
+  if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
+  else if(typeOf($arguments[1]) === 'string') {
+    const [$target, $property, $value, $options] = $arguments
+    $target[$property] = $value
+    return $target[$property]
+  }
+  else {
+    const [$target, $source, $options] = $arguments
+    iterateTargetEntries: 
+    for(const $targetKey of Object.keys($target)) {
+      delete $target[$targetKey]
+    }
+    iterateSourceEntries: 
+    for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
+      $target[$sourceKey] = $sourceValue
+    }
+    return $target
+  }
+}
+// Object Deleter
+function Deleter($target, $property, $options) {
+  const $arguments = [...arguments]
+  if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
+  else if(typeOf($arguments[1]) === 'string') {
+    return delete $target[$property]
+  }
+  else {
+    iterateTargetKeys: 
+    for(const $targetKey of Object.keys($target)) {
+      delete $target[$targetKey]
+    }
+    return undefined
+  } 
+}
+export { Getter, Setter, Deleter }

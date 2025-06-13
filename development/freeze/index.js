@@ -1,19 +1,23 @@
 import typeOf from '../type-of/index.js'
+import entities from '../entities/index.js'
+import { Cessors, Getters } from '../cessors/index.js'
 import { ObjectKeys } from '../variables/index.js'
-const Options = { ancestors: [] }
-function freeze($target, $options) {
-  const { ancestors } = Object.assign({}, Options, $options, {
+const Options = {
+  ancestors: [],
+  getters: [Getters.Object, Getters.Map], 
+}
+export default function freeze($target, $options = {}) {
+  const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
-  if(!options.ancestors.includes($target)) { options.ancestors.unshift($target) }
-  iterateTargetProperties: 
-  for(const [$propertyKey, $propertyValue] of Object.entries($target)) {
-    const typeOfPropertyValue = typeOf($propertyValue)
-    if(options.ancestors.includes($propertyValue)) { continue iterateTargetProperties }
-    if(ObjectKeys.includes(typeOfPropertyValue)) {
+  const targetEntities = entities($target, 'entries', Object.assign(options, {
+    recurse: false
+  }))
+  iterateTargetEntities: 
+  for(const [$propertyKey, $propertyValue] of targetEntities) {
+    if(ObjectKeys.includes(typeOf($propertyValue)/*typeOfPropertyValue*/)) {
       freeze($propertyValue, options)
     }
   }
   return Object.freeze($target)
 }
-export default freeze

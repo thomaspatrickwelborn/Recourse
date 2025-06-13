@@ -1,9 +1,9 @@
 import typeOf from '../type-of/index.js'
 import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
-import { Cessors, Accessors } from '../cessors/index.js'
+import { Cessors, Getters } from '../cessors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
-  accessors: [Accessors.default],
+  getters: [Getters.Object, Getters.Map],
   ancestors: [],
   delimiter: '.',
   depth: 0,
@@ -20,7 +20,7 @@ export default function getOwnPropertyDescriptor($properties, $propertyKey, $opt
   })
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++ }
-  const propertyValue = new Cessors(options.accessors).cess($properties, $propertyKey)
+  const propertyValue = new Cessors(options.getters).cess($properties, $propertyKey)
   if(propertyValue) {
     const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey)
     if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
