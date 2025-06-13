@@ -1,6 +1,7 @@
 import getProperty from './get-property/index.js'
 import setProperty from './set-property/index.js'
 import deleteProperty from './delete-property/index.js'
+import * as cessors from './cessors/index.js'
 import expand from './expand/index.js'
 import impand from './impand/index.js'
 import compand from './compand/index.js'
@@ -23,6 +24,7 @@ import entries from './entries/index.js'
 import entities from './entities/index.js'
 import getOwnPropertyDescriptors from './get-own-property-descriptors/index.js'
 import getOwnPropertyDescriptor from './get-own-property-descriptor/index.js'
+import splitPath from './split-path/index.js'
 import toString from './to-string/index.js'
 import valueOf from './value-of/index.js'
 
@@ -74,7 +76,7 @@ class Recourse extends EventTarget {
   }
 }
 export {
-  Recourse, 
+  Recourse, cessors, 
   getProperty as get, setProperty as set, deleteProperty as delete,
   expand, impand, compand, decompand,
   assign, assignConcat,
@@ -84,5 +86,7 @@ export {
   entities, 
   getOwnPropertyDescriptors, getOwnPropertyDescriptor,
   isArrayLike, isEntries, typeOf,
+  splitPath, 
   typedObjectLiteral, regularExpressions, variables,
+  valueOf, toString,
 }

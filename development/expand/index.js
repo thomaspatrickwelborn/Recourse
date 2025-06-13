@@ -8,9 +8,7 @@ const ValidPathTypes = ['string', 'function']
 export default function expand($source, $path, $options = {}) {
   const options = Object.assign({}, Options, $options, {
     ancestors: [].concat($options.ancestors || []),
-    // accessors: [Acessors.default],
   })
-  // throw options
   const { ancestors } = options
   const typeOfPath = typeOf($path)
   const typeOfSource = typeOf($source)
@@ -32,7 +30,6 @@ export default function expand($source, $path, $options = {}) {
       !Object.is($sourceValue, $source) && 
       !ancestors.includes($sourceValue)
     ) {
-      // throw [target, $sourceKey, $path, targetValue, options]
       target[$sourceKey] = setProperty({}, $path, targetValue, options)
     }
     else if(typeOfPath === ValidPathTypes[1]) {
