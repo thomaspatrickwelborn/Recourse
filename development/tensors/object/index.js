@@ -1,6 +1,6 @@
 import typeOf from '../../type-of/index.js'
 // Object Getter
-function Getter() {
+function Getter(...$arguments) {
   const $target = arguments[0]
   if(!['object', 'array'].includes(typeOf($target))) { return }
   if(typeOf(arguments[1]) === 'string') {
@@ -16,12 +16,12 @@ function Setter() {
   const $arguments = [...arguments]
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
   else if(typeOf($arguments[1]) === 'string') {
-    const [$target, $property, $value, $options] = $arguments
+    const [$target, $property, $value] = $arguments
     $target[$property] = $value
     return $target[$property]
   }
   else {
-    const [$target, $source, $options] = $arguments
+    const [$target, $source] = $arguments
     iterateTargetEntries: 
     for(const $targetKey of Object.keys($target)) {
       delete $target[$targetKey]
@@ -34,7 +34,7 @@ function Setter() {
   }
 }
 // Object Deleter
-function Deleter($target, $property, $options) {
+function Deleter($target, $property) {
   const $arguments = [...arguments]
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
   else if(typeOf($arguments[1]) === 'string') {
@@ -46,6 +46,6 @@ function Deleter($target, $property, $options) {
       delete $target[$targetKey]
     }
     return undefined
-  } 
+  }
 }
 export { Getter, Setter, Deleter }

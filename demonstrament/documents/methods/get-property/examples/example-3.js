@@ -1,7 +1,7 @@
 import { Recourse, tensors, set, typeOf, variables } from '/dependencies/recourse.js'
 const { Getters, Setters, Deleters } = tensors
 console.log("------------------------")
-console.log("Set Property | Example 3")
+console.log("Get Property | Example 3")
 console.log("------------------------")
 const options = {
   getters: [Getters.Object, Getters.Map],

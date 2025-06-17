@@ -1,5 +1,5 @@
-import { Recourse, cessors, set, typeOf, variables } from '/dependencies/recourse.js'
-const { Getters, Setters, Deleters } = cessors
+import { Recourse, tensors, set, typeOf, variables } from '/dependencies/recourse.js'
+const { Getters, Setters, Deleters } = tensors
 console.log("------------------------")
 console.log("Set Property | Example 2")
 console.log("------------------------")

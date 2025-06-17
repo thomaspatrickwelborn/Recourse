@@ -1,4 +1,4 @@
-import { Cessors, Setters } from '../cessors/index.js'
+import { Tensors, Setters } from '../tensors/index.js'
 import typeOf from '../type-of/index.js'
 import setProperty from '../set-property/index.js'
 import entities from '../entities/index.js'

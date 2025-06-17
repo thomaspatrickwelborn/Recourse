@@ -1,4 +1,4 @@
-import { Cessors, Getters } from '../cessors/index.js'
+import { Tensors, Getters } from '../tensors/index.js'
 import entities from '../entities/index.js'
 const Options = {
   ancestors: [],
@@ -17,7 +17,7 @@ export default function compand($source, $options) {
   const { ancestors, nonenumerable, values } = options
   options.depth++
   if(options.depth > options.maxDepth) { return target }
-  const source = new Cessors(options.getters).cess($source)
+  const source = new Tensors(options.getters).cess($source)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
   const objectProperties = entities(source, 'entries', { nonenumerable, recurse: false })  
   iterateObjectProperties: 

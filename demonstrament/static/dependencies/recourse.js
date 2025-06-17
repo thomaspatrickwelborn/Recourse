@@ -8,8 +8,29 @@ var typeOf = ($operand) => Object
   .toString
   .call($operand).slice(8, -1).toLowerCase();
 
+const { quotationEscape, quotationStartStop } = regularExpressions;
+function splitPath($path) {
+  const typeOfPath = typeOf($path);
+  // let subpaths
+  if(typeOfPath === 'string') {
+    const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
+
+    let subpathIndex = 0;
+    while(subpathIndex < subpaths.length) {
+      subpaths[subpathIndex] = subpaths[subpathIndex].replace(
+        new RegExp(regularExpressions.quotationStartStop), '$1'
+      );
+      subpathIndex++;
+    }
+    return subpaths
+  }
+  else if(typeOfPath === 'number'){
+    return [$path] 
+  }
+}
+
 // Object Getter
-function Getter$1() {
+function Getter$1(...$arguments) {
   const $target = arguments[0];
   if(!['object', 'array'].includes(typeOf($target))) { return }
   if(typeOf(arguments[1]) === 'string') {
@@ -25,12 +46,12 @@ function Setter$1() {
   const $arguments = [...arguments];
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
   else if(typeOf($arguments[1]) === 'string') {
-    const [$target, $property, $value, $options] = $arguments;
+    const [$target, $property, $value] = $arguments;
     $target[$property] = $value;
     return $target[$property]
   }
   else {
-    const [$target, $source, $options] = $arguments;
+    const [$target, $source] = $arguments;
     for(const $targetKey of Object.keys($target)) {
       delete $target[$targetKey];
     }
@@ -41,7 +62,7 @@ function Setter$1() {
   }
 }
 // Object Deleter
-function Deleter$1($target, $property, $options) {
+function Deleter$1($target, $property) {
   const $arguments = [...arguments];
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
   else if(typeOf($arguments[1]) === 'string') {
@@ -52,70 +73,59 @@ function Deleter$1($target, $property, $options) {
       delete $target[$targetKey];
     }
     return undefined
-  } 
+  }
 }
 
 // Map Getter
 function Getter() {
-  const $target = arguments[0];
-  if(typeOf($target) !== 'map') { return }
-  else if(typeOf(arguments[1]) === 'string') {
-    const $property = arguments[1];
-    return $target.get($property)
+  const $arguments = [...arguments];
+  if(typeOf($arguments[0]) !== 'map') { return }
+  if(typeOf($arguments[$arguments.length - 1]) !== 'boolean') { $arguments.push(true); }
+  // let length = 
+  if($arguments.length === 3) {
+    const [$receiver, $property, $returnTarget] = $arguments;
+    return ($returnTarget) ? $receiver.get($property) : $receiver[$property]
   }
-  else {
-    return Object.fromEntries($target)
+  else if($arguments.length === 2) {
+    const [$receiver, $returnTarget] = $arguments;
+    return ($returnTarget) ? Array.from($receiver.entries()) : $receiver
   }
 }
 // Map Setter
 function Setter() {
   const $arguments = [...arguments];
   if(typeOf($arguments[0]) !== 'map') { return }
-  else if(typeOf($arguments[1]) === 'string') {
-    const [$target, $property, $value, $options] = $arguments;
-    $target.set($property, $value);
-    return $target.get($property)
+  const length = $arguments.length;
+  if(length === 3) {
+    const [$receiver, $property, $value] = $arguments;
+    $receiver.set($property, $value);
+    return $receiver.get($property)
   }
-  else {
-    const [$target, $source, $options] = $arguments;
-    $target.clear();
+  else if(length === 2) {
+    const [$receiver, $source] = $arguments;
+    $receiver.clear();
     for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
-      $target.set($sourceKey, $sourceValue);
+      $receiver.set($sourceKey, $sourceValue);
     }
-    return $target
+    return $receiver
   }
 }
 // Map Deleter
 function Deleter() {
   const $arguments = [...arguments];
+  console.log($arguments);
+  const length = $arguments.length;
   if(typeOf($arguments[0]) !== 'map') { return }
-  else if(typeOf($arguments[1]) === 'string') {
-    const [$target, $property, $options] = $arguments;
-    return $target.delete($property)
+  else if(length === 2) {
+    const [$receiver, $property] = $arguments;
+    return $receiver.delete($property)
   }
-  else {
-    const [$target, $options] = $arguments;
-    return $target.clear()
+  else if(length === 1) {
+    const [$receiver] = $arguments;
+    return $receiver.clear()
   } 
 }
 
-class Cessors extends EventTarget {
-  constructor($cessors) {
-    super();
-    const cessors = Object.assign([], $cessors);
-    Object.defineProperties(this, {
-      'cess': { value: function cess() {
-        let cess;
-        iterateGetters: 
-        for(const $cessor of cessors) {
-          cess = $cessor(...arguments);
-          if(cess !== undefined) { break iterateGetters }
-        }
-        return cess
-      } },
-    });
-  }
-}
 const Getters = {
   Object: Getter$1, 
   Map: Getter, 
@@ -128,22 +138,42 @@ const Deleters = {
   Object: Deleter$1, 
   Map: Deleter, 
 };
+class Tensors extends EventTarget {
+  constructor($tensors) {
+    super();
+    const tensors = Object.assign([], $tensors);
+    Object.defineProperties(this, {
+      'cess': { value: function cess() {
+        let cess;
+        iterateGetters: 
+        for(const $tensor of tensors) {
+          cess = $tensor(...arguments);
+          if(cess !== undefined) { break iterateGetters }
+        }
+        return cess
+      } },
+    });
+  }
+}
 
 var index$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  Cessors: Cessors,
   Deleters: Deleters,
   Getters: Getters,
-  Setters: Setters
+  Setters: Setters,
+  Tensors: Tensors
 });
 
-const Options$e = { getters: [Getters.Object, Getters.Map] };
+const Options$f = {
+  getters: [Getters.Object, Getters.Map],
+  returnTarget: false,
+};
 function getProperty() {
   const [$target, $path, $options] = [...arguments];
-  const options = Object.assign ({}, Options$e, $options);
   if($path === undefined) return arguments[0]
-  const getters = new Cessors(options.getters);
-  const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
+  const options = Object.assign ({}, Options$f, $options);
+  const getters = new Tensors(options.getters);
+  const subpaths = splitPath($path);
   let subtarget = $target;
   iterateSubpaths: 
   for(const $subpath of subpaths) {
@@ -171,27 +201,28 @@ function typedObjectLiteral($value) {
   return _typedObjectLiteral
 }
 
-const Options$d = {
+const Options$e = {
   enumerable: true, nonenumerable: false,
   getters: [Getters.Object, Getters.Map], 
-  setters: [Setters.Object],
+  setters: [Setters.Object, Setters.Map],
+  returnTarget: false
 };
 function setProperty() {
   const $arguments = [...arguments];
   if(typeOf($arguments[1]) === 'string') {
     const [$target, $path, $value, $options] = $arguments;
-    const options = Object.assign({}, Options$d, $options);
-    const getters = new Cessors(options.getters);
-    const setters = new Cessors(options.setters);
+    const options = Object.assign({}, Options$e, $options);
+    const getters = new Tensors(options.getters);
+    const setters = new Tensors(options.setters);
     const { enumerable, nonenumerable } = options;
     getters.cess($target);
-    const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
+    const subpaths = splitPath($path);
     const key = subpaths.pop();
     let subtarget = $target;
     iterateSubpaths: 
     for(const $subpath of subpaths) {
-      subtarget = getters.cess(subtarget, $subpath, options) || setters.cess(
-        subtarget, $subpath, isNaN($subpath) ? {} : [], options
+      subtarget = getters.cess(subtarget, $subpath) || setters.cess(
+        subtarget, $subpath, isNaN($subpath) ? {} : []
       );
       if(subtarget === undefined) { break iterateSubpaths } 
     }
@@ -204,12 +235,15 @@ function setProperty() {
   }
 }
 
-function deleteProperty($target, $path) {
-  const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
+const Options$d = { deleters: [Deleters.Object, Deleters.Map] };
+// import tensors
+function deleteProperty($target, $path, $options) {
+  const options = Object.assign ({}, Options$d, $options);
+  const deleters = new Tensors(options.deleters);
+  const subpaths = splitPath($path);
   const key = subpaths.pop();
-  let subtarget = $target;
-  for(const $subpath of subpaths) { subtarget = subtarget[$subpath]; }
-  delete subtarget[key];
+  const subtarget = getProperty($target, subpaths.join('.')) || $target;
+  deleters.cess(subtarget, key);
   return
 }
 
@@ -267,7 +301,7 @@ function entities($source, $type, $options) {
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options;
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.push($source); }
-  const source = new Cessors(options.getters).cess($source);
+  const source = new Tensors(options.getters).cess($source);
   options.depth++;
   for(const [$key, $propertyDescriptor] of Object.entries(
     Object.getOwnPropertyDescriptors(source)
@@ -369,7 +403,7 @@ function compand($source, $options) {
   const { ancestors, nonenumerable, values } = options;
   options.depth++;
   if(options.depth > options.maxDepth) { return target }
-  const source = new Cessors(options.getters).cess($source);
+  const source = new Tensors(options.getters).cess($source);
   if(!ancestors.includes(source)) { ancestors.unshift(source); }
   const objectProperties = entities(source, 'entries', { nonenumerable, recurse: false });  
   for(const [$key, $value] of objectProperties) {
@@ -547,7 +581,7 @@ function seal($target, $options) {
   const options = Object.assign({}, Options$4, $options, {
     // ancestors: Object.assign([], $options.ancestors)
   });
-  // const target = new Cessors(options.getters).cess($target, options)
+  // const target = new Tensors(options.getters).cess($target)
   // if(!options.ancestors.includes(target)) { options.ancestors.unshift(target) }
   throw entities($target, 'entries', options)
 }
@@ -599,7 +633,7 @@ function getOwnPropertyDescriptor($properties, $propertyKey, $options = {}) {
   });
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++; }
-  const propertyValue = new Cessors(options.getters).cess($properties, $propertyKey);
+  const propertyValue = new Tensors(options.getters).cess($properties, $propertyKey);
   if(propertyValue) {
     const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey);
     if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
@@ -630,19 +664,6 @@ function getOwnPropertyDescriptors($target, $options) {
   return propertyDescriptors
 }
 
-const { quotationEscape, quotationStartStop } = regularExpressions;
-function splitPath($path) {
-  const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
-  let subpathIndex = 0;
-  while(subpathIndex < subpaths.length) {
-    subpaths[subpathIndex] = subpaths[subpathIndex].replace(
-      new RegExp(regularExpressions.quotationStartStop), '$1'
-    );
-    subpathIndex++;
-  }
-  return subpaths
-}
-
 const Options$1 = {
   ancestors: [],
   getters: [Getters.Object, Getters.Map], 
@@ -651,7 +672,7 @@ function valueOf($source, $options = {}) {
   const options = Object.assign({}, Options$1, $options, {
     ancestors: Object.assign([], $options.ancestors)
   });
-  const source = new Cessors(options.getters).cess($source, options);
+  const source = new Tensors(options.getters).cess($source);
   if(source === undefined) { throw [$source, source] }
   if(!options.ancestors.includes($source)) { options.ancestors.unshift($source); }
   const target = typedObjectLiteral(typeOf(source));
@@ -672,9 +693,7 @@ function valueOf($source, $options = {}) {
   return target
 }
 
-const Options = {
-  getters: [Getters.Object, Getters.Map], space: 0, replacer: null
-};
+const Options = { space: 0, replacer: null };
 function toString($source, $options) {
   const options = Object.assign({}, Options, $options);
   return JSON.stringify(
@@ -729,5 +748,5 @@ class Recourse extends EventTarget {
   }
 }
 
-export { Recourse, assign, assignConcat, index$1 as cessors, compand, decompand, defineProperties, defineProperty, deleteProperty as delete, entities, entries, expand, freeze, getProperty as get, getOwnPropertyDescriptor, getOwnPropertyDescriptors, impand, isArrayLike, isEntries, keys, regularExpressions, seal, setProperty as set, splitPath, toString, typeOf, typedObjectLiteral, valueOf, values, index as variables };
+export { Recourse, assign, assignConcat, compand, decompand, defineProperties, defineProperty, deleteProperty as delete, entities, entries, expand, freeze, getProperty as get, getOwnPropertyDescriptor, getOwnPropertyDescriptors, impand, isArrayLike, isEntries, keys, regularExpressions, seal, setProperty as set, splitPath, index$1 as tensors, toString, typeOf, typedObjectLiteral, valueOf, values, index as variables };
 //# sourceMappingURL=recourse.js.map

@@ -1,4 +1,3 @@
-import { toString } from '/dependencies/recourse.js'
-console.log("--------------------")
-console.log("To String | Example 1")
-console.log("--------------------")
+import './examples/example-1.js'
+import './examples/example-2.js'
+import './examples/example-3.js'

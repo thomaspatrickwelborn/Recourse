@@ -1,6 +1,6 @@
 import typeOf from '../type-of/index.js'
 import entities from '../entities/index.js'
-import { Cessors, Getters } from '../cessors/index.js'
+import { Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
   ancestors: [],

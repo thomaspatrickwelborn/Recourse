@@ -1,12 +1,16 @@
 import regularExpressions from '../regular-expressions/index.js'
-import { Cessors, Getters } from '../cessors/index.js'
-const Options = { getters: [Getters.Object, Getters.Map] }
+import splitPath from '../split-path/index.js'
+import { Tensors, Getters } from '../tensors/index.js'
+const Options = {
+  getters: [Getters.Object, Getters.Map],
+  returnTarget: false,
+}
 export default function getProperty() {
   const [$target, $path, $options] = [...arguments]
-  const options = Object.assign ({}, Options, $options)
   if($path === undefined) return arguments[0]
-  const getters = new Cessors(options.getters)
-  const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape))
+  const options = Object.assign ({}, Options, $options)
+  const getters = new Tensors(options.getters)
+  const subpaths = splitPath($path)
   let subtarget = $target
   iterateSubpaths: 
   for(const $subpath of subpaths) {

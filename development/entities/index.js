@@ -1,4 +1,4 @@
-import { Cessors, Getters } from '../cessors/index.js'
+import { Tensors, Getters } from '../tensors/index.js'
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
@@ -16,7 +16,7 @@ export default function entities($source, $type, $options) {
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.push($source) }
-  const source = new Cessors(options.getters).cess($source)
+  const source = new Tensors(options.getters).cess($source)
   options.depth++
   for(const [$key, $propertyDescriptor] of Object.entries(
     Object.getOwnPropertyDescriptors(source)

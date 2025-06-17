@@ -1,28 +1,30 @@
 import regularExpressions from '../regular-expressions/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import typeOf from '../type-of/index.js'
-import { Cessors, Getters, Setters } from '../cessors/index.js'
+import splitPath from '../split-path/index.js'
+import { Tensors, Getters, Setters } from '../tensors/index.js'
 const Options = {
   enumerable: true, nonenumerable: false,
   getters: [Getters.Object, Getters.Map], 
-  setters: [Setters.Object],
+  setters: [Setters.Object, Setters.Map],
+  returnTarget: false
 }
 export default function setProperty() {
   const $arguments = [...arguments]
   if(typeOf($arguments[1]) === 'string') {
     const [$target, $path, $value, $options] = $arguments
     const options = Object.assign({}, Options, $options)
-    const getters = new Cessors(options.getters)
-    const setters = new Cessors(options.setters)
+    const getters = new Tensors(options.getters)
+    const setters = new Tensors(options.setters)
     const { enumerable, nonenumerable } = options
     const target = getters.cess($target)
-    const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape))
+    const subpaths = splitPath($path)
     const key = subpaths.pop()
     let subtarget = $target
     iterateSubpaths: 
     for(const $subpath of subpaths) {
-      subtarget = getters.cess(subtarget, $subpath, options) || setters.cess(
-        subtarget, $subpath, isNaN($subpath) ? {} : [], options
+      subtarget = getters.cess(subtarget, $subpath) || setters.cess(
+        subtarget, $subpath, isNaN($subpath) ? {} : []
       )
       if(subtarget === undefined) { break iterateSubpaths } 
     }

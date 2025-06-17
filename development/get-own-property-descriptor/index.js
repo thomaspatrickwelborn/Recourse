@@ -1,6 +1,6 @@
 import typeOf from '../type-of/index.js'
 import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
-import { Cessors, Getters } from '../cessors/index.js'
+import { Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
@@ -20,7 +20,7 @@ export default function getOwnPropertyDescriptor($properties, $propertyKey, $opt
   })
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++ }
-  const propertyValue = new Cessors(options.getters).cess($properties, $propertyKey)
+  const propertyValue = new Tensors(options.getters).cess($properties, $propertyKey)
   if(propertyValue) {
     const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey)
     if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }

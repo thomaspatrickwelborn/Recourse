@@ -1,6 +1,6 @@
 # ➲&ensp;Recourse
  - Recursive coutility & convenience methods/properties.  
- - Recursively access & mutate properties for *targeted* or *bound* objects/arrays.  
+ - Recursively access & mutate properties for *targeted* or *bound* objects/arrays/maps.  
 
 **Used By**  
 &emsp;⁘&emsp;[Core-Plex](https://npmjs.org/core-plex)  
@@ -22,23 +22,22 @@
    - [`delete`](./document/methods/delete.md) 
    - [`freeze`](./document/methods/freeze.md)
    - [`seal`](./document/methods/seal.md)
- - Accessor Methods
+ - Actensor Methods
    - [`get`](./document/methods/get.md) 
    - [`getOwnPropertyDescriptors`](./document/methods/get-own-property-descriptors.md)
    - `getOwnPropertyDescriptor` Method
  - Utitlity Methods
    - [`isArrayLike`](./document/methods/is-array-like.md)
-   - [`typedObjectLiteral`](./document/methods/typed-object-literal.md)
    - [`typeOf`](./document/methods/type-of.md)
-   - `valueOf`
-   - `toString`
+   - [`valueOf`](./document/methods/value-of.md)
+   - [`toString`](./document/methods/to-string.md)
 
 ## Illustrations
 **Import Recourse**  
 ```
 import { Recourse } from 'recourse'
 ```
-**Then With Some Object**  
+**Then With Some Object/Array/Map**  
 ```
 const object = {
   propertyA: [{
@@ -51,22 +50,22 @@ const object = {
     }
   }, {
     propertyF: {
-      propertyG: [7, 77, 777]
+      propertyG: new Map([[0, 7], [1, 77], [2, 777]])
     }
   }]
 }
 ```
-**Get/Set/Delete Targeted Accessors/Mutators**  
+**Get/Set/Delete Targeted Actensors/Mutators**  
 ```
 Recourse.get(object, 'propertyA.0.propertyB.propertyC.0')
 Recourse.set(object, 'propertyA.1.propertyD.propertyE.1', "55")
-Recourse.delete(object, 'propertyA.2.propertyD.propertyE.2')
+Recourse.delete(object, 'propertyA.2.propertyF.propertyG.2')
 ```
 
-**Get/Set/Delete Bound Accessors/Mutators**  
+**Get/Set/Delete Bound Actensors/Mutators**  
 ```
 const recourseObject = new Recourse(object)
 recourseObject.get('propertyA.0.propertyB.propertyC.0')
 recourseObject.set('propertyA.1.propertyD.propertyE.1', "55")
-recourseObject.delete('propertyA.2.propertyD.propertyE.2')
+recourseObject.delete('propertyA.2.propertyF.propertyG.2')
 ```

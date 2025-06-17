@@ -1,7 +1,7 @@
 import entities from '../entities/index.js' 
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
-import { Cessors, Getters } from '../cessors/index.js'
+import { Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
   ancestors: [],
@@ -11,7 +11,7 @@ export default function valueOf($source, $options = {}) {
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
-  const source = new Cessors(options.getters).cess($source, options)
+  const source = new Tensors(options.getters).cess($source)
   if(source === undefined) { throw [$source, source] }
   if(!options.ancestors.includes($source)) { options.ancestors.unshift($source) }
   const target = typedObjectLiteral(typeOf(source))

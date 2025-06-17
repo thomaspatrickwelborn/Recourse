@@ -1,6 +1,6 @@
 import typeOf from '../type-of/index.js'
 import entities from '../entities/index.js'
-import { Cessors, Getters } from '../cessors/index.js'
+import { Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
   // ancestors: [],
@@ -10,7 +10,7 @@ export default function seal($target, $options) {
   const options = Object.assign({}, Options, $options, {
     // ancestors: Object.assign([], $options.ancestors)
   })
-  // const target = new Cessors(options.getters).cess($target, options)
+  // const target = new Tensors(options.getters).cess($target)
   // if(!options.ancestors.includes(target)) { options.ancestors.unshift(target) }
   throw entities($target, 'entries', options)
   const targetEntities = entities($target, 'entries', Object.assign(options, {
