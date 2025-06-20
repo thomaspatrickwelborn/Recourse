@@ -4,10 +4,8 @@ import typeOf from '../type-of/index.js'
 import splitPath from '../split-path/index.js'
 import { Tensors, Getters, Setters } from '../tensors/index.js'
 const Options = {
-  enumerable: true, nonenumerable: false,
   getters: [Getters.Object, Getters.Map], 
   setters: [Setters.Object, Setters.Map],
-  returnTarget: false
 }
 export default function setProperty() {
   const $arguments = [...arguments]
@@ -17,18 +15,18 @@ export default function setProperty() {
     const getters = new Tensors(options.getters)
     const setters = new Tensors(options.setters)
     const { enumerable, nonenumerable } = options
-    const target = getters.cess($target)
+    const target = getters.cess($target, options)
     const subpaths = splitPath($path)
     const key = subpaths.pop()
     let subtarget = $target
     iterateSubpaths: 
     for(const $subpath of subpaths) {
-      subtarget = getters.cess(subtarget, $subpath) || setters.cess(
-        subtarget, $subpath, isNaN($subpath) ? {} : []
+      subtarget = getters.cess(subtarget, $subpath, options) || setters.cess(
+        subtarget, $subpath, isNaN($subpath) ? {} : [], options
       )
       if(subtarget === undefined) { break iterateSubpaths } 
     }
-    setters.cess(subtarget, key, $value)
+    setters.cess(subtarget, key, $value, options)
     return $target
   }
   else {

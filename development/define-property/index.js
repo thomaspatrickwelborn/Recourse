@@ -25,7 +25,7 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
   else if(
     options.typeCoercion && 
     Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined &&
-    !['undefined', 'null'].includes(typeOfPropertyDescriptorValue)
+    !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
   ) {
     propertyDescriptor.value = Variables.Primitives[propertyDescriptor.type](propertyDescriptorValue)
   }

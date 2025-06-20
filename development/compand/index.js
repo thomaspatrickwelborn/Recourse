@@ -1,25 +1,24 @@
 import { Tensors, Getters } from '../tensors/index.js'
 import entities from '../entities/index.js'
 const Options = {
-  ancestors: [],
   depth: 0, 
-  enumerable: true,
   getters: [Getters.Object, Getters.Map],
   maxDepth: 10,
-  nonenumerable: false, 
   values: false,
 }
 export default function compand($source, $options) {
   const target = []
   const options = Object.assign({}, Options, $options, {
-    ancestors: [].concat($options.ancestors || [])
+    ancestors: Object.assign([], $options.ancestors)
   })
-  const { ancestors, nonenumerable, values } = options
+  const { ancestors, values } = options
   options.depth++
   if(options.depth > options.maxDepth) { return target }
-  const source = new Tensors(options.getters).cess($source)
+  const source = new Tensors(options.getters).cess($source, options)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
-  const objectProperties = entities(source, 'entries', { nonenumerable, recurse: false })  
+  const objectProperties = entities(source, 'entries', Object.assign(options, {
+    recurse: false
+  }))
   iterateObjectProperties: 
   for(const [$key, $value] of objectProperties) {
     if(!values) { target.push($key) }

@@ -4,29 +4,30 @@ import typedObjectLiteral from '../typed-object-literal/index.js'
 import { Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
-  ancestors: [],
+  ancestors: [], 
+  depth: 0, maxDepth: 10,
   getters: [Getters.Object, Getters.Map], 
 }
 export default function valueOf($source, $options = {}) {
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
-  const source = new Tensors(options.getters).cess($source)
-  if(source === undefined) { throw [$source, source] }
-  if(!options.ancestors.includes($source)) { options.ancestors.unshift($source) }
+  const { ancestors, maxDepth } = options
+  if(options.depth >= maxDepth) { return } else { options.depth++ }
+  const source = new Tensors(options.getters).cess($source, options)
+  if(source === undefined) { return }
+  if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const target = typedObjectLiteral(typeOf(source))
-  const sourceEntries = entities($source, 'entries', Object.assign(options, { recurse: false }))
+  const sourceEntries = entities($source, 'entries', { recurse: false })
   iterateSourceEntries: 
   for(const [$sourceKey, $sourceValue] of sourceEntries) {
     let sourceValue
     if(ObjectKeys.includes(typeOf($sourceValue))) {
+      if(ancestors.includes($sourceValue)) { continue iterateSourceEntries }
       sourceValue = valueOf($sourceValue, options)
     }
     else { sourceValue = $sourceValue }
-    if(options.ancestors.includes(sourceValue)) { continue iterateSourceEntries }
-    try {
-      target[$sourceKey] = sourceValue
-    }
+    try { target[$sourceKey] = sourceValue }
     catch($err) { console.error($err) }
   }
   return target

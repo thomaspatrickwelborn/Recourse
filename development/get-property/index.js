@@ -3,7 +3,6 @@ import splitPath from '../split-path/index.js'
 import { Tensors, Getters } from '../tensors/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
-  returnTarget: false,
 }
 export default function getProperty() {
   const [$target, $path, $options] = [...arguments]
@@ -15,7 +14,7 @@ export default function getProperty() {
   iterateSubpaths: 
   for(const $subpath of subpaths) {
     try {
-      subtarget = getters.cess(subtarget, $subpath)
+      subtarget = getters.cess(subtarget, $subpath, options)
       if(subtarget === undefined) { break iterateSubpaths } 
     }
     catch($err) { break iterateSubpaths }

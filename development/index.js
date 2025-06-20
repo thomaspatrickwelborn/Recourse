@@ -16,6 +16,7 @@ import regularExpressions from './regular-expressions/index.js'
 import typedObjectLiteral from './typed-object-literal/index.js'
 import typeOf from './type-of/index.js'
 import isArrayLike from './is-array-like/index.js'
+import isMapLike from './is-map-like/index.js'
 import isEntries from './is-entries/index.js'
 import * as variables from './variables/index.js'
 import keys from './keys/index.js'
@@ -49,6 +50,7 @@ class Recourse extends EventTarget {
   static getOwnPropertyDescriptors = getOwnPropertyDescriptors
   static getOwnPropertyDescriptor = getOwnPropertyDescriptor
   static isArrayLike = isArrayLike
+  static isMapLike = isMapLike
   static isEntries = isEntries
   static typeOf = typeOf
   static toString = toString
@@ -67,7 +69,8 @@ class Recourse extends EventTarget {
       defineProperties: Recourse.defineProperties, defineProperty: Recourse.defineProperty,
       freeze: Recourse.freeze, seal: Recourse.seal,
       getOwnPropertyDescriptors: Recourse.getOwnPropertyDescriptors, getOwnPropertyDescriptor: Recourse.getOwnPropertyDescriptor,
-      isArrayLike: Recourse.isArrayLike, isEntries: Recourse.isEntries, typeOf: Recourse.typeOf,
+      isArrayLike: Recourse.isArrayLike, isEntries: Recourse.isEntries, isMapLike: Recourse.isMapLike,
+      typeOf: Recourse.typeOf,
     })) {
       Object.defineProperty(this, $staticMethodName, {
         value: $staticMethod.bind(this, $target)

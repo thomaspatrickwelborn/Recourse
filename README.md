@@ -28,6 +28,7 @@
    - `getOwnPropertyDescriptor` Method
  - Utitlity Methods
    - [`isArrayLike`](./document/methods/is-array-like.md)
+   - [`isMapLike`](./document/methods/is-map-like.md)
    - [`typeOf`](./document/methods/type-of.md)
    - [`valueOf`](./document/methods/value-of.md)
    - [`toString`](./document/methods/to-string.md)

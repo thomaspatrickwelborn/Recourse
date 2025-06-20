@@ -7,17 +7,20 @@ const Options = {
   depth: 0, maxDepth: 10,
   enumerable: true, nonenumerable: false,
   recurse: true,
+  returnTarget: true,
 }
 export default function entities($source, $type, $options) {
   const sourceEntities = []
   const options = Object.assign({}, Options, $options, {
-    ancestors: [].concat($options.ancestors || [])
+    ancestors: Object.assign([], $options.ancestors)
   })
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.push($source) }
-  const source = new Tensors(options.getters).cess($source)
+  const source = new Tensors(options.getters).cess($source, Object.assign(options, { returnTarget: true }))
+  // throw [$source, source]
   options.depth++
+  iterateSourcePropertyDescriptors: 
   for(const [$key, $propertyDescriptor] of Object.entries(
     Object.getOwnPropertyDescriptors(source)
   )) {

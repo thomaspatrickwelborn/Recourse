@@ -1,10 +1,10 @@
 import typeOf from '../../type-of/index.js'
 // Object Getter
 function Getter(...$arguments) {
-  const $target = arguments[0]
+  const $target = $arguments[0]
   if(!['object', 'array'].includes(typeOf($target))) { return }
-  if(typeOf(arguments[1]) === 'string') {
-    const $property = arguments[1]
+  if(typeOf($arguments[1]) === 'string') {
+    const $property = $arguments[1]
     return $target[$property]
   }
   else {
@@ -12,8 +12,7 @@ function Getter(...$arguments) {
   }
 }
 // Object Setter
-function Setter() {
-  const $arguments = [...arguments]
+function Setter(...$arguments) {
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
   else if(typeOf($arguments[1]) === 'string') {
     const [$target, $property, $value] = $arguments
@@ -34,8 +33,7 @@ function Setter() {
   }
 }
 // Object Deleter
-function Deleter($target, $property) {
-  const $arguments = [...arguments]
+function Deleter(...$arguments) {
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
   else if(typeOf($arguments[1]) === 'string') {
     return delete $target[$property]

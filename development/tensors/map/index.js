@@ -1,31 +1,41 @@
 import typeOf from '../../type-of/index.js'
 // Map Getter
-function Getter() {
-  const $arguments = [...arguments]
+function Getter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
-  if(typeOf($arguments[$arguments.length - 1]) !== 'boolean') { $arguments.push(true) }
-  // let length = 
-  if($arguments.length === 3) {
-    const [$receiver, $property, $returnTarget] = $arguments
-    return ($returnTarget) ? $receiver.get($property) : $receiver[$property]
+  else if(typeOf($arguments[1]) === 'string') {
+    let [$receiver, $property, $options] = $arguments
+    $options = $options || { returnTarget: true }
+    let { returnTarget } = $options
+    return (
+      (typeOf(returnTarget) !== 'boolean') ? true : returnTarget
+    ) ? $receiver.get($property) : $receiver[$property]
   }
-  else if($arguments.length === 2) {
-    const [$receiver, $returnTarget] = $arguments
-    return ($returnTarget) ? Array.from($receiver.entries()) : $receiver
+  else {
+    let [$receiver, $options] = $arguments
+    $options = $options || { returnTarget: true }
+    let { returnTarget } = $options
+    return (
+      (typeOf(returnTarget) !== 'boolean') ? true : returnTarget
+    // ) ? Object.fromEntries($receiver.entries()) : $receiver
+    ) ? Array.from($receiver.entries()) : $receiver
   }
 }
 // Map Setter
-function Setter() {
-  const $arguments = [...arguments]
+function Setter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
-  const length = $arguments.length
-  if(length === 3) {
-    const [$receiver, $property, $value] = $arguments
-    $receiver.set($property, $value)
-    return $receiver.get($property)
+  else if(typeOf($arguments[1]) === 'string') {
+    let [$receiver, $property, $value, $options] = $arguments
+    $options = $options || { returnTarget: true }
+    let { returnTarget } = $options
+    returnTarget = (typeOf(returnTarget) !== 'boolean') ? true : returnTarget
+    $receiver.set($property, $value, returnTarget)
+    return $receiver.get($property, returnTarget)
   }
-  else if(length === 2) {
-    const [$receiver, $source] = $arguments
+  else {
+    let [$receiver, $source, $options] = $arguments
+    $options = $options || { returnTarget: true }
+    let { returnTarget } = $options
+    returnTarget = (typeOf(returnTarget) !== 'boolean') ? true : returnTarget
     $receiver.clear()
     iterateSourceEntries: 
     for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
@@ -35,17 +45,16 @@ function Setter() {
   }
 }
 // Map Deleter
-function Deleter() {
-  const $arguments = [...arguments]
+function Deleter(...$arguments) {
   console.log($arguments)
   const length = $arguments.length
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(length === 2) {
-    const [$receiver, $property] = $arguments
+    let [$receiver, $property] = $arguments
     return $receiver.delete($property)
   }
   else if(length === 1) {
-    const [$receiver] = $arguments
+    let [$receiver] = $arguments
     return $receiver.clear()
   } 
 }

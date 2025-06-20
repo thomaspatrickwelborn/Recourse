@@ -11,10 +11,8 @@ var typeOf = ($operand) => Object
 const { quotationEscape, quotationStartStop } = regularExpressions;
 function splitPath($path) {
   const typeOfPath = typeOf($path);
-  // let subpaths
   if(typeOfPath === 'string') {
     const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape));
-
     let subpathIndex = 0;
     while(subpathIndex < subpaths.length) {
       subpaths[subpathIndex] = subpaths[subpathIndex].replace(
@@ -24,17 +22,15 @@ function splitPath($path) {
     }
     return subpaths
   }
-  else if(typeOfPath === 'number'){
-    return [$path] 
-  }
+  else if(typeOfPath === 'number'){ return [$path] }
 }
 
 // Object Getter
 function Getter$1(...$arguments) {
-  const $target = arguments[0];
+  const $target = $arguments[0];
   if(!['object', 'array'].includes(typeOf($target))) { return }
-  if(typeOf(arguments[1]) === 'string') {
-    const $property = arguments[1];
+  if(typeOf($arguments[1]) === 'string') {
+    const $property = $arguments[1];
     return $target[$property]
   }
   else {
@@ -42,8 +38,7 @@ function Getter$1(...$arguments) {
   }
 }
 // Object Setter
-function Setter$1() {
-  const $arguments = [...arguments];
+function Setter$1(...$arguments) {
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
   else if(typeOf($arguments[1]) === 'string') {
     const [$target, $property, $value] = $arguments;
@@ -62,8 +57,7 @@ function Setter$1() {
   }
 }
 // Object Deleter
-function Deleter$1($target, $property) {
-  const $arguments = [...arguments];
+function Deleter$1(...$arguments) {
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
   else if(typeOf($arguments[1]) === 'string') {
     return delete $target[$property]
@@ -77,32 +71,42 @@ function Deleter$1($target, $property) {
 }
 
 // Map Getter
-function Getter() {
-  const $arguments = [...arguments];
+function Getter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
-  if(typeOf($arguments[$arguments.length - 1]) !== 'boolean') { $arguments.push(true); }
-  // let length = 
-  if($arguments.length === 3) {
-    const [$receiver, $property, $returnTarget] = $arguments;
-    return ($returnTarget) ? $receiver.get($property) : $receiver[$property]
+  else if(typeOf($arguments[1]) === 'string') {
+    let [$receiver, $property, $options] = $arguments;
+    $options = $options || { returnTarget: true };
+    let { returnTarget } = $options;
+    return (
+      (typeOf(returnTarget) !== 'boolean') ? true : returnTarget
+    ) ? $receiver.get($property) : $receiver[$property]
   }
-  else if($arguments.length === 2) {
-    const [$receiver, $returnTarget] = $arguments;
-    return ($returnTarget) ? Array.from($receiver.entries()) : $receiver
+  else {
+    let [$receiver, $options] = $arguments;
+    $options = $options || { returnTarget: true };
+    let { returnTarget } = $options;
+    return (
+      (typeOf(returnTarget) !== 'boolean') ? true : returnTarget
+    // ) ? Object.fromEntries($receiver.entries()) : $receiver
+    ) ? Array.from($receiver.entries()) : $receiver
   }
 }
 // Map Setter
-function Setter() {
-  const $arguments = [...arguments];
+function Setter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
-  const length = $arguments.length;
-  if(length === 3) {
-    const [$receiver, $property, $value] = $arguments;
-    $receiver.set($property, $value);
-    return $receiver.get($property)
+  else if(typeOf($arguments[1]) === 'string') {
+    let [$receiver, $property, $value, $options] = $arguments;
+    $options = $options || { returnTarget: true };
+    let { returnTarget } = $options;
+    returnTarget = (typeOf(returnTarget) !== 'boolean') ? true : returnTarget;
+    $receiver.set($property, $value, returnTarget);
+    return $receiver.get($property, returnTarget)
   }
-  else if(length === 2) {
-    const [$receiver, $source] = $arguments;
+  else {
+    let [$receiver, $source, $options] = $arguments;
+    $options = $options || { returnTarget: true };
+    let { returnTarget } = $options;
+    returnTarget = (typeOf(returnTarget) !== 'boolean') ? true : returnTarget;
     $receiver.clear();
     for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
       $receiver.set($sourceKey, $sourceValue);
@@ -111,17 +115,16 @@ function Setter() {
   }
 }
 // Map Deleter
-function Deleter() {
-  const $arguments = [...arguments];
+function Deleter(...$arguments) {
   console.log($arguments);
   const length = $arguments.length;
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(length === 2) {
-    const [$receiver, $property] = $arguments;
+    let [$receiver, $property] = $arguments;
     return $receiver.delete($property)
   }
   else if(length === 1) {
-    const [$receiver] = $arguments;
+    let [$receiver] = $arguments;
     return $receiver.clear()
   } 
 }
@@ -164,21 +167,20 @@ var index$1 = /*#__PURE__*/Object.freeze({
   Tensors: Tensors
 });
 
-const Options$f = {
+const Options$g = {
   getters: [Getters.Object, Getters.Map],
-  returnTarget: false,
 };
 function getProperty() {
   const [$target, $path, $options] = [...arguments];
   if($path === undefined) return arguments[0]
-  const options = Object.assign ({}, Options$f, $options);
+  const options = Object.assign ({}, Options$g, $options);
   const getters = new Tensors(options.getters);
   const subpaths = splitPath($path);
   let subtarget = $target;
   iterateSubpaths: 
   for(const $subpath of subpaths) {
     try {
-      subtarget = getters.cess(subtarget, $subpath);
+      subtarget = getters.cess(subtarget, $subpath, options);
       if(subtarget === undefined) { break iterateSubpaths } 
     }
     catch($err) { break iterateSubpaths }
@@ -201,32 +203,30 @@ function typedObjectLiteral($value) {
   return _typedObjectLiteral
 }
 
-const Options$e = {
-  enumerable: true, nonenumerable: false,
+const Options$f = {
   getters: [Getters.Object, Getters.Map], 
   setters: [Setters.Object, Setters.Map],
-  returnTarget: false
 };
 function setProperty() {
   const $arguments = [...arguments];
   if(typeOf($arguments[1]) === 'string') {
     const [$target, $path, $value, $options] = $arguments;
-    const options = Object.assign({}, Options$e, $options);
+    const options = Object.assign({}, Options$f, $options);
     const getters = new Tensors(options.getters);
     const setters = new Tensors(options.setters);
     const { enumerable, nonenumerable } = options;
-    getters.cess($target);
+    getters.cess($target, options);
     const subpaths = splitPath($path);
     const key = subpaths.pop();
     let subtarget = $target;
     iterateSubpaths: 
     for(const $subpath of subpaths) {
-      subtarget = getters.cess(subtarget, $subpath) || setters.cess(
-        subtarget, $subpath, isNaN($subpath) ? {} : []
+      subtarget = getters.cess(subtarget, $subpath, options) || setters.cess(
+        subtarget, $subpath, isNaN($subpath) ? {} : [], options
       );
       if(subtarget === undefined) { break iterateSubpaths } 
     }
-    setters.cess(subtarget, key, $value);
+    setters.cess(subtarget, key, $value, options);
     return $target
   }
   else {
@@ -235,16 +235,14 @@ function setProperty() {
   }
 }
 
-const Options$d = { deleters: [Deleters.Object, Deleters.Map] };
-// import tensors
+const Options$e = { deleters: [Deleters.Object, Deleters.Map], returnTarget: true };
 function deleteProperty($target, $path, $options) {
-  const options = Object.assign ({}, Options$d, $options);
+  const options = Object.assign ({}, Options$e, $options);
   const deleters = new Tensors(options.deleters);
   const subpaths = splitPath($path);
   const key = subpaths.pop();
-  const subtarget = getProperty($target, subpaths.join('.')) || $target;
-  deleters.cess(subtarget, key);
-  return
+  const subtarget = getProperty($target, subpaths.join('.'), options) || $target;
+  deleters.cess(subtarget, key, options);
 }
 
 const Primitives = {
@@ -286,22 +284,24 @@ var index = /*#__PURE__*/Object.freeze({
   Types: Types
 });
 
-const Options$c = {
+const Options$d = {
   getters: [Getters.Object, Getters.Map],
   ancestors: [],
   depth: 0, maxDepth: 10,
   enumerable: true, nonenumerable: false,
   recurse: true,
+  returnTarget: true,
 };
 function entities($source, $type, $options) {
   const sourceEntities = [];
-  const options = Object.assign({}, Options$c, $options, {
-    ancestors: [].concat($options.ancestors || [])
+  const options = Object.assign({}, Options$d, $options, {
+    ancestors: Object.assign([], $options.ancestors)
   });
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options;
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.push($source); }
-  const source = new Tensors(options.getters).cess($source);
+  const source = new Tensors(options.getters).cess($source, Object.assign(options, { returnTarget: true }));
+  // throw [$source, source]
   options.depth++;
   for(const [$key, $propertyDescriptor] of Object.entries(
     Object.getOwnPropertyDescriptors(source)
@@ -331,20 +331,16 @@ function entities($source, $type, $options) {
   return sourceEntities
 }
 
-const Options$b = { ancestors: [], nonenumerable: false };
+// const Options = {}
 const ValidPathTypes = ['string', 'function'];
 function expand($source, $path, $options = {}) {
-  const options = Object.assign({}, Options$b, $options, {
-    ancestors: [].concat($options.ancestors || []),
-  });
-  const { ancestors } = options;
+  const options = Object.assign({}, /*Options, */$options);
   const typeOfPath = typeOf($path);
   const typeOfSource = typeOf($source);
   if(
     !ValidPathTypes.includes(typeOfPath) ||
     !ObjectKeys.includes(typeOfSource)
   ) { return $source }
-  if(!ancestors.includes($source)) { ancestors.unshift($source); }
   let target = typedObjectLiteral($source);
   for(const [$sourceKey, $sourceValue] of entities(
     $source, 'entries', Object.assign({}, options, { recurse: false })
@@ -352,12 +348,7 @@ function expand($source, $path, $options = {}) {
     const targetValue = (
       ObjectKeys.includes(typeOf($sourceValue))
     ) ? expand($sourceValue, $path) : $sourceValue;
-    if(
-      typeOfPath === ValidPathTypes[0] &&
-      $sourceValue !== null &&
-      !Object.is($sourceValue, $source) && 
-      !ancestors.includes($sourceValue)
-    ) {
+    if(typeOfPath === ValidPathTypes[0]) {
       target[$sourceKey] = setProperty({}, $path, targetValue, options);
     }
     else if(typeOfPath === ValidPathTypes[1]) {
@@ -367,15 +358,23 @@ function expand($source, $path, $options = {}) {
   return target
 }
 
-var entries = ($target, $options) => entities($target, 'entries', $options);
-
-const Options$a = {};
-function impand($source, $property, $options) {
-  const options = Object.assign({}, Options$a, $options);
+const Options$c = {
+  ancestors: [], 
+  getters: [Getters.Object, Getters.Map],
+  depth: 0, maxDepth: 10,
+};
+function impand($source, $property, $options = {}) {
+  const options = Object.assign({}, Options$c, $options, {
+    ancestors: Object.assign([], $options.ancestors)
+  });
+  const { ancestors, values } = options;
+  if(options.depth > options.maxDepth) { return } else { options.depth++; }
+  const source = new Tensors(options.getters).cess($source, options);
+  if(!ancestors.includes(source)) { ancestors.unshift(source); }
   const typeOfProperty = typeOf($property);
   let target = typedObjectLiteral($source);
-  for(const [$sourceKey, $sourceValue] of entries(
-    $source, Object.assign({}, options, { recurse: false })
+  for(const [$sourceKey, $sourceValue] of entities(
+    $source, 'entries', Object.assign({}, options, { recurse: false })
   )) {
     if(typeOfProperty === 'string') { target[$sourceKey] = getProperty($sourceValue, $property); }
     else if(typeOfProperty === 'function') { target[$sourceKey] = $property($sourceValue); }
@@ -386,26 +385,25 @@ function impand($source, $property, $options) {
   return target
 }
 
-const Options$9 = {
-  ancestors: [],
+const Options$b = {
   depth: 0, 
-  enumerable: true,
   getters: [Getters.Object, Getters.Map],
   maxDepth: 10,
-  nonenumerable: false, 
   values: false,
 };
 function compand($source, $options) {
   const target = [];
-  const options = Object.assign({}, Options$9, $options, {
-    ancestors: [].concat($options.ancestors || [])
+  const options = Object.assign({}, Options$b, $options, {
+    ancestors: Object.assign([], $options.ancestors)
   });
-  const { ancestors, nonenumerable, values } = options;
+  const { ancestors, values } = options;
   options.depth++;
   if(options.depth > options.maxDepth) { return target }
-  const source = new Tensors(options.getters).cess($source);
+  const source = new Tensors(options.getters).cess($source, options);
   if(!ancestors.includes(source)) { ancestors.unshift(source); }
-  const objectProperties = entities(source, 'entries', { nonenumerable, recurse: false });  
+  const objectProperties = entities(source, 'entries', Object.assign(options, {
+    recurse: false
+  }));
   for(const [$key, $value] of objectProperties) {
     if(!values) { target.push($key); }
     else if(values) { target.push([$key, $value]); }
@@ -433,13 +431,14 @@ function compand($source, $options) {
   return target
 }
 
-const Options$8 = {
-  setters: [Setters.Object],
+const Options$a = {
+  setters: [Setters.Object, Setters.Map],
 };
 function decompand($source, $options) {
-  const options = Object.assign({}, Options$8, $options);
+  const options = Object.assign({}, Options$a, $options);
+  const typeofSource= typeOf($source);
   const sourceEntries = (
-    typeOf($source) === 'object'
+    typeofSource === 'object'
   ) ? entities($source, 'entries', options) : $source;
   if(!sourceEntries) { return }
   const target = (isNaN(sourceEntries[0][0])) ? {} : [];
@@ -449,8 +448,15 @@ function decompand($source, $options) {
   return target
 }
 
+const Options$9 = {
+  getters: [Getters.Object, Getters.Map],
+  setters: [Setters.Object, Setters.Map],
+};
 function assignSources($target, $type, ...$sources) {
   if(!$target) { return $target}
+  const options = Object.assign({}, Options$9);
+  new Tensors(options.getters);
+  const setters = new Tensors(options.setters);
   const typeOfTarget = typeOf($target);
   iterateSources: 
   for(const $source of $sources) {
@@ -469,7 +475,7 @@ function assignSources($target, $type, ...$sources) {
           assignSources(targetPropertyValue, $type, $sourcePropertyValue);
         }
         else {
-          Object.assign($target, { [$sourcePropertyKey]: $sourcePropertyValue });
+          setters.cess($target, $sourcePropertyKey, $sourcePropertyValue, options);
         }
       }
     }
@@ -481,9 +487,9 @@ var assign = ($target, ...$sources) => assignSources($target, 'assign', ...$sour
 
 var assignConcat = ($target, ...$sources) => assignSources($target, 'assignConcat', ...$sources);
 
-const Options$7 = { strict: true };
+const Options$8 = { strict: true };
 function isArrayLike($source, $options) {
-  const options = Object.assign({}, Options$7, $options);
+  const options = Object.assign({}, Options$8, $options);
   let isArrayLike;
   const typeOfSource = typeOf($source);
   if(typeOfSource === 'array') { isArrayLike = true; }
@@ -498,7 +504,7 @@ function isArrayLike($source, $options) {
     else {
       iterateSourceKeys: 
       for(const $sourceKey of entities($source, 'keys', {
-        nonenumerable: true, recurse: false
+        nonenumerable: true,  recurse: false
       }).reverse()) {
         const lastIndex = Number($sourceKey);
         if(lastIndex === $source.length - 1) {
@@ -513,11 +519,11 @@ function isArrayLike($source, $options) {
   return isArrayLike
 }
 
-const Options$6 = { typeCoercion: false };
+const Options$7 = { typeCoercion: false };
 function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
   const propertyDescriptor = Object.assign({}, $propertyDescriptor);
   let propertyDescriptorValue = propertyDescriptor.value;
-  const options = Object.assign({}, Options$6, $options);
+  const options = Object.assign({}, Options$7, $options);
   const typeOfPropertyDescriptorValue = typeOf(propertyDescriptor.value);
   const targetPropertyValue = $target[$propertyKey];
   const typeOfTargetPropertyValue = typeOf(targetPropertyValue);
@@ -535,7 +541,7 @@ function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
   else if(
     options.typeCoercion && 
     Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined &&
-    !['undefined', 'null'].includes(typeOfPropertyDescriptorValue)
+    !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
   ) {
     propertyDescriptor.value = Primitives[propertyDescriptor.type](propertyDescriptorValue);
   }
@@ -554,36 +560,89 @@ function defineProperties($target, $propertyDescriptors, $options) {
   return $target
 }
 
-const Options$5 = {
-  ancestors: [],
-  getters: [Getters.Object, Getters.Map], 
+const Options$6 = {
+  ancestors: [], 
+  depth: 0, maxDepth: 10,
 };
 function freeze($target, $options = {}) {
-  const options = Object.assign({}, Options$5, $options, {
+  const options = Object.assign({}, Options$6, $options, {
     ancestors: Object.assign([], $options.ancestors)
   });
+  const { ancestors, values } = options;
+  if(options.depth > options.maxDepth) { return } else { options.depth++; }
+  const target = new Tensors(options.getters).cess($target, options);
+  if(!ancestors.includes(target)) { ancestors.unshift(target); }
   const targetEntities = entities($target, 'entries', Object.assign(options, {
     recurse: false
   }));
+  iterateTargetEntities: 
   for(const [$propertyKey, $propertyValue] of targetEntities) {
-    if(ObjectKeys.includes(typeOf($propertyValue)/*typeOfPropertyValue*/)) {
+    if(ancestors.includes($propertyValue)) { continue iterateTargetEntities }
+    else if(ObjectKeys.includes(typeOf($propertyValue))) {
       freeze($propertyValue, options);
     }
   }
   return Object.freeze($target)
 }
 
-const Options$4 = {
-  // ancestors: [],
-  // getters: [Getters.Object, Getters.Map], 
+const Options$5 = {
+  ancestors: [], 
+  depth: 0, maxDepth: 10,
 };
-function seal($target, $options) {
-  const options = Object.assign({}, Options$4, $options, {
-    // ancestors: Object.assign([], $options.ancestors)
+function seal($target, $options = {}) {
+  const options = Object.assign({}, Options$5, $options, {
+    ancestors: Object.assign([], $options.ancestors)
   });
-  // const target = new Tensors(options.getters).cess($target)
-  // if(!options.ancestors.includes(target)) { options.ancestors.unshift(target) }
-  throw entities($target, 'entries', options)
+  const { ancestors, values } = options;
+  if(options.depth > options.maxDepth) { return } else { options.depth++; }
+  const target = new Tensors(options.getters).cess($target, options);
+  if(!ancestors.includes(target)) { ancestors.unshift(target); }
+  const targetEntities = entities($target, 'entries', Object.assign(options, {
+    recurse: false
+  }));
+  iterateTargetEntities: 
+  for(const [$propertyKey, $propertyValue] of targetEntities) {
+    if(ancestors.includes($propertyValue)) { continue iterateTargetEntities }
+    else if(ObjectKeys.includes(typeOf($propertyValue))) {
+      seal($propertyValue, options);
+    }
+  }
+  return Object.seal($target)
+}
+
+const Options$4 = { strict: true };
+function isMapLike($source, $options) {
+  const options = Object.assign({}, Options$4, $options);
+  let isMapLike;
+  const typeOfSource = typeOf($source);
+  if(typeOfSource === 'map') { isMapLike = true; }
+  else if(
+    typeOfSource === 'object' &&
+    $source.size >= 0 && 
+    Number.isInteger($source.size)
+  ) {
+    if(options.strict === false) {
+      isMapLike = true;
+    }
+    else {
+      iterateSourceEntries: 
+      for(const $sourceEntity of entities($source, 'entries', {
+        nonenumerable: true, recurse: false
+      })) {
+        if(
+          isArrayLike($sourceEntity, options) ||
+          $sourceEntity.length === 2
+        ) { isMapLike = true; }
+        else {
+          isMapLike = false;
+          break iterateSourceEntries
+        }
+      }
+      if(isMapLike === undefined) { isMapLike = false; }
+    }
+  }
+  else { isMapLike = false; }
+  return isMapLike
 }
 
 const Options$3 = { strict: true, isArrayLike: false };
@@ -615,13 +674,13 @@ var keys = ($target, $options) => entities($target, 'keys', $options);
 
 var values = ($target, $options) => entities($target, 'values', $options);
 
+var entries = ($target, $options) => entities($target, 'entries', $options);
+
 const Options$2 = {
   getters: [Getters.Object, Getters.Map],
-  ancestors: [],
   delimiter: '.',
   depth: 0,
   frozen: false,
-  maxDepth: 10,
   nonenumerable: true,
   path: false,
   sealed: false,
@@ -633,12 +692,12 @@ function getOwnPropertyDescriptor($properties, $propertyKey, $options = {}) {
   });
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++; }
-  const propertyValue = new Tensors(options.getters).cess($properties, $propertyKey);
+  const propertyValue = new Tensors(options.getters).cess($properties, $propertyKey, options);
   if(propertyValue) {
     const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey);
     if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
     if(!options.ancestors.includes($properties)) { options.ancestors.unshift($properties); }
-    if(options.ancestors.includes(/*propertyValue*/propertyValue)) { return }
+    if(options.ancestors.includes(propertyValue)) { return }
     if(options.path) {
       options.path = (
         typeOf(options.path) === 'string'
@@ -665,29 +724,30 @@ function getOwnPropertyDescriptors($target, $options) {
 }
 
 const Options$1 = {
-  ancestors: [],
+  ancestors: [], 
+  depth: 0, maxDepth: 10,
   getters: [Getters.Object, Getters.Map], 
 };
 function valueOf($source, $options = {}) {
   const options = Object.assign({}, Options$1, $options, {
     ancestors: Object.assign([], $options.ancestors)
   });
-  const source = new Tensors(options.getters).cess($source);
-  if(source === undefined) { throw [$source, source] }
-  if(!options.ancestors.includes($source)) { options.ancestors.unshift($source); }
+  const { ancestors, maxDepth } = options;
+  if(options.depth >= maxDepth) { return } else { options.depth++; }
+  const source = new Tensors(options.getters).cess($source, options);
+  if(source === undefined) { return }
+  if(!ancestors.includes($source)) { ancestors.unshift($source); }
   const target = typedObjectLiteral(typeOf(source));
-  const sourceEntries = entities($source, 'entries', Object.assign(options, { recurse: false }));
+  const sourceEntries = entities($source, 'entries', { recurse: false });
   iterateSourceEntries: 
   for(const [$sourceKey, $sourceValue] of sourceEntries) {
     let sourceValue;
     if(ObjectKeys.includes(typeOf($sourceValue))) {
+      if(ancestors.includes($sourceValue)) { continue iterateSourceEntries }
       sourceValue = valueOf($sourceValue, options);
     }
     else { sourceValue = $sourceValue; }
-    if(options.ancestors.includes(sourceValue)) { continue iterateSourceEntries }
-    try {
-      target[$sourceKey] = sourceValue;
-    }
+    try { target[$sourceKey] = sourceValue; }
     catch($err) { console.error($err); }
   }
   return target
@@ -722,6 +782,7 @@ class Recourse extends EventTarget {
   static getOwnPropertyDescriptors = getOwnPropertyDescriptors
   static getOwnPropertyDescriptor = getOwnPropertyDescriptor
   static isArrayLike = isArrayLike
+  static isMapLike = isMapLike
   static isEntries = isEntries
   static typeOf = typeOf
   static toString = toString
@@ -739,7 +800,8 @@ class Recourse extends EventTarget {
       defineProperties: Recourse.defineProperties, defineProperty: Recourse.defineProperty,
       freeze: Recourse.freeze, seal: Recourse.seal,
       getOwnPropertyDescriptors: Recourse.getOwnPropertyDescriptors, getOwnPropertyDescriptor: Recourse.getOwnPropertyDescriptor,
-      isArrayLike: Recourse.isArrayLike, isEntries: Recourse.isEntries, typeOf: Recourse.typeOf,
+      isArrayLike: Recourse.isArrayLike, isEntries: Recourse.isEntries, isMapLike: Recourse.isMapLike,
+      typeOf: Recourse.typeOf,
     })) {
       Object.defineProperty(this, $staticMethodName, {
         value: $staticMethod.bind(this, $target)

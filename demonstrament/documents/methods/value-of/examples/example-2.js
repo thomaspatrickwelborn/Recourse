@@ -8,17 +8,8 @@ const mapValueOf = Recourse.valueOf(map)
 const mapString = Recourse.toString(map, { space: 2, replacer: null })
 console.log("map", map)
 console.log("mapValueOf", mapValueOf)
-console.log("pass", mapString === `[
-  [
-    0,
-    1
-  ],
-  [
-    1,
-    2
-  ],
-  [
-    2,
-    3
-  ]
-]`)
+console.log("pass", mapString === `{
+  "0": 1,
+  "1": 2,
+  "2": 3
+}`)

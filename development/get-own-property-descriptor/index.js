@@ -4,11 +4,9 @@ import { Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
-  ancestors: [],
   delimiter: '.',
   depth: 0,
   frozen: false,
-  maxDepth: 10,
   nonenumerable: true,
   path: false,
   sealed: false,
@@ -20,12 +18,12 @@ export default function getOwnPropertyDescriptor($properties, $propertyKey, $opt
   })
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++ }
-  const propertyValue = new Tensors(options.getters).cess($properties, $propertyKey)
+  const propertyValue = new Tensors(options.getters).cess($properties, $propertyKey, options)
   if(propertyValue) {
     const propertyDescriptor = Object.getOwnPropertyDescriptor($properties, $propertyKey)
     if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
     if(!options.ancestors.includes($properties)) { options.ancestors.unshift($properties) }
-    if(options.ancestors.includes(/*propertyValue*/propertyValue)) { return }
+    if(options.ancestors.includes(propertyValue)) { return }
     if(options.path) {
       options.path = (
         typeOf(options.path) === 'string'
