@@ -31,9 +31,12 @@ const objectModifiedString = Recourse.toString(object, { space: 2, replacer: nul
 console.log("object", object)
 console.log("objectString", objectString)
 console.log("objectModifiedString", objectModifiedString)
-// console.log("pass", (
-//   (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.3', options) === "5555") &&
-//   (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2', options) === 555) &&
-//   (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.1', options) === "55") &&
-//   (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.0', options) === 5)
-// ))
+console.log("pass", (
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.6', options) === "5555") &&
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.5', options) === 555) &&
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.4', options) === "55") &&
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.3', options) === 5) &&
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2', options) === 555) &&
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.1', options) === 55) &&
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.0', options) === 5)
+))

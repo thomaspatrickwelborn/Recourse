@@ -7,7 +7,8 @@ const map = new Map([
   [{ propertyB: "BBB" }, { propertyB: "BBB" }],
   [{ propertyC: "CCC" }, { propertyC: "CCC" }],
 ])
-const mapString = Recourse.toString(map, { space: 2, replacer: null })
+const mapEntries = Recourse.valueOf(map, { returnValue: 'entries' })
+const mapString = Recourse.toString(mapEntries, { space: 2, replacer: null })
 console.log("map", map)
 console.log("mapString", mapString)
 console.log("pass", mapString === `[

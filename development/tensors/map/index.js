@@ -1,12 +1,12 @@
 import typeOf from '../../type-of/index.js'
-const returnValues = ['receiver', 'target', 'entry']
+const Options = { returnValue: 'target' }
 // Map Getter
 function Getter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(typeOf($arguments[1]) === 'string') {
     let [$receiver, $property, $options] = $arguments
-    $options = $options || { returnValue: 'target' }
-    let { returnValue } = $options
+    const options = Object.assign({}, Options, $options)
+    let { returnValue } = options
     return (
       returnValue === 'target'
     ) ? $receiver.get($property)
@@ -14,17 +14,14 @@ function Getter(...$arguments) {
       returnValue === 'receiver'
     ) ? $receiver[$property]
       : (
-      returnValue === 'entry'
+      returnValue === 'entries'
     ) ? [$property, $receiver.get($property)]
       : undefined
-    // return (
-    //   (!returnValues.includes(returnValue)) ? 'target' : returnValue
-    // ) ? $receiver.get($property) : $receiver[$property]
   }
   else {
     let [$receiver, $options] = $arguments
-    $options = $options || { returnValue: 'target' }
-    let { returnValue } = $options
+    const options = Object.assign({}, Options, $options)
+    let { returnValue } = options
     return (
       returnValue === 'target'
     ) ? Object.fromEntries($receiver)
@@ -32,12 +29,9 @@ function Getter(...$arguments) {
       returnValue === 'receiver'
     ) ? $receiver
       : (
-      returnValue === 'entry'
-    ) ? Array.from($receiver)
-      : $receiver
-    // return (
-    //   (!returnValues.includes(returnValue)) ? 'target' : returnValue
-    // ) ? Array.from($receiver.entries()) : $receiver
+      returnValue === 'entries'
+    ) ? Array.from($receiver.entries())
+      : undefined
   }
 }
 // Map Setter
@@ -45,19 +39,21 @@ function Setter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(typeOf($arguments[1]) === 'string') {
     let [$receiver, $property, $value, $options] = $arguments
-    $options = $options || { returnValue: 'target' }
-    let { returnValue } = $options
-    $receiver.set($property, $value, returnValue)
-    return $receiver.get($property, returnValue)
+    const options = Object.assign({}, Options, $options)
+
+    let { returnValue } = options
+    $receiver.set($property, $value, options)
+    return $receiver.get($property, options)
   }
   else {
     let [$receiver, $source, $options] = $arguments
-    $options = $options || { returnValue: 'target' }
-    let { returnValue } = $options
+    const options = Object.assign({}, Options, $options)
+
+    let { returnValue } = options
     $receiver.clear()
     iterateSourceEntries: 
     for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
-      $receiver.set($sourceKey, $sourceValue)
+      $receiver.set($sourceKey, $sourceValue, options)
     }
     return $receiver
   }

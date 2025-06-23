@@ -34,8 +34,9 @@ function Setter(...$arguments) {
 }
 // Object Deleter
 function Deleter(...$arguments) {
-  if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
-  else if(typeOf($arguments[1]) === 'string') {
+  const [$target, $property] = $arguments
+  if(!['object', 'array'].includes(typeOf($target))) { return }
+  else if(typeOf($property) === 'string') {
     return delete $target[$property]
   }
   else {

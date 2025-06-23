@@ -7,6 +7,7 @@ const Options = {
   ancestors: [], 
   depth: 0, maxDepth: 10,
   getters: [Getters.Object, Getters.Map], 
+  returnValue: 'target',
 }
 export default function valueOf($source, $options = {}) {
   const options = Object.assign({}, Options, $options, {
@@ -18,7 +19,7 @@ export default function valueOf($source, $options = {}) {
   if(source === undefined) { return }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const target = typedObjectLiteral(typeOf(source))
-  const sourceEntries = entities($source, 'entries', { recurse: false })
+  const sourceEntries = entities($source, 'entries', Object.assign({}, options, { recurse: false }))
   iterateSourceEntries: 
   for(const [$sourceKey, $sourceValue] of sourceEntries) {
     let sourceValue
@@ -31,7 +32,6 @@ export default function valueOf($source, $options = {}) {
       target[$sourceKey] = sourceValue
     }
     catch($err) { console.error($err) }
-    // catch($err) { throw $err }
   }
   return target
 }

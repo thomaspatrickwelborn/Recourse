@@ -11,10 +11,10 @@ const map = new Map([
   [propertyB, propertyB],
   [propertyC, propertyC],
 ])
-const mapValue = Recourse.valueOf(map)
-const mapString = Recourse.toString(map, { space: 2, replacer: null })
+const mapEntries = Recourse.valueOf(map, { returnValue: 'entries' })
+const mapString = Recourse.toString(mapEntries, { space: 2, replacer: null })
 console.log("map", map)
-console.log("mapValue", mapValue)
+console.log("mapEntries", mapEntries)
 console.log("mapString", mapString)
 console.log("pass", mapString === `[
   [

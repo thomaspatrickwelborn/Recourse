@@ -9,7 +9,7 @@ const Options = {
   recurse: true,
   returnValue: 'target',
 }
-export default function entities($source, $type, $options) {
+export default function entities($source, $type, $options = {}) {
   const sourceEntities = []
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
@@ -17,8 +17,7 @@ export default function entities($source, $type, $options) {
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.push($source) }
-  const source = new Tensors(options.getters).cess($source, Object.assign(options, { returnValue: 'target' }))
-  // throw [$source, source]
+  const source = new Tensors(options.getters).cess($source, options)
   options.depth++
   iterateSourcePropertyDescriptors: 
   for(const [$key, $propertyDescriptor] of Object.entries(

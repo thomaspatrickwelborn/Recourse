@@ -58,8 +58,9 @@ function Setter$1(...$arguments) {
 }
 // Object Deleter
 function Deleter$1(...$arguments) {
-  if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
-  else if(typeOf($arguments[1]) === 'string') {
+  const [$target, $property] = $arguments;
+  if(!['object', 'array'].includes(typeOf($target))) { return }
+  else if(typeOf($property) === 'string') {
     return delete $target[$property]
   }
   else {
@@ -70,13 +71,14 @@ function Deleter$1(...$arguments) {
   }
 }
 
+const Options$h = { returnValue: 'target' };
 // Map Getter
 function Getter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(typeOf($arguments[1]) === 'string') {
     let [$receiver, $property, $options] = $arguments;
-    $options = $options || { returnValue: 'target' };
-    let { returnValue } = $options;
+    const options = Object.assign({}, Options$h, $options);
+    let { returnValue } = options;
     return (
       returnValue === 'target'
     ) ? $receiver.get($property)
@@ -84,17 +86,14 @@ function Getter(...$arguments) {
       returnValue === 'receiver'
     ) ? $receiver[$property]
       : (
-      returnValue === 'entry'
+      returnValue === 'entries'
     ) ? [$property, $receiver.get($property)]
       : undefined
-    // return (
-    //   (!returnValues.includes(returnValue)) ? 'target' : returnValue
-    // ) ? $receiver.get($property) : $receiver[$property]
   }
   else {
     let [$receiver, $options] = $arguments;
-    $options = $options || { returnValue: 'target' };
-    let { returnValue } = $options;
+    const options = Object.assign({}, Options$h, $options);
+    let { returnValue } = options;
     return (
       returnValue === 'target'
     ) ? Object.fromEntries($receiver)
@@ -102,12 +101,9 @@ function Getter(...$arguments) {
       returnValue === 'receiver'
     ) ? $receiver
       : (
-      returnValue === 'entry'
-    ) ? Array.from($receiver)
-      : $receiver
-    // return (
-    //   (!returnValues.includes(returnValue)) ? 'target' : returnValue
-    // ) ? Array.from($receiver.entries()) : $receiver
+      returnValue === 'entries'
+    ) ? Array.from($receiver.entries())
+      : undefined
   }
 }
 // Map Setter
@@ -115,18 +111,20 @@ function Setter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(typeOf($arguments[1]) === 'string') {
     let [$receiver, $property, $value, $options] = $arguments;
-    $options = $options || { returnValue: 'target' };
-    let { returnValue } = $options;
-    $receiver.set($property, $value, returnValue);
-    return $receiver.get($property, returnValue)
+    const options = Object.assign({}, Options$h, $options);
+
+    let { returnValue } = options;
+    $receiver.set($property, $value, options);
+    return $receiver.get($property, options)
   }
   else {
     let [$receiver, $source, $options] = $arguments;
-    $options = $options || { returnValue: 'target' };
-    let { returnValue } = $options;
+    const options = Object.assign({}, Options$h, $options);
+
+    let { returnValue } = options;
     $receiver.clear();
     for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
-      $receiver.set($sourceKey, $sourceValue);
+      $receiver.set($sourceKey, $sourceValue, options);
     }
     return $receiver
   }
@@ -310,7 +308,7 @@ const Options$d = {
   recurse: true,
   returnValue: 'target',
 };
-function entities($source, $type, $options) {
+function entities($source, $type, $options = {}) {
   const sourceEntities = [];
   const options = Object.assign({}, Options$d, $options, {
     ancestors: Object.assign([], $options.ancestors)
@@ -318,8 +316,7 @@ function entities($source, $type, $options) {
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options;
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.push($source); }
-  const source = new Tensors(options.getters).cess($source, Object.assign(options, { returnValue: 'target' }));
-  // throw [$source, source]
+  const source = new Tensors(options.getters).cess($source, options);
   options.depth++;
   for(const [$key, $propertyDescriptor] of Object.entries(
     Object.getOwnPropertyDescriptors(source)
@@ -480,7 +477,6 @@ function assignSources($target, $type, ...$sources) {
   for(const $source of $sources) {
     if(!ObjectKeys.includes(typeOf($source))) continue iterateSources
     const sourceEntries = entities($source, 'entries', { recurse: false });
-    console.log("sourceEntries", sourceEntries);
     for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
       const targetPropertyValue = $target[$sourcePropertyKey];
       const typeOfTargetPropertyValue = typeOf(targetPropertyValue);
@@ -743,6 +739,7 @@ const Options$1 = {
   ancestors: [], 
   depth: 0, maxDepth: 10,
   getters: [Getters.Object, Getters.Map], 
+  returnValue: 'target',
 };
 function valueOf($source, $options = {}) {
   const options = Object.assign({}, Options$1, $options, {
@@ -754,7 +751,7 @@ function valueOf($source, $options = {}) {
   if(source === undefined) { return }
   if(!ancestors.includes($source)) { ancestors.unshift($source); }
   const target = typedObjectLiteral(typeOf(source));
-  const sourceEntries = entities($source, 'entries', { recurse: false });
+  const sourceEntries = entities($source, 'entries', Object.assign({}, options, { recurse: false }));
   iterateSourceEntries: 
   for(const [$sourceKey, $sourceValue] of sourceEntries) {
     let sourceValue;
@@ -767,12 +764,11 @@ function valueOf($source, $options = {}) {
       target[$sourceKey] = sourceValue;
     }
     catch($err) { console.error($err); }
-    // catch($err) { throw $err }
   }
   return target
 }
 
-const Options = { space: 0, replacer: null };
+const Options = { space: 0, replacer: null, returnValue: 'target' };
 function toString($source, $options) {
   const options = Object.assign({}, Options, $options);
   return JSON.stringify(
