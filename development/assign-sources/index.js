@@ -1,6 +1,8 @@
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../variables/index.js'
 import { Tensors, Getters, Setters } from '../tensors/index.js'
+import * as Variables from '../variables/index.js'
+import entities from '../entities/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
   setters: [Setters.Object, Setters.Map],
@@ -13,24 +15,22 @@ export default function assignSources($target, $type, ...$sources) {
   const typeOfTarget = typeOf($target)
   iterateSources: 
   for(const $source of $sources) {
-    if(!$source) continue iterateSources
+    if(!Variables.ObjectKeys.includes(typeOf($source))) continue iterateSources
+    const sourceEntries = entities($source, 'entries', { recurse: false })
+    console.log("sourceEntries", sourceEntries)
     iterateSourceEntries: 
-    for(const [
-      $sourcePropertyKey, $sourcePropertyValue
-    ] of Object.entries($source)) {
+    for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
       const targetPropertyValue = $target[$sourcePropertyKey]
       const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
       const typeOfSourcePropertyValue = typeOf($sourcePropertyValue)
       if(typeOfTarget === 'array' && $type === 'assignConcat') {
         $target.push($sourcePropertyValue)
       }
+      else if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
+        assignSources(targetPropertyValue, $type, $sourcePropertyValue)
+      }
       else {
-        if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
-          assignSources(targetPropertyValue, $type, $sourcePropertyValue)
-        }
-        else {
-          setters.cess($target, $sourcePropertyKey, $sourcePropertyValue, options)
-        }
+        setters.cess($target, $sourcePropertyKey, $sourcePropertyValue, options)
       }
     }
   }

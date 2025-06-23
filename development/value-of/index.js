@@ -27,8 +27,11 @@ export default function valueOf($source, $options = {}) {
       sourceValue = valueOf($sourceValue, options)
     }
     else { sourceValue = $sourceValue }
-    try { target[$sourceKey] = sourceValue }
+    try {
+      target[$sourceKey] = sourceValue
+    }
     catch($err) { console.error($err) }
+    // catch($err) { throw $err }
   }
   return target
 }

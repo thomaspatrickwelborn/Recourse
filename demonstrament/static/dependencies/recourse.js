@@ -75,20 +75,39 @@ function Getter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(typeOf($arguments[1]) === 'string') {
     let [$receiver, $property, $options] = $arguments;
-    $options = $options || { returnTarget: true };
-    let { returnTarget } = $options;
+    $options = $options || { returnValue: 'target' };
+    let { returnValue } = $options;
     return (
-      (typeOf(returnTarget) !== 'boolean') ? true : returnTarget
-    ) ? $receiver.get($property) : $receiver[$property]
+      returnValue === 'target'
+    ) ? $receiver.get($property)
+      : (
+      returnValue === 'receiver'
+    ) ? $receiver[$property]
+      : (
+      returnValue === 'entry'
+    ) ? [$property, $receiver.get($property)]
+      : undefined
+    // return (
+    //   (!returnValues.includes(returnValue)) ? 'target' : returnValue
+    // ) ? $receiver.get($property) : $receiver[$property]
   }
   else {
     let [$receiver, $options] = $arguments;
-    $options = $options || { returnTarget: true };
-    let { returnTarget } = $options;
+    $options = $options || { returnValue: 'target' };
+    let { returnValue } = $options;
     return (
-      (typeOf(returnTarget) !== 'boolean') ? true : returnTarget
-    // ) ? Object.fromEntries($receiver.entries()) : $receiver
-    ) ? Array.from($receiver.entries()) : $receiver
+      returnValue === 'target'
+    ) ? Object.fromEntries($receiver)
+      : (
+      returnValue === 'receiver'
+    ) ? $receiver
+      : (
+      returnValue === 'entry'
+    ) ? Array.from($receiver)
+      : $receiver
+    // return (
+    //   (!returnValues.includes(returnValue)) ? 'target' : returnValue
+    // ) ? Array.from($receiver.entries()) : $receiver
   }
 }
 // Map Setter
@@ -96,17 +115,15 @@ function Setter(...$arguments) {
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(typeOf($arguments[1]) === 'string') {
     let [$receiver, $property, $value, $options] = $arguments;
-    $options = $options || { returnTarget: true };
-    let { returnTarget } = $options;
-    returnTarget = (typeOf(returnTarget) !== 'boolean') ? true : returnTarget;
-    $receiver.set($property, $value, returnTarget);
-    return $receiver.get($property, returnTarget)
+    $options = $options || { returnValue: 'target' };
+    let { returnValue } = $options;
+    $receiver.set($property, $value, returnValue);
+    return $receiver.get($property, returnValue)
   }
   else {
     let [$receiver, $source, $options] = $arguments;
-    $options = $options || { returnTarget: true };
-    let { returnTarget } = $options;
-    returnTarget = (typeOf(returnTarget) !== 'boolean') ? true : returnTarget;
+    $options = $options || { returnValue: 'target' };
+    let { returnValue } = $options;
     $receiver.clear();
     for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
       $receiver.set($sourceKey, $sourceValue);
@@ -116,7 +133,6 @@ function Setter(...$arguments) {
 }
 // Map Deleter
 function Deleter(...$arguments) {
-  console.log($arguments);
   const length = $arguments.length;
   if(typeOf($arguments[0]) !== 'map') { return }
   else if(length === 2) {
@@ -195,10 +211,12 @@ function typedObjectLiteral($value) {
     const value = $value.toLowerCase();
     if(value === 'object') { _typedObjectLiteral = {}; }
     else if(value === 'array') { _typedObjectLiteral = []; }
+    else { _typedObjectLiteral = {}; }
   }
   else  {
     if(typeOfValue === 'object') { _typedObjectLiteral = {}; }
     else if(typeOfValue === 'array') { _typedObjectLiteral = []; }
+    else { _typedObjectLiteral = {}; }
   }
   return _typedObjectLiteral
 }
@@ -235,7 +253,7 @@ function setProperty() {
   }
 }
 
-const Options$e = { deleters: [Deleters.Object, Deleters.Map], returnTarget: true };
+const Options$e = { deleters: [Deleters.Object, Deleters.Map], returnValue: 'target' };
 function deleteProperty($target, $path, $options) {
   const options = Object.assign ({}, Options$e, $options);
   const deleters = new Tensors(options.deleters);
@@ -290,7 +308,7 @@ const Options$d = {
   depth: 0, maxDepth: 10,
   enumerable: true, nonenumerable: false,
   recurse: true,
-  returnTarget: true,
+  returnValue: 'target',
 };
 function entities($source, $type, $options) {
   const sourceEntities = [];
@@ -300,7 +318,7 @@ function entities($source, $type, $options) {
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options;
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.push($source); }
-  const source = new Tensors(options.getters).cess($source, Object.assign(options, { returnTarget: true }));
+  const source = new Tensors(options.getters).cess($source, Object.assign(options, { returnValue: 'target' }));
   // throw [$source, source]
   options.depth++;
   for(const [$key, $propertyDescriptor] of Object.entries(
@@ -460,23 +478,21 @@ function assignSources($target, $type, ...$sources) {
   const typeOfTarget = typeOf($target);
   iterateSources: 
   for(const $source of $sources) {
-    if(!$source) continue iterateSources
-    for(const [
-      $sourcePropertyKey, $sourcePropertyValue
-    ] of Object.entries($source)) {
+    if(!ObjectKeys.includes(typeOf($source))) continue iterateSources
+    const sourceEntries = entities($source, 'entries', { recurse: false });
+    console.log("sourceEntries", sourceEntries);
+    for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
       const targetPropertyValue = $target[$sourcePropertyKey];
       const typeOfTargetPropertyValue = typeOf(targetPropertyValue);
       typeOf($sourcePropertyValue);
       if(typeOfTarget === 'array' && $type === 'assignConcat') {
         $target.push($sourcePropertyValue);
       }
+      else if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
+        assignSources(targetPropertyValue, $type, $sourcePropertyValue);
+      }
       else {
-        if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
-          assignSources(targetPropertyValue, $type, $sourcePropertyValue);
-        }
-        else {
-          setters.cess($target, $sourcePropertyKey, $sourcePropertyValue, options);
-        }
+        setters.cess($target, $sourcePropertyKey, $sourcePropertyValue, options);
       }
     }
   }
@@ -747,8 +763,11 @@ function valueOf($source, $options = {}) {
       sourceValue = valueOf($sourceValue, options);
     }
     else { sourceValue = $sourceValue; }
-    try { target[$sourceKey] = sourceValue; }
+    try {
+      target[$sourceKey] = sourceValue;
+    }
     catch($err) { console.error($err); }
+    // catch($err) { throw $err }
   }
   return target
 }

@@ -38,11 +38,11 @@ Recourse.get($receiver, $path, $options)
 **Descript**:  
 Array of `Tensor` methods that return properties from a receiver.  
 
-#### `returnTarget` Option
+#### `returnValue` Option
 **Type**: `boolean`  
 **Default**: `false`  
 **Descript**:  
-When `$returnTarget` is: 
+When `$returnValue` is: 
  - `false` - Returns `$receiver` wrapping `$target`.  
  - `true` - Returns direct `$target` from `$receiver`.  
 
