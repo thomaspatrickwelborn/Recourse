@@ -1,19 +1,12 @@
-import typeOf from '../type-of/index.js'
-import regularExpressions from '../regular-expressions/index.js'
-const { quotationEscape, quotationStartStop } = regularExpressions
 export default function splitPath($path) {
-  const typeOfPath = typeOf($path)
-  if(typeOfPath === 'string') {
-    const subpaths = $path.split(new RegExp(regularExpressions.quotationEscape))
-    let subpathIndex = 0
-    iterateSubpaths: 
-    while(subpathIndex < subpaths.length) {
-      subpaths[subpathIndex] = subpaths[subpathIndex].replace(
-        new RegExp(regularExpressions.quotationStartStop), '$1'
-      )
-      subpathIndex++
-    }
-    return subpaths
+  const subpathDelimiters = /([a-zA-Z_][a-zA-Z0-9_]*)|(\d+)|\["([^"]*)"\]|"([^"]*)"|\./g
+  const subpaths = []
+  let match
+  while((match = subpathDelimiters.exec($path)) !== null) {
+    if(match[1]) { subpaths.push(match[1]) }
+    else if(match[2]) { subpaths.push(parseInt(match[2], 10)) }
+    else if(match[3]) { subpaths.push(match[3]) }
+    else if(match[4]) { subpaths.push(match[4]) }
   }
-  else if(typeOfPath === 'number'){ return [$path] }
+  return subpaths
 }

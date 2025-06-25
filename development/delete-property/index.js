@@ -1,4 +1,3 @@
-import regularExpressions from '../regular-expressions/index.js'
 import splitPath from '../split-path/index.js'
 import { Tensors, Deleters } from '../tensors/index.js'
 const Options = { deleters: [Deleters.Object, Deleters.Map], returnValue: 'target' }

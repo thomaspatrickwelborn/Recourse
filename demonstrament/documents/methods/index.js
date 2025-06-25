@@ -1,6 +1,6 @@
 // import './assign/index.js'
 // import './assign-concat/index.js'
-// import './compand/index.js'
+import './compand/index.js'
 // import './decompand/index.js'
 // import './define-properties/index.js'
 // import './expand/index.js'
@@ -15,4 +15,4 @@
 // import './to-string/index.js'
 // import './type-of/index.js'
 // import './value-of/index.js'
-import './readme.md/index.js'
+// import './readme.md/index.js'

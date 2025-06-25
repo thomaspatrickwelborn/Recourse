@@ -56,17 +56,30 @@ const object = {
   }]
 }
 ```
-**Get/Set/Delete Targeted Actensors/Mutators**  
+**`get`/`set`/`delete` Targeted Tensors/Mutators**  
 ```
 Recourse.get(object, 'propertyA.0.propertyB.propertyC.0')
 Recourse.set(object, 'propertyA.1.propertyD.propertyE.1', "55")
 Recourse.delete(object, 'propertyA.2.propertyF.propertyG.2')
 ```
+*get*/*set*/*delete*  
+```
+propertyA.0.propertyB.propertyC.0 3
+propertyA.1.propertyD.propertyE.1 "55"
+propertyA.2.propertyF.propertyG.2 undefined
+```
 
-**Get/Set/Delete Bound Actensors/Mutators**  
+**`get`/`set`/`delete` Bound Tensors/Mutators**  
 ```
 const recourseObject = new Recourse(object)
-recourseObject.get('propertyA.0.propertyB.propertyC.0')
-recourseObject.set('propertyA.1.propertyD.propertyE.1', "55")
+recourseObject.get('propertyA.0.propertyB.propertyC.2')
+recourseObject.set('propertyA.1.propertyD.propertyE.2', "555")
 recourseObject.delete('propertyA.2.propertyF.propertyG.2')
 ```
+*get*/*set*/*delete*  
+```
+propertyA.0.propertyB.propertyC.2 333
+propertyA.1.propertyD.propertyE.2 555
+propertyA.2.propertyF.propertyG.2 undefined
+```
+

@@ -18,6 +18,23 @@ try { object.propertyA[1] = {
   propertyD: {
     propertyE: [5, 55, 555]
   }
-} } catch($err) { console.error($err) }
-const objectString = JSON.stringify(object, null, 2)
-console.log(objectString)
+} } catch($err) {
+  console.error($err)
+}
+const objectString = Recourse.toString(object, {
+  space: 2, replacer: null, returnValue: 'target'
+})
+
+console.log("pass", (`{
+  "propertyA": [
+    {
+      "propertyB": {
+        "propertyC": [
+          3,
+          33,
+          333
+        ]
+      }
+    }
+  ]
+}` === objectString))

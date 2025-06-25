@@ -12,7 +12,6 @@ import defineProperties from './define-properties/index.js'
 import defineProperty from './define-property/index.js'
 import freeze from './freeze/index.js'
 import seal from './seal/index.js'
-import regularExpressions from './regular-expressions/index.js'
 import typedObjectLiteral from './typed-object-literal/index.js'
 import typeOf from './type-of/index.js'
 import isArrayLike from './is-array-like/index.js'
@@ -90,6 +89,6 @@ export {
   getOwnPropertyDescriptors, getOwnPropertyDescriptor,
   isArrayLike, isEntries, typeOf,
   splitPath, 
-  typedObjectLiteral, regularExpressions, variables,
+  typedObjectLiteral, variables,
   valueOf, toString,
 }

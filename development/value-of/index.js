@@ -7,13 +7,14 @@ const Options = {
   ancestors: [], 
   depth: 0, maxDepth: 10,
   getters: [Getters.Object, Getters.Map], 
-  returnValue: 'target',
+  returnValue: 'receiver',
 }
 export default function valueOf($source, $options = {}) {
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
-  const { ancestors, maxDepth } = options
+  const { ancestors, maxDepth, returnValue } = options
+  if(returnValue === 'receiver') { return $source }
   if(options.depth >= maxDepth) { return } else { options.depth++ }
   const source = new Tensors(options.getters).cess($source, options)
   if(source === undefined) { return }

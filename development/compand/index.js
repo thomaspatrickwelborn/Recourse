@@ -1,4 +1,5 @@
 import { Tensors, Getters } from '../tensors/index.js'
+import { ObjectKeys } from '../variables/index.js'
 import entities from '../entities/index.js'
 const Options = {
   depth: 0, 
@@ -19,6 +20,8 @@ export default function compand($source, $options) {
   const objectProperties = entities(source, 'entries', Object.assign(options, {
     recurse: false
   }))
+  console.log(objectProperties)
+  // throw objectProperties
   iterateObjectProperties: 
   for(const [$key, $value] of objectProperties) {
     if(!values) { target.push($key) }

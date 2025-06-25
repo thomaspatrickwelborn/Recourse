@@ -1,6 +1,7 @@
 import { Tensors, Getters } from '../tensors/index.js'
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../variables/index.js'
+import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
   ancestors: [],
@@ -21,12 +22,13 @@ export default function entities($source, $type, $options = {}) {
   options.depth++
   iterateSourcePropertyDescriptors: 
   for(const [$key, $propertyDescriptor] of Object.entries(
-    Object.getOwnPropertyDescriptors(source)
+    // Object.getOwnPropertyDescriptors(source)
+    getOwnPropertyDescriptors(source, { nonenumerable: true })
   )) {
-    if(
-      enumerable && $propertyDescriptor.enumerable ||
-      nonenumerable && !$propertyDescriptor.enumerable
-    ) {
+    // if(
+    //   enumerable && $propertyDescriptor.enumerable ||
+    //   nonenumerable && !$propertyDescriptor.enumerable
+    // ) {
       const $value = $propertyDescriptor.value
       const typeOfValue = typeOf($value)
       if(
@@ -43,7 +45,7 @@ export default function entities($source, $type, $options = {}) {
         else if($type === 'values') { sourceEntities.push($value) }
         else if($type === 'keys') { sourceEntities.push($key) }
       }
-    }
+    // }
   }
   return sourceEntities
 }

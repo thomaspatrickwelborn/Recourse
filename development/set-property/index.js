@@ -1,4 +1,3 @@
-import regularExpressions from '../regular-expressions/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import typeOf from '../type-of/index.js'
 import splitPath from '../split-path/index.js'

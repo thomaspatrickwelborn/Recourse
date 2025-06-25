@@ -3,7 +3,7 @@ import typeOf from '../../type-of/index.js'
 function Getter(...$arguments) {
   const $target = $arguments[0]
   if(!['object', 'array'].includes(typeOf($target))) { return }
-  if(typeOf($arguments[1]) === 'string') {
+  else if(['string', 'number'].includes(typeOf($arguments[1]))) {
     const $property = $arguments[1]
     return $target[$property]
   }
@@ -14,7 +14,7 @@ function Getter(...$arguments) {
 // Object Setter
 function Setter(...$arguments) {
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return }
-  else if(typeOf($arguments[1]) === 'string') {
+  else if(['string', 'number'].includes(typeOf($arguments[1]))) {
     const [$target, $property, $value] = $arguments
     $target[$property] = $value
     return $target[$property]
@@ -26,7 +26,7 @@ function Setter(...$arguments) {
       delete $target[$targetKey]
     }
     iterateSourceEntries: 
-    for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
+    for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
       $target[$sourceKey] = $sourceValue
     }
     return $target
@@ -36,7 +36,7 @@ function Setter(...$arguments) {
 function Deleter(...$arguments) {
   const [$target, $property] = $arguments
   if(!['object', 'array'].includes(typeOf($target))) { return }
-  else if(typeOf($property) === 'string') {
+  else if(['string', 'number'].includes(typeOf($property))) {
     return delete $target[$property]
   }
   else {

@@ -20,15 +20,15 @@ const object = {
   }]
 }
 const objectString = JSON.stringify(object, null, 2)
-Recourse.set(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2', "555", options)
-Recourse.set(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.1', "55", options)
-Recourse.set(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.0', "5", options)
+Recourse.set(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE["2"]', "555", options)
+Recourse.set(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE["1"]', "55", options)
+Recourse.set(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE["0"]', "5", options)
 const objectModifiedString = JSON.stringify(object, null, 2)
 console.log("object", object)
 console.log("objectString", objectString)
 console.log("objectModifiedString", objectModifiedString)
 console.log("pass", (
-  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2', options) === "555") &&
-  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.1', options) === "55") &&
-  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.0', options) === "5")
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE."2"', options) === "555") &&
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE."1"', options) === "55") &&
+  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE."0"', options) === "5")
 ))

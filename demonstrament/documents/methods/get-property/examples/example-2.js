@@ -22,9 +22,9 @@ const object = {
 }
 const objectString = JSON.stringify(object, null, 2)
 const propertyE = Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE')
-const propertyE0 = Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.0', options)
-const propertyE1 = Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.1', options)
-const propertyE2 = Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2', options)
+const propertyE0 = Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE["0"]', options)
+const propertyE1 = Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE["1"]', options)
+const propertyE2 = Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE["2"]', options)
 console.log("object", objectString)
 console.log("pass", (
   (propertyE0 === 5) &&
