@@ -17,18 +17,20 @@ export default function entities($source, $type, $options = {}) {
   })
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
   if(options.depth >= maxDepth) { return }
-  if(!ancestors.includes($source)) { ancestors.push($source) }
-  const source = new Tensors(options.getters).cess($source, options)
+  if(!ancestors.includes($source)) { ancestors.unshift($source) }
+  // const source = new Tensors(options.getters).cess($source, options)
+  console.log(getOwnPropertyDescriptors($source, {
+    nonenumerable: true, returnValue: 'entries'
+  }))
   options.depth++
   iterateSourcePropertyDescriptors: 
-  for(const [$key, $propertyDescriptor] of Object.entries(
-    // Object.getOwnPropertyDescriptors(source)
-    getOwnPropertyDescriptors(source, { nonenumerable: true })
-  )) {
-    // if(
-    //   enumerable && $propertyDescriptor.enumerable ||
-    //   nonenumerable && !$propertyDescriptor.enumerable
-    // ) {
+  for(const [$key, $propertyDescriptor] of getOwnPropertyDescriptors($source, {
+    nonenumerable: true, returnValue: 'entries'
+  })) {
+    if(
+      enumerable && $propertyDescriptor.enumerable ||
+      nonenumerable && !$propertyDescriptor.enumerable
+    ) {
       const $value = $propertyDescriptor.value
       const typeOfValue = typeOf($value)
       if(
@@ -45,7 +47,7 @@ export default function entities($source, $type, $options = {}) {
         else if($type === 'values') { sourceEntities.push($value) }
         else if($type === 'keys') { sourceEntities.push($key) }
       }
-    // }
+    }
   }
   return sourceEntities
 }

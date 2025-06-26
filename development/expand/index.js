@@ -17,9 +17,10 @@ export default function expand($source, $path, $options = {}) {
   for(const [$sourceKey, $sourceValue] of entities(
     $source, 'entries', Object.assign({}, options, { recurse: false })
   )) {
+    console.log($sourceKey, $sourceValue)
     const targetValue = (
       ObjectKeys.includes(typeOf($sourceValue))
-    ) ? expand($sourceValue, $path) : $sourceValue
+    ) ? expand($sourceValue, $path, options) : $sourceValue
     if(typeOfPath === ValidPathTypes[0]) {
       target[$sourceKey] = setProperty({}, $path, targetValue, options)
     }

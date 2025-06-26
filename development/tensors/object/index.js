@@ -1,14 +1,23 @@
 import typeOf from '../../type-of/index.js'
+import { PrimitiveKeys } from '../../variables/index.js'
+const Options = { returnValue: 'target' }
 // Object Getter
 function Getter(...$arguments) {
   const $target = $arguments[0]
   if(!['object', 'array'].includes(typeOf($target))) { return }
   else if(['string', 'number'].includes(typeOf($arguments[1]))) {
-    const $property = $arguments[1]
-    return $target[$property]
+    const [$receiver, $property, $options] = $arguments
+    const { returnValue } = Object.assign({}, Options, $options)
+    return (returnValue !== 'entries')
+      ? $target[$property]
+      : [$property, $target[$property]]
   }
   else {
-    return $target
+    const [$receiver, $options] = $arguments
+    const { returnValue } = Object.assign({}, Options, $options)
+    return (returnValue !== 'entries')
+      ? $target
+      : Object.entries($target)
   }
 }
 // Object Setter

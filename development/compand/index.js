@@ -16,12 +16,10 @@ export default function compand($source, $options) {
   options.depth++
   if(options.depth > options.maxDepth) { return target }
   const source = new Tensors(options.getters).cess($source, options)
-  if(!ancestors.includes(source)) { ancestors.unshift(source) }
-  const objectProperties = entities(source, 'entries', Object.assign(options, {
-    recurse: false
+if(!ancestors.includes($source)) { ancestors.unshift($source) }
+  const objectProperties = entities($source, 'entries', Object.assign(options, {
+    recurse: false// , returnValue: 'receiver'
   }))
-  console.log(objectProperties)
-  // throw objectProperties
   iterateObjectProperties: 
   for(const [$key, $value] of objectProperties) {
     if(!values) { target.push($key) }
