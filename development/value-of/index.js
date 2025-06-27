@@ -16,9 +16,9 @@ export default function valueOf($source, $options = {}) {
   const { ancestors, maxDepth, returnValue } = options
   if(returnValue === 'receiver') { return $source }
   if(options.depth >= maxDepth) { return } else { options.depth++ }
+  if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const source = new Tensors(options.getters).cess($source, options)
   if(source === undefined) { return }
-  if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const target = typedObjectLiteral(typeOf(source))
   const sourceEntries = entities($source, 'entries', Object.assign({}, options, { recurse: false }))
   iterateSourceEntries: 

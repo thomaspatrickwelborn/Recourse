@@ -19,14 +19,12 @@ export default function entities($source, $type, $options = {}) {
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   // const source = new Tensors(options.getters).cess($source, options)
-  console.log(getOwnPropertyDescriptors($source, {
-    nonenumerable: true, returnValue: 'entries'
-  }))
   options.depth++
   iterateSourcePropertyDescriptors: 
-  for(const [$key, $propertyDescriptor] of getOwnPropertyDescriptors($source, {
-    nonenumerable: true, returnValue: 'entries'
-  })) {
+  for(const [$key, $propertyDescriptor] of getOwnPropertyDescriptors($source, Object.assign(
+    {}, options, { returnValue: 'entries' })
+  )) {
+    if(!$propertyDescriptor) { continue iterateSourcePropertyDescriptors }
     if(
       enumerable && $propertyDescriptor.enumerable ||
       nonenumerable && !$propertyDescriptor.enumerable

@@ -27,15 +27,16 @@ Recourse.assign(object, {
     }
   }]
 })
-const objectModifiedString = JSON.stringify(object, null, 2)
-console.log("object", objectString)
-console.log("objectModified", objectModifiedString)
-console.log(`Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2')`, Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2'))
-console.log("pass", (
-  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2') === "555") &&
-  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.1') === 55) &&
-  (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.0') === "5")
-))
+console.log(object)
+// const objectModifiedString = JSON.stringify(object, null, 2)
+// console.log("object", objectString)
+// console.log("objectModified", objectModifiedString)
+// console.log(`Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2')`, Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2'))
+// console.log("pass", (
+//   (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.2') === "555") &&
+//   (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.1') === 55) &&
+//   (Recourse.get(object, 'propertyA.0.propertyB.propertyC.0.propertyD.propertyE.0') === "5")
+// ))
 
 // get($target)
 // get($target, $options)

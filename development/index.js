@@ -16,7 +16,6 @@ import typedObjectLiteral from './typed-object-literal/index.js'
 import typeOf from './type-of/index.js'
 import isArrayLike from './is-array-like/index.js'
 import isMapLike from './is-map-like/index.js'
-import isEntries from './is-entries/index.js'
 import * as variables from './variables/index.js'
 import keys from './keys/index.js'
 import values from './values/index.js'
@@ -50,7 +49,6 @@ class Recourse extends EventTarget {
   static getOwnPropertyDescriptor = getOwnPropertyDescriptor
   static isArrayLike = isArrayLike
   static isMapLike = isMapLike
-  static isEntries = isEntries
   static typeOf = typeOf
   static toString = toString
   static valueOf = valueOf
@@ -68,7 +66,7 @@ class Recourse extends EventTarget {
       defineProperties: Recourse.defineProperties, defineProperty: Recourse.defineProperty,
       freeze: Recourse.freeze, seal: Recourse.seal,
       getOwnPropertyDescriptors: Recourse.getOwnPropertyDescriptors, getOwnPropertyDescriptor: Recourse.getOwnPropertyDescriptor,
-      isArrayLike: Recourse.isArrayLike, isEntries: Recourse.isEntries, isMapLike: Recourse.isMapLike,
+      isArrayLike: Recourse.isArrayLike, isMapLike: Recourse.isMapLike,
       typeOf: Recourse.typeOf,
     })) {
       Object.defineProperty(this, $staticMethodName, {
@@ -87,7 +85,7 @@ export {
   keys, values, entries,
   entities, 
   getOwnPropertyDescriptors, getOwnPropertyDescriptor,
-  isArrayLike, isEntries, typeOf,
+  isArrayLike, typeOf,
   splitPath, 
   typedObjectLiteral, variables,
   valueOf, toString,

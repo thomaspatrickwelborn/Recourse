@@ -9,8 +9,8 @@ object.propertyA.propertyC = object.propertyA
 const objectPDAST = getOwnPropertyDescriptors(object, {
   path: true,
   type: true,
+  // returnValue: 'entries'
 })
-console.log(objectPDAST)
 const objectString = JSON.stringify(objectPDAST, null, 2)
 const objectPDASTString = JSON.stringify(objectPDAST, null, 2)
 console.log("---------------------------------------------------")
