@@ -14,7 +14,6 @@ const Options = {
   type: false,
 }
 export default function getOwnPropertyDescriptor($source, $propertyKey, $options = {}) {
-  console.log($source, $propertyKey)
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors),
   })

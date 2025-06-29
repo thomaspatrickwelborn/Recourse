@@ -3,6 +3,7 @@
 // import './compand/index.js'
 // import './decompand/index.js'
 // import './define-properties/index.js'
+// import './entities/index.js'
 // import './expand/index.js'
 // import './freeze/index.js'
 // import './get-property/index.js'
