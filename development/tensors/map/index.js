@@ -62,4 +62,34 @@ function Deleter(...$arguments) {
     return $receiver.clear()
   } 
 }
-export { Getter, Setter, Deleter }
+/*
+
+// Map Descriptor
+function Descriptor(...$arguments) {
+  if(typeOf($arguments[0]) !== 'map') { return this?.next(...$arguments) }
+  else if(PrimitiveKeys.includes(typeOf($arguments[1]))) {
+    const [$receiver, $property, $options] = $arguments
+    const { returnValue } = Object.assign({}, Options, $options)
+    if($receiver.has($property)) {
+      if(returnValue === 'target') {
+        return $receiver.get($property)
+      }
+      else if(returnValue === 'entries') {
+        return [$property, $receiver.get($property)]
+      }
+    }
+    else if(returnValue === 'receiver' && Object.hasOwn($receiver, $property)) {
+      return $receiver[$property]
+    }
+  }
+  else {
+    const [$receiver, $options] = $arguments
+    const { returnValue } = Object.assign({}, Options, $options)
+    return (returnValue === 'target') ? Object.fromEntries($receiver)
+    : (returnValue === 'receiver') ? $receiver
+    : (returnValue === 'entries') ? Array.from($receiver.entries())
+    : undefined
+  }
+}
+*/
+export { Getter, Setter, Deleter/*, Descriptor*/ }

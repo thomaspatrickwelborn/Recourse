@@ -24,7 +24,6 @@ try { object.propertyA[1] = {
 const objectString = Recourse.toString(object, {
   space: 2, replacer: null, returnValue: 'target'
 })
-
 console.log("pass", (`{
   "propertyA": [
     {

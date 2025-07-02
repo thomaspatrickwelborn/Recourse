@@ -55,4 +55,24 @@ function Deleter(...$arguments) {
     return undefined
   }
 }
-export { Getter, Setter, Deleter }
+/*
+// Object Descriptor
+function Descriptor(...$arguments) {
+  if(!['object', 'array'].includes(typeOf($arguments[0]))) { return this?.next(...$arguments) }
+  else if(['string', 'number'].includes(typeOf($arguments[1]))) {
+    const [$receiver, $property, $options] = $arguments
+    const { returnValue } = Object.assign({}, Options, $options)
+    return (returnValue !== 'entries')
+      ? Object.getOwnPropertyDescriptor($receiver, $property)
+      : [$property, Object.getOwnPropertyDescriptor($receiver, $property)]
+  }
+  else {
+    const [$receiver, $options] = $arguments
+    const { returnValue } = Object.assign({}, Options, $options)
+    return (returnValue !== 'entries')
+      ? Object.getOwnPropertyDescriptors($receiver)
+      : Object.entries(Object.getOwnPropertyDescriptors($receiver))
+  }
+}
+*/
+export { Getter, Setter, Deleter/*, Descriptor*/ }

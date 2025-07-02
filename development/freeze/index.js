@@ -3,6 +3,7 @@ import entities from '../entities/index.js'
 import { Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
+  getters: [Getters.Object, Getters.Map],
   ancestors: [], 
   depth: 0, maxDepth: 10,
 }

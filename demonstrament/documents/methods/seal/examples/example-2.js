@@ -1,8 +1,8 @@
 import { toString, typeOf } from '/dependencies/recourse.js'
 import * as Recourse from '/dependencies/recourse.js'
-console.log("------------------")
-console.log("Freeze | Example 2")
-console.log("------------------")
+console.log("----------------")
+console.log("Seal | Example 2")
+console.log("----------------")
 const object = {
   propertyA: [{
     propertyB: {
@@ -13,7 +13,7 @@ const object = {
     propertyE: new Map([[0, 5], [1, 55], [2, 555]])
   }))
 }
-Recourse.freeze(object)
+Recourse.seal(object)
 try {
   object.propertyD.get('propertyE').set(0, "5")
   object.propertyD.get('propertyE').set(1, "55")

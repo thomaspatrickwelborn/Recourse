@@ -24,7 +24,7 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
     const typeOfSource = typeOf($source)
     const propertyDescriptor = (typeOfSource !== 'map')
       ? Object.getOwnPropertyDescriptor($source, $propertyKey)
-      : { configurable: false, enumerable: true, value: propertyValue, writable: true }
+      : { configurable: false, enumerable: true, value: propertyValue[1], writable: true }
     if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
     if(!options.ancestors.includes($source)) { options.ancestors.unshift($source) }
     if(options.ancestors.includes(propertyValue)) { return }
@@ -44,9 +44,9 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
       if(ObjectKeys.includes(typeOf(propertyValue[1]))) {
         propertyDescriptor.value = getOwnPropertyDescriptors(propertyValue[1], options)
       }
-      else {
-        propertyDescriptor.value = propertyValue[1]
-      }
+      // else {
+      //   propertyDescriptor.value = propertyValue
+      // }
     }
     return (options.returnValue !== 'entries')
       ? propertyDescriptor

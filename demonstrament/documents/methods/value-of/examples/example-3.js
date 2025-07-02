@@ -11,8 +11,10 @@ const map = new Map([
   [propertyB, propertyB],
   [propertyC, propertyC],
 ])
-const mapEntries = Recourse.valueOf(map, { returnValue: 'entries' })
-const mapString = Recourse.toString(mapEntries, { space: 2, replacer: null })
+const mapEntries = Recourse.entities(map, 'entries')
+const mapString = Recourse.toString(mapEntries, {
+  space: 2, replacer: null
+})
 console.log("map", map)
 console.log("mapEntries", mapEntries)
 console.log("mapString", mapString)

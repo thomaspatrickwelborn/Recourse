@@ -14,18 +14,22 @@ export default function valueOf($source, $options = {}) {
     ancestors: Object.assign([], $options.ancestors)
   })
   const { ancestors, maxDepth, returnValue } = options
-  if(returnValue === 'receiver') { return $source }
-  if(options.depth >= maxDepth) { return } else { options.depth++ }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
+  // else { return $source }
+  // if(returnValue === 'receiver') { return $source }
+  if(options.depth >= maxDepth) { return } else { options.depth++ }
   const source = new Tensors(options.getters).cess($source, options)
   if(source === undefined) { return }
   const target = typedObjectLiteral(typeOf(source))
-  const sourceEntries = entities($source, 'entries', Object.assign({}, options, { recurse: false }))
+  const sourceEntries = entities($source, 'entries', Object.assign({}, options, {
+    recurse: false
+  }))
   iterateSourceEntries: 
   for(const [$sourceKey, $sourceValue] of sourceEntries) {
     let sourceValue
     if(ObjectKeys.includes(typeOf($sourceValue))) {
-      if(ancestors.includes($sourceValue)) { continue iterateSourceEntries }
+      if(!ancestors.includes($sourceValue)) { ancestors.unshift($sourceValue) }
+      else { continue iterateSourceEntries }
       sourceValue = valueOf($sourceValue, options)
     }
     else { sourceValue = $sourceValue }
