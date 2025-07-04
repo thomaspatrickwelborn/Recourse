@@ -21,13 +21,16 @@ export default function assignSources($target, $type, ...$sources) {
     })
     iterateSourceEntries: 
     for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
-      const targetPropertyValue = $target[$sourcePropertyKey]
+      const targetPropertyValue = getters.cess($target, $sourcePropertyKey)
       const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
       const typeOfSourcePropertyValue = typeOf($sourcePropertyValue)
       if(typeOfTarget === 'array' && $type === 'assignConcat') {
-        $target.push($sourcePropertyValue)
+        setters.cess($target, $target.length, $sourcePropertyValue)
       }
-      else if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
+      else if(
+        Variables.ObjectKeys.includes(typeOfSourcePropertyValue) &&
+        Variables.ObjectKeys.includes(typeOfTargetPropertyValue)
+      ) {
         assignSources(targetPropertyValue, $type, $sourcePropertyValue)
       }
       else {
@@ -35,5 +38,4 @@ export default function assignSources($target, $type, ...$sources) {
       }
     }
   }
-  return $target
 }

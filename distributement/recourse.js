@@ -290,9 +290,12 @@ function deleteProperty($target, $path, $options) {
 function getOwnPropertyDescriptors($source, $options = {}) {
   const options = Object.assign({}, $options);
   const propertyDescriptors = (options.returnValue !== 'entries') ? {} : [];
-  const propertyDescriptorKeys = (['array', 'object'].includes(typeOf($source)))
+  const typeOfSource = typeOf($source);
+  const propertyDescriptorKeys = (['array', 'object'].includes(typeOfSource))
     ? Object.keys(Object.getOwnPropertyDescriptors($source))
-    : Array.from($source.keys());
+    : (typeOfSource == 'map')
+    ? Array.from($source.keys())
+    : [];
   for(const $propertyKey of propertyDescriptorKeys) {
     const propertyDescriptor = getOwnPropertyDescriptor($source, $propertyKey, options);
     if(propertyDescriptor) {
@@ -544,7 +547,7 @@ const Options$7 = {
 function assignSources($target, $type, ...$sources) {
   if(!$target) { return $target}
   const options = Object.assign({}, Options$7);
-  new Tensors(options.getters);
+  const getters = new Tensors(options.getters);
   const setters = new Tensors(options.setters);
   const typeOfTarget = typeOf($target);
   iterateSources: 
@@ -554,13 +557,16 @@ function assignSources($target, $type, ...$sources) {
       recurse: false, // returnValue: 'entries'
     });
     for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
-      const targetPropertyValue = $target[$sourcePropertyKey];
+      const targetPropertyValue = getters.cess($target, $sourcePropertyKey);
       const typeOfTargetPropertyValue = typeOf(targetPropertyValue);
-      typeOf($sourcePropertyValue);
+      const typeOfSourcePropertyValue = typeOf($sourcePropertyValue);
       if(typeOfTarget === 'array' && $type === 'assignConcat') {
-        $target.push($sourcePropertyValue);
+        setters.cess($target, $target.length, $sourcePropertyValue);
       }
-      else if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
+      else if(
+        ObjectKeys.includes(typeOfSourcePropertyValue) &&
+        ObjectKeys.includes(typeOfTargetPropertyValue)
+      ) {
         assignSources(targetPropertyValue, $type, $sourcePropertyValue);
       }
       else {
@@ -568,7 +574,6 @@ function assignSources($target, $type, ...$sources) {
       }
     }
   }
-  return $target
 }
 
 var assign = ($target, ...$sources) => assignSources($target, 'assign', ...$sources);
@@ -751,8 +756,6 @@ function valueOf($source, $options = {}) {
   });
   const { ancestors, maxDepth, returnValue } = options;
   if(!ancestors.includes($source)) { ancestors.unshift($source); }
-  // else { return $source }
-  // if(returnValue === 'receiver') { return $source }
   if(options.depth >= maxDepth) { return } else { options.depth++; }
   const source = new Tensors(options.getters).cess($source, options);
   if(source === undefined) { return }

@@ -15,8 +15,6 @@ export default function valueOf($source, $options = {}) {
   })
   const { ancestors, maxDepth, returnValue } = options
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
-  // else { return $source }
-  // if(returnValue === 'receiver') { return $source }
   if(options.depth >= maxDepth) { return } else { options.depth++ }
   const source = new Tensors(options.getters).cess($source, options)
   if(source === undefined) { return }
