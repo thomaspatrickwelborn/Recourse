@@ -20,6 +20,7 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++ }
   const propertyValue = new Tensors(options.getters).cess($source, $propertyKey, options)
+  throw [$propertyKey, propertyValue, options.returnValue]
   if(propertyValue !== undefined) {
     const typeOfSource = typeOf($source)
     const propertyDescriptor = (typeOfSource !== 'map')
@@ -37,16 +38,16 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
     if(options.type) { propertyDescriptor.type = typeOf(propertyValue) }
     if(options.frozen) { propertyDescriptor.frozen = Object.isFrozen(propertyValue) }
     if(options.sealed) { propertyDescriptor.sealed = Object.isSealed(propertyValue) }
-    if(typeOfSource !== 'map' && ObjectKeys.includes(typeOf(propertyValue))) {
+    if(/*typeOfSource !== 'map' && */ObjectKeys.includes(typeOf(propertyValue))) {
       propertyDescriptor.value = getOwnPropertyDescriptors(propertyValue, options)
     }
     else if(typeOfSource === 'map') {
       if(ObjectKeys.includes(typeOf(propertyValue[1]))) {
         propertyDescriptor.value = getOwnPropertyDescriptors(propertyValue[1], options)
       }
-      // else {
-      //   propertyDescriptor.value = propertyValue
-      // }
+      else {
+        propertyDescriptor.value = propertyValue
+      }
     }
     return (options.returnValue !== 'entries')
       ? propertyDescriptor

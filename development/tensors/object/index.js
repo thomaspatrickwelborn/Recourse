@@ -1,22 +1,15 @@
 import typeOf from '../../type-of/index.js'
 import { PrimitiveKeys } from '../../variables/index.js'
-const Options = { returnValue: 'target' }
 // Object Getter
 function Getter(...$arguments) {
   if(!['object', 'array'].includes(typeOf($arguments[0]))) { return this?.next(...$arguments) }
-  else if(['string', 'number'].includes(typeOf($arguments[1]))) {
-    const [$target, $property, $options] = $arguments
-    const { returnValue } = Object.assign({}, Options, $options)
-    return (returnValue !== 'entries')
-      ? $target[$property]
-      : [$property, $target[$property]]
+  else if($arguments.length === 1) {
+    const [$target] = $arguments
+    return $target
   }
   else {
-    const [$target, $options] = $arguments
-    const { returnValue } = Object.assign({}, Options, $options)
-    return (returnValue !== 'entries')
-      ? $target
-      : Object.entries($target)
+    const [$target, $property] = $arguments
+    return $target[$property]
   }
 }
 // Object Setter
@@ -55,24 +48,4 @@ function Deleter(...$arguments) {
     return undefined
   }
 }
-/*
-// Object Descriptor
-function Descriptor(...$arguments) {
-  if(!['object', 'array'].includes(typeOf($arguments[0]))) { return this?.next(...$arguments) }
-  else if(['string', 'number'].includes(typeOf($arguments[1]))) {
-    const [$receiver, $property, $options] = $arguments
-    const { returnValue } = Object.assign({}, Options, $options)
-    return (returnValue !== 'entries')
-      ? Object.getOwnPropertyDescriptor($receiver, $property)
-      : [$property, Object.getOwnPropertyDescriptor($receiver, $property)]
-  }
-  else {
-    const [$receiver, $options] = $arguments
-    const { returnValue } = Object.assign({}, Options, $options)
-    return (returnValue !== 'entries')
-      ? Object.getOwnPropertyDescriptors($receiver)
-      : Object.entries(Object.getOwnPropertyDescriptors($receiver))
-  }
-}
-*/
-export { Getter, Setter, Deleter/*, Descriptor*/ }
+export { Getter, Setter, Deleter }

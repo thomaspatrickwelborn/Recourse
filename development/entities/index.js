@@ -1,4 +1,5 @@
 import { Tensors, Getters } from '../tensors/index.js'
+import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../variables/index.js'
 import getOwnPropertyDescriptor from '../get-own-property-descriptor/index.js'
@@ -20,20 +21,12 @@ export default function entities($source, $type, $options = {}) {
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   options.depth++
-  const propertyDescriptorKeys = (['array', 'object'].includes(typeOf($source)))
-    ? Object.keys(Object.getOwnPropertyDescriptors($source))
-    : Array.from($source.keys())
+  const propertyDescriptors = getOwnPropertyDescriptors($source, {
+    returnValue: 'entries', recursive: false
+  })
+  throw propertyDescriptors
   iterateSourcePropertyDescriptors: 
   for(const $propertyKey of propertyDescriptorKeys) {
-    // const propertyValue = new Tensors(options.getters).cess($source, $propertyKey, options)
-    const propertyDescriptor = (typeOf($source) !== 'map')
-      ? Object.getOwnPropertyDescriptor($source, $propertyKey)
-      : {
-        configurable: false,
-        enumerable: true,
-        value: new Tensors(options.getters).cess($source, $propertyKey, options),
-        writable: true,
-      }
     if(!propertyDescriptor) { continue iterateSourcePropertyDescriptors }
     if(
       enumerable && propertyDescriptor.enumerable ||
@@ -48,6 +41,7 @@ export default function entities($source, $type, $options = {}) {
       ) {
         ancestors.unshift($value)
         const subentities = entities($value, $type, options)
+        console.log($propertyKey, $value)
         if(subentities.length) {
           if($type === 'entries') { sourceEntities.push([$propertyKey, subentities]) }
           else if($type === 'values') { sourceEntities.push(subentities) }

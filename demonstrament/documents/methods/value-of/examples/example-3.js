@@ -12,6 +12,7 @@ const map = new Map([
   [propertyC, propertyC],
 ])
 const mapEntries = Recourse.entities(map, 'entries')
+throw mapEntries
 const mapString = Recourse.toString(mapEntries, {
   space: 2, replacer: null
 })
@@ -40,7 +41,7 @@ console.log("pass", mapString === `[
       "propertyC": "CCC"
     },
     {
-      "propertyC": "CCC"
+      "propertyC": "CCC"  
     }
   ]
 ]`)

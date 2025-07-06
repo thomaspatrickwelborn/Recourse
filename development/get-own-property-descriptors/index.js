@@ -9,14 +9,18 @@ export default function getOwnPropertyDescriptors($source, $options = {}) {
     : (typeOfSource == 'map')
     ? Array.from($source.keys())
     : []
+
   iteratePropertyDescriptorKeys: 
   for(const $propertyKey of propertyDescriptorKeys) {
     const propertyDescriptor = getOwnPropertyDescriptor($source, $propertyKey, options)
+    throw [$source, $propertyKey, propertyDescriptor]
     if(propertyDescriptor) {
       if(options.returnValue !== 'entries') {
         propertyDescriptors[$propertyKey] = propertyDescriptor
       }
-      else { propertyDescriptors.push(propertyDescriptor) }
+      else {
+        propertyDescriptors.push(propertyDescriptor)
+      }
     }
   }
   return propertyDescriptors
