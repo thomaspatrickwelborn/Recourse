@@ -14,14 +14,14 @@ export default function setProperty() {
     const getters = new Tensors(options.getters)
     const setters = new Tensors(options.setters)
     const { enumerable, nonenumerable } = options
-    const target = getters.cess($target, options)
+    const target = getters.cess($target)
     const subpaths = splitPath($path)
     const key = subpaths.pop()
     let subtarget = $target
     iterateSubpaths: 
     for(const $subpath of subpaths) {
       subtarget = getters.cess(subtarget, $subpath, options) || setters.cess(
-        subtarget, $subpath, isNaN($subpath) ? {} : [], options
+        subtarget, $subpath, isNaN($subpath) ? {} : []
       )
       if(subtarget === undefined) { break iterateSubpaths } 
     }

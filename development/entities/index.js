@@ -22,12 +22,12 @@ export default function entities($source, $type, $options = {}) {
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   options.depth++
   const propertyDescriptors = getOwnPropertyDescriptors($source, {
-    returnValue: 'entries', recursive: false
+    returnValue: 'entries', recurse: false
   })
-  throw propertyDescriptors
   iterateSourcePropertyDescriptors: 
-  for(const $propertyKey of propertyDescriptorKeys) {
-    if(!propertyDescriptor) { continue iterateSourcePropertyDescriptors }
+  for(const [$propertyKey, $propertyDescriptor] of propertyDescriptors) {
+    console.log($propertyKey, $propertyDescriptor)
+    const propertyDescriptor = $propertyDescriptor
     if(
       enumerable && propertyDescriptor.enumerable ||
       nonenumerable && !propertyDescriptor.enumerable
@@ -41,7 +41,6 @@ export default function entities($source, $type, $options = {}) {
       ) {
         ancestors.unshift($value)
         const subentities = entities($value, $type, options)
-        console.log($propertyKey, $value)
         if(subentities.length) {
           if($type === 'entries') { sourceEntities.push([$propertyKey, subentities]) }
           else if($type === 'values') { sourceEntities.push(subentities) }

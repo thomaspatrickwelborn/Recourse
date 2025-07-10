@@ -16,8 +16,9 @@ console.log("---------------------------------------------------")
 console.log("Recourse | Get Own Property Descriptors | Example 3")
 console.log("---------------------------------------------------")
 console.log('object', objectString)
+console.log("objectPDAST", objectPDAST)
 console.log("objectPDASTString", objectPDASTString)
-console.log(`{
+console.log("pass", `{
   "propertyA": {
     "value": {
       "0": {
@@ -64,13 +65,6 @@ console.log(`{
         "enumerable": true,
         "configurable": true,
         "type": "object"
-      },
-      "length": {
-        "value": 3,
-        "writable": true,
-        "enumerable": false,
-        "configurable": false,
-        "type": "number"
       }
     },
     "writable": true,

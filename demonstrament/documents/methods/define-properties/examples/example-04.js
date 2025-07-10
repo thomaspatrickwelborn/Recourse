@@ -18,7 +18,7 @@ const objectDefinedProperties = defineProperties({}, objectPDAST, {
 })
 const objectDefinedPropertiesString = JSON.stringify(objectDefinedProperties, null, 2)
 console.log("---------------------------------------------------")
-console.log("Recourse | Get Own Property Descriptors | Example 4")
+console.log("Recourse | Define Properties | Example 4")
 console.log("---------------------------------------------------")
 console.log("objectPDASTString", objectPDASTString)
 console.log('objectDefinedPropertiesString', objectDefinedPropertiesString)

@@ -13,7 +13,7 @@ export default function freeze($target, $options = {}) {
   })
   const { ancestors, values } = options
   if(options.depth > options.maxDepth) { return } else { options.depth++ }
-  const target = new Tensors(options.getters).cess($target, options)
+  const target = new Tensors(options.getters).cess($target)
   if(!ancestors.includes(target)) { ancestors.unshift(target) }
   const targetEntities = entities($target, 'entries', Object.assign(options, {
     recurse: false

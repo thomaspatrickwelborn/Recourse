@@ -32,9 +32,8 @@ function Setter(...$arguments) {
 }
 // Map Deleter
 function Deleter(...$arguments) {
-  const length = $arguments.length
   if(typeOf($arguments[0]) !== 'map') { return this?.next(...$arguments) }
-  else if($arguments.length === 2) {
+  else if($arguments`.length` === 2) {
     let [$receiver, $property] = $arguments
     return $receiver.delete($property)
   }

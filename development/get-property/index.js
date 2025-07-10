@@ -13,7 +13,7 @@ export default function getProperty() {
   iterateSubpaths: 
   for(const $subpath of subpaths) {
     try {
-      subtarget = getters.cess(subtarget, $subpath, options)
+      subtarget = getters.cess(subtarget, $subpath)
       if(subtarget === undefined) { break iterateSubpaths } 
     }
     catch($err) { break iterateSubpaths }

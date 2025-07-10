@@ -17,10 +17,11 @@ export default function assignSources($target, $type, ...$sources) {
   for(const $source of $sources) {
     if(!Variables.ObjectKeys.includes(typeOf($source))) continue iterateSources
     const sourceEntries = entities($source, 'entries', {
-      recurse: false, // returnValue: 'entries'
+      recurse: false, returnValue: 'entries'
     })
     iterateSourceEntries: 
     for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
+      console.log($sourcePropertyKey, $sourcePropertyValue)
       const targetPropertyValue = getters.cess($target, $sourcePropertyKey)
       const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
       const typeOfSourcePropertyValue = typeOf($sourcePropertyValue)

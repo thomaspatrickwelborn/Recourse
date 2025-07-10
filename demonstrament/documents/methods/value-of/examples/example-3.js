@@ -11,10 +11,9 @@ const map = new Map([
   [propertyB, propertyB],
   [propertyC, propertyC],
 ])
-const mapEntries = Recourse.entities(map, 'entries')
-throw mapEntries
-const mapString = Recourse.toString(mapEntries, {
-  space: 2, replacer: null
+const mapEntries = Recourse.entities(map, 'entries', { recurse: false })
+const mapString = Recourse.toString(map, {
+  space: 2, replacer: null, recurse: false, returnValue: 'entries'
 })
 console.log("map", map)
 console.log("mapEntries", mapEntries)
@@ -41,7 +40,7 @@ console.log("pass", mapString === `[
       "propertyC": "CCC"
     },
     {
-      "propertyC": "CCC"  
+      "propertyC": "CCC"
     }
   ]
 ]`)

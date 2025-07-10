@@ -8,5 +8,5 @@ export default function deleteProperty($target, $path, $options) {
   const subpaths = splitPath($path)
   const key = subpaths.pop()
   const subtarget = getProperty($target, subpaths.join('.'), options) || $target
-  deleters.cess(subtarget, key, options)
+  deleters.cess(subtarget, key)
 }

@@ -15,7 +15,7 @@ export default function compand($source, $options) {
   const { ancestors, values } = options
   options.depth++
   if(options.depth > options.maxDepth) { return target }
-  const source = new Tensors(options.getters).cess($source, options)
+  const source = new Tensors(options.getters).cess($source)
 if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const objectProperties = entities($source, 'entries', Object.assign(options, {
     recurse: false// , returnValue: 'receiver'

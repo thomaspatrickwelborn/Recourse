@@ -14,16 +14,19 @@ const mapPDASTTargetValid = (mapPDASTTargetString === `{
   "7": {
     "configurable": false,
     "enumerable": true,
+    "value": 7,
     "writable": true
   },
   "77": {
     "configurable": false,
     "enumerable": true,
+    "value": 77,
     "writable": true
   },
   "777": {
     "configurable": false,
     "enumerable": true,
+    "value": 777,
     "writable": true
   }
 }`)

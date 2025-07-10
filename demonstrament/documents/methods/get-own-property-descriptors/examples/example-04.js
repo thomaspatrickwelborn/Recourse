@@ -71,14 +71,6 @@ console.log("pass", `{
         "configurable": true,
         "path": "propertyA.2",
         "type": "object"
-      },
-      "length": {
-        "value": 3,
-        "writable": true,
-        "enumerable": false,
-        "configurable": false,
-        "path": "propertyA.length",
-        "type": "number"
       }
     },
     "writable": true,

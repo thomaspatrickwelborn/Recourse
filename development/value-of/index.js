@@ -10,31 +10,6 @@ const Options = {
   returnValue: 'receiver',
 }
 export default function valueOf($source, $options = {}) {
-  const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
-  })
-  const { ancestors, maxDepth, returnValue } = options
-  if(!ancestors.includes($source)) { ancestors.unshift($source) }
-  if(options.depth >= maxDepth) { return } else { options.depth++ }
-  const source = new Tensors(options.getters).cess($source, options)
-  if(source === undefined) { return }
-  const target = typedObjectLiteral(typeOf(source))
-  const sourceEntries = entities($source, 'entries', Object.assign({}, options, {
-    recurse: false
-  }))
-  iterateSourceEntries: 
-  for(const [$sourceKey, $sourceValue] of sourceEntries) {
-    let sourceValue
-    if(ObjectKeys.includes(typeOf($sourceValue))) {
-      if(!ancestors.includes($sourceValue)) { ancestors.unshift($sourceValue) }
-      else { continue iterateSourceEntries }
-      sourceValue = valueOf($sourceValue, options)
-    }
-    else { sourceValue = $sourceValue }
-    try {
-      target[$sourceKey] = sourceValue
-    }
-    catch($err) { console.error($err) }
-  }
-  return target
+  return ($options.returnValue === 'entries')
+    ? entities($source, 'entries', $options) : $source
 }

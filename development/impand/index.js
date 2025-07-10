@@ -14,7 +14,7 @@ export default function impand($source, $property, $options = {}) {
   })
   const { ancestors, values } = options
   if(options.depth > options.maxDepth) { return } else { options.depth++ }
-  const source = new Tensors(options.getters).cess($source, options)
+  const source = new Tensors(options.getters).cess($source)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
   const typeOfProperty = typeOf($property)
   let target = typedObjectLiteral($source)
