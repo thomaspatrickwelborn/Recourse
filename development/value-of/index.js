@@ -11,7 +11,7 @@ const Options = {
 }
 export default function valueOf($source, $options = {}) {
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
+    ancestors: $options.ancestors ? [...$options.ancestors] : []
   })
   const { ancestors, maxDepth, returnValue } = options
   if(!ancestors.includes($source)) { ancestors.unshift($source) }

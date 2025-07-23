@@ -7,10 +7,10 @@ const Options = {
   maxDepth: 10,
   values: false,
 }
-export default function compand($source, $options) {
+export default function compand($source, $options = {}) {
   const target = []
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
+    ancestors: $options.ancestors ? [...$options.ancestors] : []
   })
   const { ancestors, values } = options
   options.depth++

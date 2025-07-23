@@ -10,10 +10,10 @@ const Options = {
 }
 export default function impand($source, $property, $options = {}) {
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
+    ancestors: $options.ancestors ? [...$options.ancestors] : []
   })
   const { ancestors, values } = options
-  if(options.depth > options.maxDepth) { return } else { options.depth++ }
+  if(options.depth > options.maxDepth) { return typedObjectLiteral($source) } else { options.depth++ }
   const source = new Tensors(options.getters).cess($source, options)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
   const typeOfProperty = typeOf($property)

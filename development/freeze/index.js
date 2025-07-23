@@ -9,10 +9,10 @@ const Options = {
 }
 export default function freeze($target, $options = {}) {
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
+    ancestors: $options.ancestors ? [...$options.ancestors] : []
   })
   const { ancestors, values } = options
-  if(options.depth > options.maxDepth) { return } else { options.depth++ }
+  if(options.depth > options.maxDepth) { return $target } else { options.depth++ }
   const target = new Tensors(options.getters).cess($target, options)
   if(!ancestors.includes(target)) { ancestors.unshift(target) }
   const targetEntities = entities($target, 'entries', Object.assign(options, {

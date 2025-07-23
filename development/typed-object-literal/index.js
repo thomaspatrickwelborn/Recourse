@@ -12,7 +12,7 @@ export default function typedObjectLiteral($value) {
   else  {
     if(typeOfValue === 'object') { _typedObjectLiteral = new Object() }
     else if(typeOfValue === 'array') { _typedObjectLiteral = new Array() }
-    else if(value === 'map') { _typedObjectLiteral = new Map() }
+    else if(typeOfValue === 'map') { _typedObjectLiteral = new Map() }
     else { _typedObjectLiteral = {} }
   }
   return _typedObjectLiteral

@@ -15,10 +15,10 @@ export default function entities($source, $type, $options = {}) {
   const typeOfSource = typeOf($source)
   const sourceEntities = []
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
+    ancestors: $options.ancestors ? [...$options.ancestors] : []
   })
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
-  if(options.depth >= maxDepth) { return }
+  if(options.depth >= maxDepth) { return [] }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   options.depth++
   const propertyDescriptors = getOwnPropertyDescriptors($source, {

@@ -15,7 +15,7 @@ const Options = {
 }
 export default function getOwnPropertyDescriptor($source, $propertyKey, $options = {}) {
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors),
+    ancestors: $options.ancestors ? [...$options.ancestors] : [],
   })
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++ }
