@@ -20,7 +20,6 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++ }
   const propertyValue = new Tensors(options.getters).cess($source, $propertyKey, options)
-  throw [$propertyKey, propertyValue, options.returnValue]
   if(propertyValue !== undefined) {
     const typeOfSource = typeOf($source)
     const propertyDescriptor = (typeOfSource !== 'map')

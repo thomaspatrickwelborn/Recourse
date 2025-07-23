@@ -13,7 +13,6 @@ export default function getOwnPropertyDescriptors($source, $options = {}) {
   iteratePropertyDescriptorKeys: 
   for(const $propertyKey of propertyDescriptorKeys) {
     const propertyDescriptor = getOwnPropertyDescriptor($source, $propertyKey, options)
-    throw [$source, $propertyKey, propertyDescriptor]
     if(propertyDescriptor) {
       if(options.returnValue !== 'entries') {
         propertyDescriptors[$propertyKey] = propertyDescriptor

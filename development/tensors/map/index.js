@@ -19,7 +19,7 @@ function Setter(...$arguments) {
     let [$receiver, $source] = $arguments
     $receiver.clear()
     iterateSourceEntries: 
-    for(const [$sourceKey, $sourceValue] of Object.entries(source)) {
+    for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
       $receiver.set($sourceKey, $sourceValue)
     }
     return $receiver

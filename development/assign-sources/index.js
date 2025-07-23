@@ -38,4 +38,5 @@ export default function assignSources($target, $type, ...$sources) {
       }
     }
   }
+  return $target
 }

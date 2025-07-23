@@ -24,9 +24,8 @@ export default function entities($source, $type, $options = {}) {
   const propertyDescriptors = getOwnPropertyDescriptors($source, {
     returnValue: 'entries', recursive: false
   })
-  throw propertyDescriptors
   iterateSourcePropertyDescriptors: 
-  for(const $propertyKey of propertyDescriptorKeys) {
+  for(const [$propertyKey, propertyDescriptor] of propertyDescriptors) {
     if(!propertyDescriptor) { continue iterateSourcePropertyDescriptors }
     if(
       enumerable && propertyDescriptor.enumerable ||
