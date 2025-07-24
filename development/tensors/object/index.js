@@ -2,7 +2,9 @@ import typeOf from '../../type-of/index.js'
 import { PrimitiveKeys } from '../../variables/index.js'
 // Object Getter
 function Getter(...$arguments) {
-  if(!['object', 'array'].includes(typeOf($arguments[0]))) { return this?.next(...$arguments) }
+  if(!['object', 'array'].includes(typeOf($arguments[0]))) {
+    return this?.next(...$arguments)
+  }
   else if($arguments.length === 1) {
     const [$target] = $arguments
     return $target
@@ -14,7 +16,9 @@ function Getter(...$arguments) {
 }
 // Object Setter
 function Setter(...$arguments) {
-  if(!['object', 'array'].includes(typeOf($arguments[0]))) { return this?.next(...$arguments) }
+  if(!['object', 'array'].includes(typeOf($arguments[0]))) {
+    return this?.next(...$arguments)
+  }
   else if(['string', 'number'].includes(typeOf($arguments[1]))) {
     const [$target, $property, $value] = $arguments
     $target[$property] = $value
@@ -36,7 +40,9 @@ function Setter(...$arguments) {
 // Object Deleter
 function Deleter(...$arguments) {
   const [$target, $property] = $arguments
-  if(!['object', 'array'].includes(typeOf($target))) { return this?.next(...$arguments) }
+  if(!['object', 'array'].includes(typeOf($target))) {
+    return this?.next(...$arguments)
+  }
   else if(['string', 'number'].includes(typeOf($property))) {
     return delete $target[$property]
   }

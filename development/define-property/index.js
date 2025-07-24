@@ -1,4 +1,5 @@
 import isArrayLike from '../is-array-like/index.js'
+import isMapLike from '../is-map-like/index.js'
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import defineProperties from '../define-properties/index.js'
@@ -16,6 +17,7 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
       propertyDescriptor.value = defineProperties(targetPropertyValue, propertyDescriptorValue, options)
     }
     else {
+      console.log(propertyDescriptorValue)
       const propertyValueTarget = typedObjectLiteral(isArrayLike(
         Object.defineProperties({}, propertyDescriptorValue)
       ) ? 'array' : 'object')
@@ -24,10 +26,10 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
   }
   else if(
     options.typeCoercion && 
-    Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined &&
-    !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
+    Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined // &&
+    // !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
   ) {
-    propertyDescriptor.value = Variables.Primitives[propertyDescriptor.type](propertyDescriptorValue)
+    propertyDescriptor.value = new Variables.Primitives[propertyDescriptor.type](propertyDescriptorValue)
   }
   Object.defineProperty($target, $propertyKey, propertyDescriptor)
   if($propertyDescriptor.sealed) { Object.seal($target[$propertyKey]) }

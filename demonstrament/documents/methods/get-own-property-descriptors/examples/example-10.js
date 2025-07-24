@@ -5,7 +5,7 @@ import { Recourse } from '/dependencies/recourse.js'
 const { getOwnPropertyDescriptors } = Recourse
 const map = new Map([[7, 7], [77, 77], [777, 777]])
 const mapPDASTTarget = Recourse.getOwnPropertyDescriptors(map, {
-  returnValue: 'target'
+  // returnValue: 'target'
 })
 const mapPDASTTargetString = JSON.stringify(mapPDASTTarget, null, 2)
 console.log('map', map)

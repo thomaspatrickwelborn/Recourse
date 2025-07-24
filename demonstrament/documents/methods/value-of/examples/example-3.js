@@ -13,7 +13,7 @@ const map = new Map([
 ])
 const mapEntries = Recourse.entities(map, 'entries', { recurse: false })
 const mapString = Recourse.toString(map, {
-  space: 2, replacer: null, recurse: false, returnValue: 'entries'
+  space: 2, replacer: null, // returnValue: 'entries' // recurse: false, // returnValue: 'entries'
 })
 console.log("map", map)
 console.log("mapEntries", mapEntries)

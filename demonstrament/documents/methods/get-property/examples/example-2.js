@@ -7,7 +7,7 @@ const options = {
   // getters: [Getters.Object, Getters.Map],
   // setters: [Setters.Object, Setters.Map],
   // deleters: [Deleters.Object, Deleters.Map],
-  returnValue: 'target'
+  // returnValue: 'target'
 }
 const object = {
   propertyA: [{

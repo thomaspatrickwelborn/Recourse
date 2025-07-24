@@ -133,7 +133,9 @@
    + get-own-property-descriptor
 
  + get-property
+
  + set-property
+ 
  + delete-property
    + get-property
 

@@ -12,6 +12,7 @@ const Options = {
   nonenumerable: false,
   path: false,
   recurse: true,
+  returnValue: 'receiver',
   sealed: false,
   type: false,
 }
@@ -22,12 +23,13 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++ }
   if(!options.ancestors.includes($source)) { options.ancestors.unshift($source) }
-  const propertyValue = new Tensors(options.getters).cess($source, $propertyKey)
-  if(ObjectKeys.includes(typeOf(propertyValue))) {
-    if(options.ancestors.includes(propertyValue)) { return }
-    else { options.ancestors.unshift(propertyValue) }
-  }
+  const getters = new Tensors(options.getters)
+  const propertyValue = getters.cess($source, $propertyKey)
   if(propertyValue !== undefined) {
+    if(ObjectKeys.includes(typeOf(propertyValue))) {
+      if(options.ancestors.includes(propertyValue)) { return }
+      else { options.ancestors.unshift(propertyValue) }
+    }
     const typeOfSource = typeOf($source)
     const propertyDescriptor = (typeOfSource !== 'map')
       ? Object.getOwnPropertyDescriptor($source, $propertyKey)
@@ -42,22 +44,12 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
     if(options.type) { propertyDescriptor.type = typeOf(propertyValue) }
     if(options.frozen) { propertyDescriptor.frozen = Object.isFrozen(propertyValue) }
     if(options.sealed) { propertyDescriptor.sealed = Object.isSealed(propertyValue) }
-    if(options.recurse && typeOfSource !== 'map' && ObjectKeys.includes(typeOf(propertyValue))) {
+    if(options.recurse && ObjectKeys.includes(typeOf(propertyValue))) {
       propertyDescriptor.value = getOwnPropertyDescriptors(propertyValue, options)
-    }
-    else if(typeOfSource === 'map') {
-      if(options.recurse && ObjectKeys.includes(typeOf(propertyValue[1]))) {
-        propertyDescriptor.value = getOwnPropertyDescriptors(propertyValue[1], options)
-      }
-      else {
-        propertyDescriptor.value = propertyValue
-      }
     }
     else {
       propertyDescriptor.value = propertyValue
     }
-    return (options.returnValue !== 'entries')
-      ? propertyDescriptor
-      : [$propertyKey, propertyDescriptor]
+    return propertyDescriptor
   }
 }

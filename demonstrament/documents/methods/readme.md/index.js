@@ -33,4 +33,4 @@ console.log('propertyA.1.propertyD.propertyE.2', recourseObject.get('propertyA.1
 console.log('propertyA.2.propertyF.propertyG.2', recourseObject.get('propertyA.2.propertyF.propertyG.2'))
 
 console.log('object', Recourse.valueOf(object))
-console.log('object', Recourse.toString(object, { space: 2, replacer: null, returnValue: 'target' }))
+console.log('object', Recourse.toString(object, { space: 2, replacer: null, /*returnValue: 'target'*/ }))

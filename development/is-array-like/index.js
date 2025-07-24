@@ -17,7 +17,7 @@ export default function isArrayLike($source, $options) {
     else {
       iterateSourceKeys: 
       for(const $sourceKey of entities($source, 'keys', {
-        nonenumerable: true,  recurse: false
+        nonenumerable: true, recurse: false
       }).reverse()) {
         const lastIndex = Number($sourceKey)
         if(lastIndex === $source.length - 1) {

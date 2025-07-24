@@ -20,7 +20,7 @@ try {
   object.propertyD.get('propertyE').set(2, "555")
 } catch($err) { console.error($err) }
 const objectString = toString(object, {
-  replacer: null, space: 2, returnValue: 'target'
+  replacer: null, space: 2, // returnValue: 'target'
 })
 console.log(object)
 console.log(objectString)

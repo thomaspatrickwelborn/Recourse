@@ -15,7 +15,7 @@ const object = {
     }
   }]
 }
-const objectString = Recourse.toString(object, { space: 2, replacer: null, returnValue: 'target' })
+const objectString = Recourse.toString(object, { space: 2, replacer: null, /*returnValue: 'target'*/ })
 Recourse.assign(object, {
   propertyA: [{
     propertyB: {
@@ -49,7 +49,7 @@ Recourse.assign(object, {
     }
   }]
 })
-const objectModifiedString = Recourse.toString(object, { space: 2, replacer: null, returnValue: 'target' })
+const objectModifiedString = Recourse.toString(object, { space: 2, replacer: null, /*returnValue: 'target'*/ })
 console.log("object", object)
 console.log("objectString", objectString)
 console.log("objectModifiedString", objectModifiedString)

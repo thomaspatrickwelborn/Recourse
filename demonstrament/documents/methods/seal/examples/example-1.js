@@ -19,7 +19,7 @@ try { object.propertyA[1] = {
 } }
 catch($err) { console.error($err) }
 const objectString = Recourse.toString(object, {
-  space: 2, replacer: null, returnValue: 'target'
+  space: 2, replacer: null, // returnValue: 'target'
 })
 console.log("pass", (`{
   "propertyA": [

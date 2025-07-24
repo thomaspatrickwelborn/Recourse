@@ -4,7 +4,6 @@ console.log("------------------")
 console.log("Freeze | Example 1")
 console.log("------------------")
 
-
 const object = {
   propertyA: [{
     propertyB: {
@@ -22,7 +21,7 @@ try { object.propertyA[1] = {
   console.error($err)
 }
 const objectString = Recourse.toString(object, {
-  space: 2, replacer: null, returnValue: 'target'
+  space: 2, replacer: null, // returnValue: 'target'
 })
 console.log("pass", (`{
   "propertyA": [

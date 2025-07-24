@@ -11,7 +11,7 @@ const object = {
 }
 const objectString = JSON.stringify(object, null, 2)
 const objectPDAST = getOwnPropertyDescriptors(object, {
-  type: true, 
+  type: true, nonenumerable: true,// returnValue: 'entries'
 })
 const objectPDASTString = JSON.stringify(objectPDAST, null, 2)
 const objectDefinedProperties = defineProperties({}, objectPDAST, {
