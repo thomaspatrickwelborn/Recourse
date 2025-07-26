@@ -22,6 +22,7 @@ export default function entities($source, $type, $options = {}) {
   options.depth++
   const getters = new Tensors(options.getters)
   const source = getters.cess($source)
+  if(!source) { return sourceEntities }
   const propertyDescriptorKeys = (typeOf(source) === 'map')
     ? source.keys()
     : Object.keys(source)

@@ -16,13 +16,13 @@ const Deleters = {
 class Tensors extends EventTarget {
   constructor($tensors) {
     super()
-    const tensors = $tensors.map(($tensor, $tensorIndex) => $tensor.bind({
-      next: $tensors[$tensorIndex + 1]
-    }))
     Object.defineProperties(this, {
       'cess': { value: function next() {
-        try { return tensors[0](...arguments) }
-        catch($err) { console.error($err) }
+        iterateTensors:
+        for(const $tensor of $tensors) {
+          try { return $tensor(...arguments) }
+          catch($err) {}
+        }
       } },
     })
   }

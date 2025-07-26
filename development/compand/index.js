@@ -6,8 +6,9 @@ const Options = {
   getters: [Getters.Object, Getters.Map],
   maxDepth: 10,
   values: false,
+  returnValue: 'receiver',
 }
-export default function compand($source, $options) {
+export default function compand($source, $options = {}) {
   const target = []
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
@@ -16,9 +17,9 @@ export default function compand($source, $options) {
   options.depth++
   if(options.depth > options.maxDepth) { return target }
   const source = new Tensors(options.getters).cess($source)
-if(!ancestors.includes($source)) { ancestors.unshift($source) }
-  const objectProperties = entities($source, 'entries', Object.assign(options, {
-    recurse: false// , returnValue: 'receiver'
+  if(!ancestors.includes($source)) { ancestors.unshift($source) }
+  const objectProperties = entities($source, 'entries', Object.assign({}, options, {
+    recurse: false
   }))
   iterateObjectProperties: 
   for(const [$key, $value] of objectProperties) {

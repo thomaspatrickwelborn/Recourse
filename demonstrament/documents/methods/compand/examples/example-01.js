@@ -24,7 +24,7 @@ const object = [{
   }
 }]
 const objectCompand = Recourse.compand(object, {
-  values: false
+  values: false, nonenumerable: true
 })
 const objectString = JSON.stringify(object, null, 2)
 const objectCompandString = JSON.stringify(objectCompand, null, 2)

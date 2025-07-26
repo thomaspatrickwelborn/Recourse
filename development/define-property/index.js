@@ -17,7 +17,6 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
       propertyDescriptor.value = defineProperties(targetPropertyValue, propertyDescriptorValue, options)
     }
     else {
-      console.log(propertyDescriptorValue)
       const propertyValueTarget = typedObjectLiteral(isArrayLike(
         Object.defineProperties({}, propertyDescriptorValue)
       ) ? 'array' : 'object')
@@ -26,8 +25,8 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
   }
   else if(
     options.typeCoercion && 
-    Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined // &&
-    // !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
+    Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined &&
+    !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
   ) {
     propertyDescriptor.value = new Variables.Primitives[propertyDescriptor.type](propertyDescriptorValue)
   }

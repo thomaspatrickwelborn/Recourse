@@ -29,6 +29,7 @@ const PrimitiveValues = Object.values(Primitives);
 const Objects = {
   'object': Object,
   'array': Array,
+  'eventTarget': EventTarget,
   'map': Map,
 };
 const ObjectKeys = Object.keys(Objects);
@@ -57,9 +58,9 @@ var index$1 = /*#__PURE__*/Object.freeze({
 
 // Object Getter
 function Getter$1(...$arguments) {
-  if(!['object', 'array'].includes(typeOf($arguments[0]))) {
-    return this?.next(...$arguments)
-  }
+  if(![
+    'object', 'array', 'eventtarget'
+  ].includes(typeOf($arguments[0]))) { throw new Error() }
   else if($arguments.length === 1) {
     const [$target] = $arguments;
     return $target
@@ -71,9 +72,9 @@ function Getter$1(...$arguments) {
 }
 // Object Setter
 function Setter$1(...$arguments) {
-  if(!['object', 'array'].includes(typeOf($arguments[0]))) {
-    return this?.next(...$arguments)
-  }
+  if(![
+    'object', 'array', 'eventtarget'
+  ].includes(typeOf($arguments[0]))) { throw new Error() }
   else if(['string', 'number'].includes(typeOf($arguments[1]))) {
     const [$target, $property, $value] = $arguments;
     $target[$property] = $value;
@@ -93,9 +94,9 @@ function Setter$1(...$arguments) {
 // Object Deleter
 function Deleter$1(...$arguments) {
   const [$target, $property] = $arguments;
-  if(!['object', 'array'].includes(typeOf($target))) {
-    return this?.next(...$arguments)
-  }
+  if(![
+    'object', 'array', 'eventtarget'
+  ].includes(typeOf($target))) { throw new Error() }
   else if(['string', 'number'].includes(typeOf($property))) {
     return delete $target[$property]
   }
@@ -109,9 +110,7 @@ function Deleter$1(...$arguments) {
 
 // Map Getter
 function Getter(...$arguments) {
-  if(typeOf($arguments[0]) !== 'map') {
-    return this?.next(...$arguments)
-  }
+  if(typeOf($arguments[0]) !== 'map') { throw new Error() }
   else if($arguments.length === 1) {
     let [$receiver] = $arguments;
     // return Object.fromEntries($receiver)
@@ -124,9 +123,7 @@ function Getter(...$arguments) {
 }
 // Map Setter
 function Setter(...$arguments) {
-  if(typeOf($arguments[0]) !== 'map') {
-    return this?.next(...$arguments)
-  }
+  if(typeOf($arguments[0]) !== 'map') { throw new Error() }
   else if($arguments.length === 2) {
     let [$receiver, $source] = $arguments;
     $receiver.clear();
@@ -143,9 +140,7 @@ function Setter(...$arguments) {
 }
 // Map Deleter
 function Deleter(...$arguments) {
-  if(typeOf($arguments[0]) !== 'map') {
-    return this?.next(...$arguments)
-  }
+  if(typeOf($arguments[0]) !== 'map') { throw new Error() }
   else if($arguments`.length` === 2) {
     let [$receiver, $property] = $arguments;
     return $receiver.delete($property)
@@ -171,13 +166,12 @@ const Deleters = {
 class Tensors extends EventTarget {
   constructor($tensors) {
     super();
-    const tensors = $tensors.map(($tensor, $tensorIndex) => $tensor.bind({
-      next: $tensors[$tensorIndex + 1]
-    }));
     Object.defineProperties(this, {
       'cess': { value: function next() {
-        try { return tensors[0](...arguments) }
-        catch($err) { console.error($err); }
+        for(const $tensor of $tensors) {
+          try { return $tensor(...arguments) }
+          catch($err) {}
+        }
       } },
     });
   }
@@ -301,6 +295,7 @@ function entities($source, $type, $options = {}) {
   options.depth++;
   const getters = new Tensors(options.getters);
   const source = getters.cess($source);
+  if(!source) { return sourceEntities }
   const propertyDescriptorKeys = (typeOf(source) === 'map')
     ? source.keys()
     : Object.keys(source);
@@ -527,8 +522,9 @@ const Options$6 = {
   getters: [Getters.Object, Getters.Map],
   maxDepth: 10,
   values: false,
+  returnValue: 'receiver',
 };
-function compand($source, $options) {
+function compand($source, $options = {}) {
   const target = [];
   const options = Object.assign({}, Options$6, $options, {
     ancestors: Object.assign([], $options.ancestors)
@@ -537,9 +533,9 @@ function compand($source, $options) {
   options.depth++;
   if(options.depth > options.maxDepth) { return target }
   const source = new Tensors(options.getters).cess($source);
-if(!ancestors.includes($source)) { ancestors.unshift($source); }
-  const objectProperties = entities($source, 'entries', Object.assign(options, {
-    recurse: false// , returnValue: 'receiver'
+  if(!ancestors.includes($source)) { ancestors.unshift($source); }
+  const objectProperties = entities($source, 'entries', Object.assign({}, options, {
+    recurse: false
   }));
   for(const [$key, $value] of objectProperties) {
     if(!values) { target.push($key); }
@@ -638,7 +634,6 @@ function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
       propertyDescriptor.value = defineProperties(targetPropertyValue, propertyDescriptorValue, options);
     }
     else {
-      console.log(propertyDescriptorValue);
       const propertyValueTarget = typedObjectLiteral(isArrayLike(
         Object.defineProperties({}, propertyDescriptorValue)
       ) ? 'array' : 'object');
@@ -647,8 +642,8 @@ function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
   }
   else if(
     options.typeCoercion && 
-    Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined // &&
-    // !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
+    Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined &&
+    !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
   ) {
     propertyDescriptor.value = new Primitives[propertyDescriptor.type](propertyDescriptorValue);
   }
