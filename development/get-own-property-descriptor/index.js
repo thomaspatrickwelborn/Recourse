@@ -1,9 +1,10 @@
 import typeOf from '../type-of/index.js'
 import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
-import { Tensors, Getters } from '../tensors/index.js'
+import { TypeValidators, Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
+  typeValidators: [TypeValidators.Object, TypeValidators.Map],
   delimiter: '.',
   depth: 0,
   enumerable: true,
@@ -23,7 +24,7 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
   if(options.depth >= options.maxDepth) { return }
   else { options.depth++ }
   if(!options.ancestors.includes($source)) { options.ancestors.unshift($source) }
-  const getters = new Tensors(options.getters)
+  const getters = new Tensors(options.getters, options.typeValidators)
   const propertyValue = getters.cess($source, $propertyKey)
   if(propertyValue !== undefined) {
     if(ObjectKeys.includes(typeOf(propertyValue))) {

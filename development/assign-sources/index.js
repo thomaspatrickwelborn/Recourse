@@ -1,17 +1,18 @@
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../variables/index.js'
-import { Tensors, Getters, Setters } from '../tensors/index.js'
+import { TypeValidators, Tensors, Getters, Setters } from '../tensors/index.js'
 import * as Variables from '../variables/index.js'
 import entities from '../entities/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
   setters: [Setters.Object, Setters.Map],
+  typeValidators: [TypeValidators.Object, TypeValidators.Map],
 }
 export default function assignSources($target, $type, ...$sources) {
   if(!$target) { return $target}
   const options = Object.assign({}, Options)
-  const getters = new Tensors(options.getters)
-  const setters = new Tensors(options.setters)
+  const getters = new Tensors(options.getters, options.typeValidators)
+  const setters = new Tensors(options.setters, options.typeValidators)
   const typeOfTarget = typeOf($target)
   iterateSources: 
   for(const $source of $sources) {

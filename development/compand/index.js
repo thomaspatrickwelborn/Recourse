@@ -1,30 +1,31 @@
-import { Tensors, Getters } from '../tensors/index.js'
+import { TypeValidators, Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 import entities from '../entities/index.js'
 const Options = {
   depth: 0, 
   getters: [Getters.Object, Getters.Map],
+  typeValidators: [TypeValidators.Object, TypeValidators.Map],
   maxDepth: 10,
   values: false,
   returnValue: 'receiver',
 }
 export default function compand($source, $options = {}) {
-  const target = []
+  const compandEntries = []
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
   const { ancestors, values } = options
   options.depth++
-  if(options.depth > options.maxDepth) { return target }
-  const source = new Tensors(options.getters).cess($source)
+  if(options.depth > options.maxDepth) { return compandEntries }
+  const source = new Tensors(options.getters, options.typeValidators).cess($source)
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
-  const objectProperties = entities($source, 'entries', Object.assign({}, options, {
+  const sourceEntries = entities($source, 'entries', Object.assign({}, options, {
     recurse: false
   }))
   iterateObjectProperties: 
-  for(const [$key, $value] of objectProperties) {
-    if(!values) { target.push($key) }
-    else if(values) { target.push([$key, $value]) }
+  for(const [$key, $value] of sourceEntries) {
+    if(!values) { compandEntries.push($key) }
+    else if(values) { compandEntries.push([$key, $value]) }
     if(
       typeof $value === 'object' &&
       $value !== null &&
@@ -35,16 +36,16 @@ export default function compand($source, $options = {}) {
       if(!values) {
         for(const $subsource of subsources) {
           const path = [$key, $subsource].join('.')
-          target.push(path)
+          compandEntries.push(path)
         }
       }
       else if(values) {
         for(const [$subsourceKey, $subsource] of subsources) {
           const path = [$key, $subsourceKey].join('.')
-          target.push([path, $subsource])
+          compandEntries.push([path, $subsource])
         }
       }
     }
   }
-  return target
+  return compandEntries
 }

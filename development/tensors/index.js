@@ -13,18 +13,27 @@ const Deleters = {
   Object: ObjectTensors.Deleter, 
   Map: MapTensors.Deleter, 
 }
+const TypeValidators = {
+  Object: ObjectTensors.TypeValidator, 
+  Map: MapTensors.TypeValidator, 
+}
 class Tensors extends EventTarget {
-  constructor($tensors) {
+  constructor($tensors, $typeValidators) {
     super()
     Object.defineProperties(this, {
-      'cess': { value: function next() {
+      'cess': { value: function next(...$arguments) {
+        let tensorIndex = 0
         iterateTensors:
         for(const $tensor of $tensors) {
-          try { return $tensor(...arguments) }
-          catch($err) {}
+          if(tensorIndex >= $tensors.length) { break iterateTensors }
+          const typeValidator = $typeValidators[tensorIndex]
+          if(typeValidator($arguments[0])) {
+            return $tensor(...$arguments)
+          }
+          tensorIndex++
         }
       } },
     })
   }
 }
-export { Tensors, Getters, Setters, Deleters }
+export { TypeValidators, Tensors, Getters, Setters, Deleters }

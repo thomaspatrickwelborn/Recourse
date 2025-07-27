@@ -1,9 +1,10 @@
 import typeOf from '../type-of/index.js'
 import entities from '../entities/index.js'
-import { Tensors, Getters } from '../tensors/index.js'
+import { TypeValidators, Tensors, Getters } from '../tensors/index.js'
 import { ObjectKeys } from '../variables/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
+  typeValidators: [TypeValidators.Object, TypeValidators.Map],
   ancestors: [], 
   depth: 0, maxDepth: 10,
 }
@@ -13,7 +14,7 @@ export default function seal($target, $options = {}) {
   })
   const { ancestors, values } = options
   if(options.depth > options.maxDepth) { return } else { options.depth++ }
-  const target = new Tensors(options.getters).cess($target)
+  const target = new Tensors(options.getters, options.typeValidators).cess($target)
   if(!ancestors.includes(target)) { ancestors.unshift(target) }
   const targetEntities = entities($target, 'entries', Object.assign(options, {
     recurse: false

@@ -1,10 +1,11 @@
-import { Tensors, Getters } from '../tensors/index.js'
+import { TypeValidators, Tensors, Getters } from '../tensors/index.js'
 import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../variables/index.js'
 import getOwnPropertyDescriptor from '../get-own-property-descriptor/index.js'
 const Options = {
   getters: [Getters.Object, Getters.Map],
+  typeValidators: [TypeValidators.Object, TypeValidators.Map],
   ancestors: [],
   depth: 0, maxDepth: 10,
   enumerable: true, nonenumerable: false,
@@ -20,7 +21,7 @@ export default function entities($source, $type, $options = {}) {
   if(options.depth >= maxDepth) { return }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   options.depth++
-  const getters = new Tensors(options.getters)
+  const getters = new Tensors(options.getters, options.typeValidators)
   const source = getters.cess($source)
   if(!source) { return sourceEntities }
   const propertyDescriptorKeys = (typeOf(source) === 'map')
