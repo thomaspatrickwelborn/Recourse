@@ -1,6 +1,6 @@
 import { Recourse, get } from '/dependencies/recourse.js'
 console.log("------------------------")
-console.log("Get Property | Example 6")
+console.log("Get Property | Example 7")
 console.log("------------------------")
 document.querySelector('body').insertAdjacentHTML('afterbegin', `
 <application>
@@ -40,7 +40,7 @@ const buttonsAThroughCQueryString = 'application > menu[data-id="menu-a"] > butt
 const buttonsSecondLayerQueryString = 'application > menu > menu > button'
 const buttonsThirdLayerQueryString = 'menu > menu > menu > button'
 const allButtonsQueryString = 'button[data-id]'
-const querySelectors = {
+const querySelectorsA = {
   menus: {
     menuA: document.querySelector('[data-id="menu-a"]'),
     menuB: document.querySelector('[data-id="menu-b"]'),
@@ -58,15 +58,33 @@ const querySelectors = {
   },
   allButtons: document.querySelectorAll(allButtonsQueryString),
 }
+const querySelectorsB = {
+  menus: {
+    get menuA() { return document.querySelector('[data-id="menu-a"]') },
+    get menuB() { return document.querySelector('[data-id="menu-b"]') },
+  },
+  buttonSequences: {
+    get buttonsAThroughC() { return document.querySelectorAll(buttonsAThroughCQueryString) },
+  },
+  buttonLayers: {
+    secondLayer: {
+      get buttons() { return document.querySelectorAll(buttonsSecondLayerQueryString) },
+      thirdLayer: {
+        get buttons() { return document.querySelectorAll(buttonsThirdLayerQueryString) },
+      },
+    },
+  },
+  get allButtons() { return document.querySelectorAll(allButtonsQueryString) },
+}
 const getOptionsA = { pathMatch: true }
 const pathMatchA = 'menus.*'
 const pathMatchB = 'buttonSequences.buttonsAThroughC'
 const pathMatchC = 'buttonLayers.**.buttons'
 const pathMatchD = 'buttonLayers.**.buttons.[0-9]'
-const pathMatchesA = Recourse.get(querySelectors, pathMatchA, getOptionsA)
-const pathMatchesB = Recourse.get(querySelectors, pathMatchB, getOptionsA)
-const pathMatchesC = Recourse.get(querySelectors, pathMatchC, getOptionsA)
-const pathMatchesD = Recourse.get(querySelectors, pathMatchD, getOptionsA)
+const pathMatchesA = Recourse.get(querySelectorsA, pathMatchA, getOptionsA)
+const pathMatchesB = Recourse.get(querySelectorsA, pathMatchB, getOptionsA)
+const pathMatchesC = Recourse.get(querySelectorsA, pathMatchC, getOptionsA)
+const pathMatchesD = Recourse.get(querySelectorsA, pathMatchD, getOptionsA)
 console.log("pathMatchesA", pathMatchesA)
 console.log("pathMatchesB", pathMatchesB)
 console.log("pathMatchesC", pathMatchesC)

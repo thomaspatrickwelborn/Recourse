@@ -1,9 +1,8 @@
 import { TypeValidators, Tensors, Getters } from '../tensors/index.js'
-import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../variables/index.js'
-import getOwnPropertyDescriptor from '../get-own-property-descriptor/index.js'
 const Options = {
+  pathParseInteger: false,
   getters: [Getters.Object, Getters.Map],
   typeValidators: [TypeValidators.Object, TypeValidators.Map],
   ancestors: [],
@@ -28,7 +27,10 @@ export default function entities($source, $type, $options = {}) {
     ? source.keys()
     : Object.keys(source)
   iterateSourcePropertyDescriptors: 
-  for(const $propertyKey of propertyDescriptorKeys) {
+  for(let $propertyKey of propertyDescriptorKeys) {
+    if(!isNaN($propertyKey) && options.pathParseInteger) {
+      $propertyKey = parseInt($propertyKey, 10)
+    }
     const value = getters.cess($source, $propertyKey)
     const propertyDescriptor = (typeOf($source) !== 'map')
       ? Object.getOwnPropertyDescriptor($source, $propertyKey)
@@ -37,7 +39,9 @@ export default function entities($source, $type, $options = {}) {
       (enumerable && propertyDescriptor.enumerable) ||
       (nonenumerable && !propertyDescriptor.enumerable)
     ) {
-      const $value = propertyDescriptor.value
+      const $value = (
+        propertyDescriptor.get?.call
+      ) ? propertyDescriptor.get.call() : propertyDescriptor.value
       const typeOfValue = typeOf($value)
       if(
         recurse && 

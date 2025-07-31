@@ -5,15 +5,16 @@ import { TypeValidators, Tensors, Getters } from '../tensors/index.js'
 const Options = {
   pathMatch: false,
   pathMatchMaxResults: 1000,
+  pathParseInteger: false,
   getters: [Getters.Object, Getters.Map],
   typeValidators: [TypeValidators.Object, TypeValidators.Map],
 }
 export default function getProperty() {
   const [$target, $path, $options] = [...arguments]
-  if($path === undefined) return arguments[0]
   const options = Object.assign ({}, Options, $options)
   const getters = new Tensors(options.getters, options.typeValidators)
-  const subpaths = splitPath($path)
+  if($path === undefined) { return getters.cess($target, options) }
+  const subpaths = splitPath($path, options.pathParseInteger)
   if(!options.pathMatch) {
     let subtarget = $target
     iterateSubpaths: 
@@ -28,7 +29,7 @@ export default function getProperty() {
   }
   else {
     const subtargets = []
-    const compandEntries = compand($target, { values: true })
+    const compandEntries = compand($target, Object.assign({}, options, { values: true }))
     const propertyPathMatcher = outmatch($path, { separator: '.' })
     iterateCompandEntries:
     for(const [$propertyPath, $propertyValue] of compandEntries) {

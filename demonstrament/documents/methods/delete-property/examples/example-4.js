@@ -1,7 +1,7 @@
 import { Recourse, get } from '/dependencies/recourse.js'
-console.log("------------------------")
-console.log("Set Property | Example 4")
-console.log("------------------------")
+console.log("---------------------------")
+console.log("Delete Property | Example 4")
+console.log("---------------------------")
 const object = {
   propertyA: [{
     propertyB: [{

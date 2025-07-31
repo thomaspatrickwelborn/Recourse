@@ -63,9 +63,11 @@ class Recourse extends EventTarget {
       keys: Recourse.keys, values: Recourse.values, entries: Recourse.entries, 
       get: Recourse.get, set: Recourse.set, delete: Recourse.delete,
       assign: Recourse.assign, assignConcat: Recourse.assignConcat, 
-      defineProperties: Recourse.defineProperties, defineProperty: Recourse.defineProperty,
+      defineProperties: Recourse.defineProperties, 
+      defineProperty: Recourse.defineProperty,
       freeze: Recourse.freeze, seal: Recourse.seal,
-      getOwnPropertyDescriptors: Recourse.getOwnPropertyDescriptors, getOwnPropertyDescriptor: Recourse.getOwnPropertyDescriptor,
+      getOwnPropertyDescriptors: Recourse.getOwnPropertyDescriptors, 
+      getOwnPropertyDescriptor: Recourse.getOwnPropertyDescriptor,
       isArrayLike: Recourse.isArrayLike, isMapLike: Recourse.isMapLike,
       typeOf: Recourse.typeOf,
     })) {

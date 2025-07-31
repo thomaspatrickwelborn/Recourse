@@ -21,7 +21,7 @@ class Tensors extends EventTarget {
   constructor($tensors, $typeValidators) {
     super()
     Object.defineProperties(this, {
-      'cess': { value: function next(...$arguments) {
+      'cess': { value: function(...$arguments) {
         let tensorIndex = 0
         iterateTensors:
         for(const $tensor of $tensors) {
