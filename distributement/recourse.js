@@ -811,11 +811,13 @@ function entities($source, $type, $options = {}) {
   const getters = new Tensors(options.getters, options.typeValidators);
   const source = getters.cess($source);
   if(!source) { return sourceEntities }
+  // NONENUMERABLE
   const propertyDescriptorKeys = (typeOf(source) === 'map')
     ? source.keys()
     : (nonenumerable) 
     ? Object.keys(Object.getOwnPropertyDescriptors(source))
     : Object.keys(source);
+    // : Object.keys(Object.getOwnPropertyDescriptors(source))
   iterateSourcePropertyDescriptors: 
   for(let $propertyKey of propertyDescriptorKeys) {
     if(!isNaN($propertyKey) && options.pathParseInteger) {
@@ -1212,6 +1214,9 @@ function assignSources($target, $type, ...$sources) {
         ObjectKeys.includes(typeOfSourcePropertyValue) &&
         ObjectKeys.includes(typeOfTargetPropertyValue)
       ) {
+        // setters.cess($target, $sourcePropertyKey, assignSources(
+        //   targetPropertyValue, $type, $sourcePropertyValue
+        // ))
         assignSources(targetPropertyValue, $type, $sourcePropertyValue);
       }
       else {

@@ -30,6 +30,9 @@ export default function assignSources($target, $type, ...$sources) {
         Variables.ObjectKeys.includes(typeOfSourcePropertyValue) &&
         Variables.ObjectKeys.includes(typeOfTargetPropertyValue)
       ) {
+        // setters.cess($target, $sourcePropertyKey, assignSources(
+        //   targetPropertyValue, $type, $sourcePropertyValue
+        // ))
         assignSources(targetPropertyValue, $type, $sourcePropertyValue)
       }
       else {
