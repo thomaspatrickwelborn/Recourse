@@ -22,15 +22,17 @@ class Tensors extends EventTarget {
     super()
     Object.defineProperties(this, {
       'cess': { value: function(...$arguments) {
+        const [$target] = $arguments
         let tensorIndex = 0
-        iterateTensors:
-        for(const $tensor of $tensors) {
-          if(tensorIndex >= $tensors.length) { break iterateTensors }
-          const typeValidator = $typeValidators[tensorIndex]
-          if(typeValidator($arguments[0])) {
-            return $tensor(...$arguments)
+        iterateTypeValidators: 
+        for(const $typeValidator of $typeValidators) {
+          if($typeValidator($target)) {
+            return $tensors[tensorIndex](...$arguments)
           }
           tensorIndex++
+          if(tensorIndex === $typeValidators.length) {
+            throw new Error(null)
+          }
         }
       } },
     })
