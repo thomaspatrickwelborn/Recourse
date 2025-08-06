@@ -25,7 +25,7 @@ const object = [{
 }]
 const objectString = JSON.stringify(object, null, 2)
 const objectCompand = Recourse.compand(object, {
-  values: true
+  values: true, maxDepth: 11
 })
 const objectCompandString = JSON.stringify(objectCompand, null, 2)
 console.log("objectString", objectString)
