@@ -12,6 +12,7 @@ const Options = {
   maxDepth: 10,
   nonenumerable: false,
   path: false,
+  pathMatch: false,
   recurse: true,
   returnValue: 'receiver',
   sealed: false,
@@ -34,7 +35,10 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
     const typeOfSource = typeOf($source)
     const propertyDescriptor = (typeOfSource !== 'map')
       ? Object.getOwnPropertyDescriptor($source, $propertyKey)
-      : { configurable: false, enumerable: true, value: propertyValue[1], writable: true }
+      : (typeOfSource === 'map')
+      ? { configurable: false, enumerable: true, value: propertyValue[1], writable: true }
+      : undefined
+    if(!propertyDescriptor) return undefined
     if(!options.nonenumerable && !propertyDescriptor.enumerable) { return }
     if(options.path) {
       options.path = (
