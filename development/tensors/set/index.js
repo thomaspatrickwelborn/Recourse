@@ -1,7 +1,7 @@
 import typeOf from '../../type-of/index.js'
 import { PrimitiveKeys } from '../../variables/index.js'
 // Map Type Validator
-const TypeValidator = ($target) => ($target instanceof Map)
+const TypeValidator = ($target) => ($target instanceof Set)
 // Map Getter
 function Getter(...$arguments) {
   if($arguments.length === 1) {
@@ -10,7 +10,7 @@ function Getter(...$arguments) {
   }
   else {
     let [$receiver, $property] = $arguments
-    return $receiver.get($property)
+    return ($receiver.has($property)) ? $property : undefined
   }
 }
 // Map Setter
@@ -18,11 +18,8 @@ function Setter(...$arguments) {
   if($arguments.length === 2) {
     let [$receiver, $source] = $arguments
     $receiver.clear()
-    const sourceEntries = (typeOf($source) === 'map')
-      ? $source.entries()
-      : Object.entries($source)
     iterateSourceEntries: 
-    for(const [$sourceKey, $sourceValue] of sourceEntries) {
+    for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
       $receiver.set($sourceKey, $sourceValue)
     }
     return $receiver

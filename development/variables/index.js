@@ -11,8 +11,9 @@ const PrimitiveValues = Object.values(Primitives)
 const Objects = {
   'object': Object,
   'array': Array,
-  'eventTarget': EventTarget,
+  'eventtarget': EventTarget,
   'map': Map,
+  // 'set': Set, 
 }
 const ObjectKeys = Object.keys(Objects)
 const ObjectValues = Object.values(Objects)
