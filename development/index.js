@@ -28,6 +28,8 @@ import toString from './to-string/index.js'
 import valueOf from './value-of/index.js'
 
 class Recourse extends EventTarget {
+  #target
+  #options
   static compand = compand
   static decompand = decompand
   static expand = expand
@@ -51,10 +53,14 @@ class Recourse extends EventTarget {
   static isMapLike = isMapLike
   static typeOf = typeOf
   static toString = toString
+  get toString() { return Object.defineProperty(this, $staticMethodName, {
+    value: $staticMethod.bind(null, this.#target, this.#options)
+  }) }
   static valueOf = valueOf
-
-  constructor($target) {
+  constructor($target, $options = {}) {
     super()
+    this.#target = $target
+    this.#options = $options
     iterateStaticMutatorMethods: 
     for(const [$staticMethodName, $staticMethod] of Object.entries({
       compand: Recourse.compand, decompand: Recourse.decompand, 
@@ -72,7 +78,7 @@ class Recourse extends EventTarget {
       typeOf: Recourse.typeOf,
     })) {
       Object.defineProperty(this, $staticMethodName, {
-        value: $staticMethod.bind(this, $target)
+        value: $staticMethod.bind(null, $target)
       })
     }
   }
