@@ -1,4 +1,4 @@
-import typeOf from '../type-of/index.js'
+import typeOf from '../methods/type-of/index.js'
 import * as ObjectTensors from './object/index.js'
 import * as MapTensors from './map/index.js'
 // import * as SetTensors from './set/index.js'
@@ -43,4 +43,4 @@ class Tensors extends EventTarget {
     })
   }
 }
-export { TypeValidators, Tensors, Getters, Setters, Deleters }
+export { Tensors, TypeValidators, Getters, Setters, Deleters }

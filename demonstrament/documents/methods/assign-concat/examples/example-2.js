@@ -1,5 +1,5 @@
-import { Recourse, tensors, set, typeOf, variables } from '/dependencies/recourse.js'
-const { Getters, Setters, Deleters } = tensors
+import { Recourse, Tensors, set, typeOf, variables } from '/dependencies/recourse.js'
+const { Getters, Setters, Deleters } = Tensors
 console.log("-------------------------")
 console.log("Assign Concat | Example 2")
 console.log("-------------------------")

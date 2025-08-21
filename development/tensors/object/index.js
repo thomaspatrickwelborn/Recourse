@@ -1,4 +1,4 @@
-import typeOf from '../../type-of/index.js'
+import typeOf from '../../methods/type-of/index.js'
 import { PrimitiveKeys } from '../../variables/index.js'
 // Object Type Validator
 const TypeValidator = ($target) => (
