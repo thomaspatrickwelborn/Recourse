@@ -1,35 +1,33 @@
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../../variables/index.js'
-import { TypeValidators, Tensors, Getters, Setters } from '../../tensors/index.js'
-import * as Variables from '../../variables/index.js'
+import { TensorProxy } from '../../tensors/index.js'
 import entities from '../entities/index.js'
 import Options from '../../options/index.js'
 export default function assignSources($target, $type, ...$sources) {
   if(!$target) { return $target}
   const options = Object.assign({}, Options)
-  const getters = new Tensors(options.getters, options.typeValidators)
-  const setters = new Tensors(options.setters, options.typeValidators)
+  const tensorProxy = new TensorProxy(options)
   const typeOfTarget = typeOf($target)
   iterateSources: 
   for(const $source of $sources) {
-    if(!Variables.ObjectKeys.includes(typeOf($source))) continue iterateSources
+    if(!ObjectKeys.includes(typeOf($source))) continue iterateSources
     const sourceEntries = entities($source, 'entries', { recurse: false, })
     iterateSourceEntries: 
     for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
-      const targetPropertyValue = getters.cess($target, $sourcePropertyKey)
+      const targetPropertyValue = tensorProxy.get($target, $sourcePropertyKey)
       const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
       const typeOfSourcePropertyValue = typeOf($sourcePropertyValue)
       if(typeOfTarget === 'array' && $type === 'assignConcat') {
-        setters.cess($target, $target.length, $sourcePropertyValue)
+        tensorProxy.set($target, $target.length, $sourcePropertyValue)
       }
       else if(
-        Variables.ObjectKeys.includes(typeOfSourcePropertyValue) &&
-        Variables.ObjectKeys.includes(typeOfTargetPropertyValue)
+        ObjectKeys.includes(typeOfSourcePropertyValue) &&
+        ObjectKeys.includes(typeOfTargetPropertyValue)
       ) {
         assignSources(targetPropertyValue, $type, $sourcePropertyValue)
       }
       else {
-        setters.cess($target, $sourcePropertyKey, $sourcePropertyValue)
+        tensorProxy.set($target, $sourcePropertyKey, $sourcePropertyValue)
       }
     }
   }

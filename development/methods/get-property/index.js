@@ -1,20 +1,20 @@
 import outmatch from 'outmatch'
 import splitPath from '../split-path/index.js'
 import compand from '../compand/index.js'
-import { TypeValidators, Tensors, Getters } from '../../tensors/index.js'
+import { TypeValidators, TensorProxy, Getters } from '../../tensors/index.js'
 import Options from '../../options/index.js'
 export default function getProperty() {
   const [$target, $path, $options] = [...arguments]
   const options = Object.assign ({}, Options, $options)
-  const getters = new Tensors(options.getters, options.typeValidators)
-  if($path === undefined) { return getters.cess($target, options) }
+  const tensorProxy = new TensorProxy(options)
+  if($path === undefined) { return tensorProxy.get($target, options) }
   const subpaths = splitPath($path, options.pathParseInteger)
   if(!options.pathMatch) {
     let subtarget = $target
     iterateSubpaths: 
     for(const $subpath of subpaths) {
       try {
-        subtarget = getters.cess(subtarget, $subpath)
+        subtarget = tensorProxy.get(subtarget, $subpath)
         if(subtarget === undefined) { break iterateSubpaths } 
       }
       catch($err) { break iterateSubpaths }

@@ -1,32 +1,30 @@
-
 import outmatch from 'outmatch'
 import compand from '../compand/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import typeOf from '../type-of/index.js'
 import splitPath from '../split-path/index.js'
-import { TypeValidators, Tensors, Getters, Setters } from '../../tensors/index.js'
+import { TypeValidators, TensorProxy, Getters, Setters } from '../../tensors/index.js'
 import Options from '../../options/index.js'
 export default function setProperty() {
   const $arguments = [...arguments]
   const [$target, $path, $value, $options] = $arguments
   const options = Object.assign({}, Options, $options)
-  const getters = new Tensors(options.getters, options.typeValidators)
-  const setters = new Tensors(options.setters, options.typeValidators)
+  const tensorProxy = new TensorProxy(options)
   if(!options.pathMatch) {
     if(typeOf($arguments[1]) === 'string') {
       const { enumerable, nonenumerable } = options
-      const target = getters.cess($target)
+      const target = tensorProxy.get($target)
       const subpaths = splitPath($path, options.pathParseInteger)
       const key = subpaths.pop()
       let subtarget = $target
       iterateSubpaths: 
       for(const $subpath of subpaths) {
-        subtarget = getters.cess(subtarget, $subpath, options) || setters.cess(
+        subtarget = tensorProxy.get(subtarget, $subpath, options) || tensorProxy.set(
           subtarget, $subpath, isNaN($subpath) ? {} : []
         )
         if(subtarget === undefined) { break iterateSubpaths } 
       }
-      setters.cess(subtarget, key, $value, options)
+      tensorProxy.set(subtarget, key, $value, options)
       return $target
     }
     else {

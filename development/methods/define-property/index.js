@@ -3,7 +3,7 @@ import isMapLike from '../is-map-like/index.js'
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import defineProperties from '../define-properties/index.js'
-import * as Variables from '../../variables/index.js'
+import { ObjectKeys, Primitives } from '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
   const propertyDescriptor = Object.assign({}, $propertyDescriptor)
@@ -12,8 +12,8 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
   const typeOfPropertyDescriptorValue = typeOf(propertyDescriptor.value)
   const targetPropertyValue = $target[$propertyKey]
   const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
-  if(Variables.ObjectKeys.includes(typeOfPropertyDescriptorValue)) {
-    if(Variables.ObjectKeys.includes(typeOfTargetPropertyValue)) {
+  if(ObjectKeys.includes(typeOfPropertyDescriptorValue)) {
+    if(ObjectKeys.includes(typeOfTargetPropertyValue)) {
       propertyDescriptor.value = defineProperties(targetPropertyValue, propertyDescriptorValue, options)
     }
     else {
@@ -28,7 +28,7 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
     Object.getOwnPropertyDescriptor(propertyDescriptor, 'type') !== undefined &&
     !['undefined'/*, 'null'*/].includes(typeOfPropertyDescriptorValue)
   ) {
-    propertyDescriptor.value = new Variables.Primitives[propertyDescriptor.type](propertyDescriptorValue)
+    propertyDescriptor.value = new Primitives[propertyDescriptor.type](propertyDescriptorValue)
   }
   Object.defineProperty($target, $propertyKey, propertyDescriptor)
   if($propertyDescriptor.sealed) { Object.seal($target[$propertyKey]) }

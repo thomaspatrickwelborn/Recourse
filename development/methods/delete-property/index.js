@@ -2,17 +2,16 @@ import outmatch from 'outmatch'
 import compand from '../compand/index.js'
 import splitPath from '../split-path/index.js'
 import Options from '../../options/index.js'
-
-import { Tensors } from '../../tensors/index.js'
+import { TensorProxy } from '../../tensors/index.js'
 import getProperty from '../get-property/index.js'
 export default function deleteProperty($target, $path, $options) {
   const options = Object.assign ({}, Options, $options)
-  const deleters = new Tensors(options.deleters, options.typeValidators)
+  const tensorProxy = new TensorProxy(options)
   if(!options.pathMatch) {
     const subpaths = splitPath($path, options.pathParseInteger)
     const key = subpaths.pop()
     const subtarget = getProperty($target, subpaths.join('.'), options) || $target
-    deleters.cess(subtarget, key)
+    tensorProxy.delete(subtarget, key)
   }
   else {
     const subtargets = []

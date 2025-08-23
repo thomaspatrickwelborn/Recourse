@@ -1,4 +1,4 @@
-import { TypeValidators, Tensors, Getters } from '../../tensors/index.js'
+import { TypeValidators, TensorProxy, Getters } from '../../tensors/index.js'
 import { ObjectKeys } from '../../variables/index.js'
 import entities from '../entities/index.js'
 import Options from '../../options/index.js'
@@ -7,15 +7,15 @@ export default function compand($source, $options = {}) {
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
-  const { ancestors, values } = options
+  const { ancestors, maxDepth, values } = options
   options.depth++
-  if(options.depth > options.maxDepth) { return compandEntries }
-  const source = new Tensors(options.getters, options.typeValidators).cess($source)
+  if(options.depth > maxDepth) { return compandEntries }
+  const source = new TensorProxy(options).get($source)
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const sourceEntries = entities($source, 'entries', Object.assign({}, options, {
     recurse: false
   }))
-  iterateObjectProperties: 
+  iterateSourceProperties: 
   for(const [$key, $value] of sourceEntries) {
     if(!values) { compandEntries.push($key) }
     else if(values) { compandEntries.push([$key, $value]) }

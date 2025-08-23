@@ -7,12 +7,13 @@ export default function decompand($source, $options) {
   const typeofSource= typeOf($source)
   const sourceEntries = (
     typeofSource === 'object'
-  ) ? entities($source, 'entries', options) : $source
+  ) ? entities($source, 'entries', Object.assign({}, options, {
+    recurse: false
+  })) : $source
   if(!sourceEntries) { return }
-  const target = (isNaN(sourceEntries[0][0])) ? {} : []
   iterateSourceEntries: 
   for(const [$propertyPath, $propertyValue] of sourceEntries) {
-    setProperty(target, $propertyPath, $propertyValue, options)
+    setProperty($source, $propertyPath, $propertyValue, options)
   }
-  return target
+  return $source
 }

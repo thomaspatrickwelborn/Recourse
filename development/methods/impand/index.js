@@ -1,4 +1,4 @@
-import { TypeValidators, Tensors, Getters } from '../../tensors/index.js'
+import { TypeValidators, TensorProxy, Getters } from '../../tensors/index.js'
 import getProperty from '../get-property/index.js'
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
@@ -10,7 +10,7 @@ export default function impand($source, $property, $options = {}) {
   })
   const { ancestors, values } = options
   if(options.depth > options.maxDepth) { return } else { options.depth++ }
-  const source = new Tensors(options.getters, options.typeValidators).cess($source)
+  const source = new TensorProxy(options).get($source)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
   const typeOfProperty = typeOf($property)
   let target = typedObjectLiteral($source)

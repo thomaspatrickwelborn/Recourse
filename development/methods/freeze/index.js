@@ -1,6 +1,6 @@
 import typeOf from '../type-of/index.js'
 import entities from '../entities/index.js'
-import { TypeValidators, Tensors, Getters } from '../../tensors/index.js'
+import { TypeValidators, TensorProxy, Getters } from '../../tensors/index.js'
 import { ObjectKeys } from '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function freeze($target, $options = {}) {
@@ -9,7 +9,7 @@ export default function freeze($target, $options = {}) {
   })
   const { ancestors, values } = options
   if(options.depth > options.maxDepth) { return } else { options.depth++ }
-  const target = new Tensors(options.getters, options.typeValidators).cess($target)
+  const target = new TensorProxy(options).get($target)
   if(!ancestors.includes(target)) { ancestors.unshift(target) }
   const targetEntities = entities($target, 'entries', Object.assign(options, {
     recurse: false

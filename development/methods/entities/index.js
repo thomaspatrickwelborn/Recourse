@@ -1,4 +1,4 @@
-import { TypeValidators, Tensors, Getters } from '../../tensors/index.js'
+import { TensorProxy } from '../../tensors/index.js'
 import getOwnPropertyDescriptor from '../get-own-property-descriptor/index.js'
 import typeOf from '../type-of/index.js'
 import { ObjectKeys } from '../../variables/index.js'
@@ -12,8 +12,8 @@ export default function entities($source, $type, $options = {}) {
   if(options.depth >= maxDepth) { return sourceEntities }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   options.depth++
-  const getters = new Tensors(options.getters, options.typeValidators)
-  const source = getters.cess($source)
+  const tensorProxy = new TensorProxy(options)
+  const source = tensorProxy.get($source)
   if(!source) { return sourceEntities }
   const propertyDescriptorKeys = (typeOf(source) === 'map')
     ? source.keys()
@@ -25,7 +25,7 @@ export default function entities($source, $type, $options = {}) {
     if(!isNaN($propertyKey) && options.pathParseInteger) {
       $propertyKey = parseInt($propertyKey, 10)
     }
-    const value = getters.cess($source, $propertyKey)
+    const value = tensorProxy.get($source, $propertyKey)
     const propertyDescriptor = getOwnPropertyDescriptor(
       $source, $propertyKey, Object.assign(
         {}, options, { recurse: false }
