@@ -81,18 +81,18 @@ const arrayLikeObject11 = {
 } // false
 
 const arrayLikeObjects = [
-  isArrayLike(arrayLikeObject00, { strict: false }) === true,
-  isArrayLike(arrayLikeObject01, { strict: false }) === true,
-  isArrayLike(arrayLikeObject02, { strict: false }) === true,
-  isArrayLike(arrayLikeObject03, { strict: false }) === true,
-  isArrayLike(arrayLikeObject04, { strict: false }) === true,
-  isArrayLike(arrayLikeObject05, { strict: false }) === false,
-  isArrayLike(arrayLikeObject06, { strict: false }) === false,
-  isArrayLike(arrayLikeObject07, { strict: false }) === true,
-  isArrayLike(arrayLikeObject08, { strict: false }) === true,
-  isArrayLike(arrayLikeObject09, { strict: false }) === true,
-  isArrayLike(arrayLikeObject10, { strict: false }) === true,
-  isArrayLike(arrayLikeObject11, { strict: false }) === false,
+  isArrayLike(arrayLikeObject00, false) === true,
+  isArrayLike(arrayLikeObject01, false) === true,
+  isArrayLike(arrayLikeObject02, false) === true,
+  isArrayLike(arrayLikeObject03, false) === true,
+  isArrayLike(arrayLikeObject04, false) === true,
+  isArrayLike(arrayLikeObject05, false) === false,
+  isArrayLike(arrayLikeObject06, false) === false,
+  isArrayLike(arrayLikeObject07, false) === true,
+  isArrayLike(arrayLikeObject08, false) === true,
+  isArrayLike(arrayLikeObject09, false) === true,
+  isArrayLike(arrayLikeObject10, false) === true,
+  isArrayLike(arrayLikeObject11, false) === false,
 ]
 console.log("arrayLike", JSON.stringify(arrayLikeObjects, null, 2))
 console.log("pass", !arrayLikeObjects.includes(false))

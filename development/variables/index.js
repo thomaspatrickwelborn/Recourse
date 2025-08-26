@@ -1,3 +1,10 @@
+const ObjectLiterals = {
+  get object() { return {} },
+  get array() { return [] },
+  get eventtarget() { return new EventTarget() },
+  get map() { return new Map() },
+  // get set() { return new Set() },
+}
 const Primitives = {
   'string': String, 
   'number': Number, 
@@ -26,6 +33,6 @@ const TypeMethods = [
 ]
 export {
   Primitives, PrimitiveKeys, PrimitiveValues, 
-  Objects, ObjectKeys, ObjectValues,
+  Objects, ObjectKeys, ObjectValues, ObjectLiterals, 
   Types, TypeKeys, TypeValues, TypeMethods
 }

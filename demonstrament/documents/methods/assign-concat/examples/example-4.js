@@ -34,7 +34,9 @@ Recourse.assignConcat(array, [
   ],
   [88888888888888888888888888888888]
 ])
-const arrayString0 = Recourse.toString(array, { space: 2, replacer: null })
+const arrayString0 = Recourse.toString(array, {
+  space: 2, replacer: null, strict: false
+})
 console.log("arrayString0", arrayString0)
 const pass = (arrayString === `[
   [

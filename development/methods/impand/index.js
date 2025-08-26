@@ -6,14 +6,14 @@ import entities from '../entities/index.js'
 import Options from '../../options/index.js'
 export default function impand($source, $property, $options = {}) {
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
+    // ancestors: Object.assign([], $options.ancestors)
   })
-  const { ancestors, values } = options
+  const { ancestors, resemble, strict, values } = options
   if(options.depth > options.maxDepth) { return } else { options.depth++ }
   const source = new TensorProxy(options).get($source)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
   const typeOfProperty = typeOf($property)
-  let target = typedObjectLiteral($source)
+  let target = typedObjectLiteral($source, { resemble, strict })
   iterateSourceEntries: 
   for(const [$sourceKey, $sourceValue] of entities(
     $source, 'entries', Object.assign({}, options, { recurse: false })

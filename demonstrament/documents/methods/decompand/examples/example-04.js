@@ -25,12 +25,17 @@ const object = [{
 }]
 const objectString = JSON.stringify(object, null, 2)
 const objectCompand = Recourse.compand(object, {
-  values: true
+  values: true, maxDepth: 20
 })
-const objectCompandString = JSON.stringify(objectCompand, null, 2)
-const objectDecompand = Recourse.decompand(objectCompand)
-console.log(objectDecompand)
-const objectDecompandString = JSON.stringify(objectDecompand, null, 2)
+// const objectCompandString = JSON.stringify(objectCompand, null, 2)
+// console.log("object", objectString)
+// console.log("objectCompand", objectCompand)
+// console.log("objectCompandString", objectCompandString)
+// const objectCompandString = JSON.stringify(objectCompand, null, 2)
+// const objectDecompand = Recourse.decompand(objectCompand)
+// console.log(objectDecompand)
+// const objectDecompandString = JSON.stringify(objectDecompand, null, 2)
+// // console.log("objectCompand", objectCompandString)
 // console.log("objectCompand", objectCompandString)
-console.log("objectDecompand", objectDecompandString)
-console.log("pass", objectDecompandString === objectString)
+// console.log("objectDecompand", objectDecompandString)
+// console.log("pass", objectDecompandString === objectString)

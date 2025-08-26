@@ -1,4 +1,4 @@
-import { Deleters, Getters, Setters, TypeValidators  } from '../tensors/index.js'
+import { Deleters, Getters, Setters, TypeValidators, Returners  } from '../tensors/index.js'
 export default {
   // Path
   delimiter: '.',
@@ -7,25 +7,27 @@ export default {
   pathMatchMax: 100,
   pathParseInteger: false, 
   // Tensors
-  getters: [Getters.Object, Getters.Map],
-  setters: [Setters.Object, Setters.Map],
-  deleters: [Deleters.Object, Deleters.Map],
-  typeValidators: [TypeValidators.Object, TypeValidators.Map],
+  getters: [Getters.Object, Getters.Map, /* Getters.Set */],
+  setters: [Setters.Object, Setters.Map, /* Setters.Set */],
+  deleters: [Deleters.Object, Deleters.Map, /* Deleters.Set */],
+  typeValidators: [TypeValidators.Object, TypeValidators.Map, /* TypeValidators.Set */],
+  returners: [Returners.Object, Returners.Map, /* Returners.Set */],
   // Entities
   enumerable: true, 
   nonenumerable: false,
   values: false,
   returnValue: 'receiver',
   // Recurse
-  // ancestors: [],
+  ancestors: [],
   recurse: true,
   depth: 0, 
   maxDepth: 10,
-  // Property Descriptors
+  // Property Descriptors, Definitions
   frozen: false,
   sealed: false,
   type: false,
-  // Property Definitions
   typeCoercion: false,
-  strict: true,
+  // Objects
+  resemble: false,
+  strict: false,
 }

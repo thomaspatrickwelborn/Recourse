@@ -8,15 +8,9 @@ const map = new Map([
 const mapCompand = Recourse.compand(map, {
   values: true, // returnValue: 'target'
 })
-let mapCompandString
-let rangeErrorPass
-try {
-  mapCompandString = Recourse.toString(map, { space: 2, replacer: null, returnValue: 'target' })
-}
-catch($err) {
-  // if($err.message === 'Uncaught RangeError: Invalid string length') { rangeErrorPass = true }
-  mapCompandString = JSON.stringify(Recourse.valueOf(map, { space: 2, replacer: null, returnValue: 'target' }))
-}
+const mapCompandString = Recourse.toString(map, {
+  space: 2, replacer: null, returnValue: 'target'
+})
 // const mapCompandString = Recourse.toString(Array.from(map.entries()), { space: 2, replacer: null })
 console.log(mapCompand)
 console.log('mapCompandString', mapCompandString)

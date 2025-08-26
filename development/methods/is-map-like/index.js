@@ -1,9 +1,7 @@
 import entities from '../entities/index.js'
 import isArrayLike from '../is-array-like/index.js'
 import typeOf from '../type-of/index.js'
-const Options = { strict: true }
-export default function isMapLike($source, $options) {
-  const options = Object.assign({}, Options, $options)
+export default function isMapLike($source, $strict) {
   let isMapLike
   const typeOfSource = typeOf($source)
   if(typeOfSource === 'map') { isMapLike = true }
@@ -12,7 +10,7 @@ export default function isMapLike($source, $options) {
     $source.size >= 0 && 
     Number.isInteger($source.size)
   ) {
-    if(options.strict === false) {
+    if($strict === false) {
       isMapLike = true
     }
     else {
@@ -21,7 +19,7 @@ export default function isMapLike($source, $options) {
         nonenumerable: true, recurse: false
       })) {
         if(
-          isArrayLike($sourceEntity, options) ||
+          isArrayLike($sourceEntity, $strict) ||
           $sourceEntity.length === 2
         ) { isMapLike = true }
         else {

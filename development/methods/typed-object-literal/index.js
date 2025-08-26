@@ -1,20 +1,18 @@
 import typeOf from '../type-of/index.js'
 import isArrayLike from '../is-array-like/index.js'
 import isMapLike from '../is-map-like/index.js'
-export default function typedObjectLiteral($source, $strict = true) {
-  let _typedObjectLiteral
+import { ObjectLiterals, Objects } from  '../../variables/index.js'
+import Options from '../../options/index.js'
+export default function typedObjectLiteral($source, $options) {
+  const { resemble, strict } = Object.assign({}, Options, $options)
   const typeOfSource = typeOf($source)
-  if(typeOfSource === 'string') {
-    const source = $source.toLowerCase()
-    if(source === 'object') { return Object() }
-    else if(source === 'array') { return Array() }
-    else if(source === 'map') { return new Map() }
-    else { _typedObjectLiteral = {} }
+  if(typeOfSource === 'string') { return ObjectLiterals[$source.toLowerCase()] }
+  else if(!resemble) { return ObjectLiterals[typeOfSource] }
+  else if(resemble) {
+    if(isArrayLike($source, strict)) { return ObjectLiterals['array'] }
+    else if(isMapLike($source, strict)) { return ObjectLiterals['map'] }
+    // else if(isSetLike($source, strict)) { return ObjectLiterals['set'] }
+    else { return ObjectLiterals['object'] }
   }
-  else  {
-    if(typeOfSource === 'object') { return Object() }
-    else if(isArrayLike($source, { strict: $strict })) { return Array() }
-    else if(isMapLike($source, { strict: $strict })) { return new Map() }
-    else { _typedObjectLiteral = {} }
-  }
+  else { return null }
 }

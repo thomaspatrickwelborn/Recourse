@@ -15,6 +15,7 @@ import typedObjectLiteral from './methods/typed-object-literal/index.js'
 import typeOf from './methods/type-of/index.js'
 import isArrayLike from './methods/is-array-like/index.js'
 import isMapLike from './methods/is-map-like/index.js'
+// import isSetLike from './methods/is-set-like/index.js'
 import keys from './methods/keys/index.js'
 import values from './methods/values/index.js'
 import entries from './methods/entries/index.js'
@@ -52,6 +53,7 @@ class Recourse extends EventTarget {
   static getOwnPropertyDescriptor = getOwnPropertyDescriptor
   static isArrayLike = isArrayLike
   static isMapLike = isMapLike
+  // static isSetLike = isSetLike
   static typeOf = typeOf
   static toString = toString
   static valueOf = valueOf
@@ -121,6 +123,9 @@ class Recourse extends EventTarget {
   get isMapLike() { return Object.defineProperty(this, 'isMapLike', {
     value: Recourse.isMapLike.bind(null, this.#target)
   })['isMapLike'] }
+  // get isSetLike() { return Object.defineProperty(this, 'isSetLike', {
+  //   value: Recourse.isSetLike.bind(null, this.#target)
+  // })['isSetLike'] }
   get typeOf() { return Object.defineProperty(this, 'typeOf', {
     value: Recourse.typeOf.bind(null, this.#target)
   })['typeOf'] }
@@ -140,8 +145,8 @@ export {
   keys, values, entries,
   entities, 
   getOwnPropertyDescriptors, getOwnPropertyDescriptor,
-  isArrayLike, typeOf,
+  isArrayLike, isMapLike, /* isSetLike, */
+  typedObjectLiteral, typeOf, 
   splitPath, 
-  typedObjectLiteral, 
   valueOf, toString,
 }

@@ -1,3 +1,4 @@
+// import assign from '../assign/index.js'
 import typeOf from '../type-of/index.js'
 import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
 import { TensorProxy } from '../../tensors/index.js'
@@ -5,17 +6,18 @@ import { ObjectKeys } from '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function getOwnPropertyDescriptor($source, $propertyKey, $options = {}) {
   const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors),
+    ancestors: Object.assign([], $options.ancestors)
   })
-  if(options.depth >= options.maxDepth) { return }
+  const { ancestors, maxDepth, path } = options
+  if(!ancestors.includes($source)) { ancestors.unshift($source) }
+  if(options.depth >= maxDepth) { return }
   else { options.depth++ }
-  if(!options.ancestors.includes($source)) { options.ancestors.unshift($source) }
   const tensorProxy = new TensorProxy(options)
-  const propertyValue = tensorProxy.get($source, $propertyKey)
-  if(propertyValue !== undefined) {
+  try {
+    const propertyValue = tensorProxy.get($source, $propertyKey)
     if(ObjectKeys.includes(typeOf(propertyValue))) {
-      if(options.ancestors.includes(propertyValue)) { return }
-      else { options.ancestors.unshift(propertyValue) }
+      if(ancestors.includes(propertyValue)) { return }
+      else { ancestors.unshift(propertyValue) }
     }
     const typeOfSource = typeOf($source)
     const propertyDescriptor = (typeOfSource !== 'map')
@@ -42,4 +44,6 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
     }
     return propertyDescriptor
   }
+  catch($err) { console.error($err) }
+  return undefined
 }

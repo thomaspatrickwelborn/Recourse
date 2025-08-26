@@ -16,8 +16,12 @@ const object = {
 object.propertyA[0].propertyB.propertyF = object.propertyA[0].propertyB
 object.propertyA[0].propertyB.propertyG = object.propertyA[0]
 object.propertyA[0].propertyB.propertyH = object
+
 const objectValueOf = Recourse.valueOf(object)
-const objectString = Recourse.toString(object, { space: 2, replacer: null })
+const objectString = Recourse.toString(object, {
+  space: 2, replacer: null// , type: true, 
+  /*nonenumerable: true, resemble: true, strict: false,*/
+})
 console.log('object', object)
 console.log('objectValueOf', objectValueOf)
 console.log('objectString', objectString)

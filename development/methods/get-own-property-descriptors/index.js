@@ -1,7 +1,10 @@
 import typeOf from '../type-of/index.js'
 import getOwnPropertyDescriptor from '../get-own-property-descriptor/index.js'
+import Options from '../../options/index.js'
 export default function getOwnPropertyDescriptors($source, $options = {}) {
-  const options = Object.assign({}, $options)
+  const options = Object.assign({}, Options, $options, {
+    ancestors: Object.assign([], $options.ancestors)
+  })
   const propertyDescriptors = {}
   const typeOfSource = typeOf($source)
   const propertyDescriptorKeys = (['array', 'object'].includes(typeOfSource))
@@ -12,9 +15,7 @@ export default function getOwnPropertyDescriptors($source, $options = {}) {
   iteratePropertyDescriptorKeys: 
   for(const $propertyKey of propertyDescriptorKeys) {
     const propertyDescriptor = getOwnPropertyDescriptor($source, $propertyKey, options)
-    if(propertyDescriptor) {
-      propertyDescriptors[$propertyKey] = propertyDescriptor
-    }
+    if(propertyDescriptor) { propertyDescriptors[$propertyKey] = propertyDescriptor }
   }
   return propertyDescriptors
 }

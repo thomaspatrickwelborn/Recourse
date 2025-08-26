@@ -1,8 +1,16 @@
-import valueOf from '../value-of/index.js'
-import { Getters } from '../../tensors/index.js'
-import { ObjectKeys } from '../../variables/index.js'
-const Options = { space: 0, replacer: null }
-export default function toString($source, $options) {
-  const options = Object.assign({}, Options, $options)
-  return JSON.stringify(valueOf($source, options), options.replacer, options.space)
+import { TensorProxy } from '../../tensors/index.js'
+import typedObjectLiteral from '../typed-object-literal/index.js'
+import defineProperties from '../define-properties/index.js'
+import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
+import Options from '../../options/index.js'
+export default function toString($source, $options = {}) {
+  const options = Object.assign({}, Options, $options, {
+    resemble: true, type: true
+  })
+  return JSON.stringify(
+    defineProperties(
+      typedObjectLiteral($source), getOwnPropertyDescriptors($source, options), options
+    ), 
+    options.replacer, options.space
+  )
 }

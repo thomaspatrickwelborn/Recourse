@@ -1,8 +1,6 @@
 import entities from '../entities/index.js'
 import typeOf from '../type-of/index.js'
-import Options from '../../options/index.js'
-export default function isArrayLike($source, $options) {
-  const options = Object.assign({}, Options, $options)
+export default function isArrayLike($source, $strict) {
   let isArrayLike
   const typeOfSource = typeOf($source)
   if(typeOfSource === 'array') { isArrayLike = true }
@@ -11,9 +9,7 @@ export default function isArrayLike($source, $options) {
     $source.length >= 0 && 
     Number.isInteger($source.length)
   ) {
-    if(options.strict === false) {
-      isArrayLike = true
-    }
+    if($strict === false) { isArrayLike = true }
     else {
       iterateSourceKeys: 
       for(const $sourceKey of entities($source, 'keys', {

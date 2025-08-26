@@ -39,6 +39,13 @@ function Deleter(...$arguments) {
   else {
     let [$receiver] = $arguments
     return $receiver.clear()
-  } 
+  }
 }
-export { TypeValidator, Getter, Setter, Deleter }
+// Map Returner
+function Returner($returnValue, $value) {
+  /**/
+}
+
+export {
+  TypeValidator, Getter, Setter, Deleter
+}

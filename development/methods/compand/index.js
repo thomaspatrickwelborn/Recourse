@@ -4,9 +4,15 @@ import entities from '../entities/index.js'
 import Options from '../../options/index.js'
 export default function compand($source, $options = {}) {
   const compandEntries = []
+  // 
+  // OPTIONS CONTAMINATION
+  // PROPERTY POLLUTION
+  // MAX DEPTH, DEPTH
+  // 
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
+  console.log(options)
   const { ancestors, maxDepth, values } = options
   options.depth++
   if(options.depth > maxDepth) { return compandEntries }
@@ -17,6 +23,7 @@ export default function compand($source, $options = {}) {
   }))
   iterateSourceProperties: 
   for(const [$key, $value] of sourceEntries) {
+    console.log($key, $value)
     if(!values) { compandEntries.push($key) }
     else if(values) { compandEntries.push([$key, $value]) }
     if(
@@ -26,6 +33,7 @@ export default function compand($source, $options = {}) {
       !ancestors.includes($value)
     ) {
       const subsources = compand($value, options)
+      console.log(subsources)
       if(!values) {
         for(const $subsource of subsources) {
           const path = [$key, $subsource].join('.')

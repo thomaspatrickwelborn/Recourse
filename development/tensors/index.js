@@ -22,37 +22,35 @@ const TypeValidators = {
   Map: MapTensors.TypeValidator, 
   // Set: SetTensors.TypeValidator, 
 }
-function Cess($tensorMethod, ...$arguments) {
-  const { typeValidators } = this
-  const tensors = this[$tensorMethod]
+const Returners = {
+  Object: ObjectTensors.Returner, 
+  Map: MapTensors.Returner, 
+  // Set: SetTensors.TypeValidator, 
+}
+function Cess($tensors, ...$arguments) {
+  const {   typeValidators } = this
   const [$target] = $arguments
   let tensorIndex = 0
   iterateTypeValidators: 
   for(const $typeValidator of typeValidators) {
-    if($typeValidator($target)) {
-      return tensors[tensorIndex](...$arguments)
-    }
+    if($typeValidator($target)) { return $tensors[tensorIndex](...$arguments) }
     tensorIndex++
-    if(tensorIndex === typeValidators.length) {
-      throw new Error(null)
-    }
+    if(tensorIndex === typeValidators.length) { throw new Error(null) }
   }
 }
 class TensorProxy extends EventTarget {
   constructor($options) {
     super()
-    const {
-      typeValidators, getters, setters, deleters
-    } = $options
-    Object.defineProperties(this, {
-      'typeValidators': { value: typeValidators },
-      'getters': { value: getters },
-      'setters': { value: setters },
-      'deleters': { value: deleters },
-    })
+    this.options = $options
   }
-  get get() { return Object.defineProperty(this, 'get', { value: Cess.bind(this, 'getters') })['get'] }
-  get set() { return Object.defineProperty(this, 'set', { value: Cess.bind(this, 'setters') })['set'] }
-  get delete() { return Object.defineProperty(this, 'delete', { value: Cess.bind(this, 'deleters') })['delete'] }
+  get returnValue() { return Object.defineProperty(this, 'returnValue', { value: this.options.returnValue })['returnValue'] }
+  get returners() { return Object.defineProperty(this, 'returners', { value: this.options.returners.map(($returner) => $returner.bind(this)) })['returners'] }
+  get typeValidators() { return Object.defineProperty(this, 'typeValidators', { value: this.options.typeValidators })['typeValidators'] }
+  get getters() { return Object.defineProperty(this, 'getters', { value: this.options.getters.map(($getter) => $getter.bind(this)) })['getters'] }
+  get setters() { return Object.defineProperty(this, 'setters', { value: this.options.setters.map(($setter) => $setter.bind(this)) })['setters'] }
+  get deleters() { return Object.defineProperty(this, 'deleters', { value: this.options.deleters.map(($deleter) => $deleter.bind(this)) })['deleters'] }
+  get get() { return Object.defineProperty(this, 'get', { value: Cess.bind(this, this['getters']) })['get'] }
+  get set() { return Object.defineProperty(this, 'set', { value: Cess.bind(this, this['setters']) })['set'] }
+  get delete() { return Object.defineProperty(this, 'delete', { value: Cess.bind(this, this['deleters']) })['delete'] }
 }
-export { TensorProxy, TypeValidators, Getters, Setters, Deleters }
+export { TensorProxy, Getters, Setters, Deleters, Returners, TypeValidators }

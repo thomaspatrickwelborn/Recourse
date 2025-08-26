@@ -9,11 +9,11 @@ const TypeValidator = ($target) => (
 function Getter(...$arguments) {
   if($arguments.length === 1) {
     const [$target] = $arguments
-    return $target
+    return Returner(this.returnValue, $target)
   }
   else {
     const [$target, $property] = $arguments
-    return $target[$property]
+    return Returner(this.returnValue, $property, $target[$property])
   }
 }
 // Object Setter
@@ -21,7 +21,7 @@ function Setter(...$arguments) {
   if(['string', 'number'].includes(typeOf($arguments[1]))) {
     const [$target, $property, $value] = $arguments
     $target[$property] = $value
-    return $target[$property]
+    return Returner(this.returnValue, $property, $target[$property])
   }
   else {
     const [$target, $source] = $arguments
@@ -33,22 +33,28 @@ function Setter(...$arguments) {
     for(const [$sourceKey, $sourceValue] of Object.entries($source)) {
       $target[$sourceKey] = $sourceValue
     }
-    return $target
+    return Returner(this.returnValue, $target)
   }
 }
 // Object Deleter
 function Deleter(...$arguments) {
   const [$target, $property] = $arguments
   if(['string', 'number'].includes(typeOf($property))) {
-    return delete $target[$property]
+    delete $target[$property]
+    return Returner(this.returnValue, $property, $target[$property])
   }
   else {
     iterateTargetKeys: 
     for(const $targetKey of Object.keys($target)) {
       delete $target[$targetKey]
     }
-    return undefined
+    return Returner(this.returnValue, $target)
   }
 }
-
-export { TypeValidator, Getter, Setter, Deleter }
+// Object Returner
+function Returner($returnValue, ...$arguments) {
+  return $arguments.at(-1)
+}
+export {
+  TypeValidator, Getter, Setter, Deleter, Returner
+}

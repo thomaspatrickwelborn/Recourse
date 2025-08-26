@@ -5,20 +5,24 @@ import typedObjectLiteral from '../typed-object-literal/index.js'
 import entities from '../entities/index.js'
 const ValidPathTypes = ['string', 'function']
 export default function expand($source, $path, $options = {}) {
-  const options = Object.assign({}, $options)
+  const options = Object.assign({}, $options, {
+    ancestors: Object.assign([], $options.ancestors)
+  })
+  const { resemble, strict } = options
   const typeOfPath = typeOf($path)
   const typeOfSource = typeOf($source)
   if(
     !ValidPathTypes.includes(typeOfPath) ||
     !ObjectKeys.includes(typeOfSource)
   ) { return $source }
-  let target = typedObjectLiteral($source)
-  for(const [$sourceKey, $sourceValue] of entities(
+  let target = typedObjectLiteral($source, { resemble, strict })
+  const sourceEntries = entities(
     $source, 'entries', Object.assign({}, options, { recurse: false })
-  )) {
-    const targetValue = (
-      ObjectKeys.includes(typeOf($sourceValue))
-    ) ? expand($sourceValue, $path, options) : $sourceValue
+  )
+  for(const [$sourceKey, $sourceValue] of sourceEntries) {
+    const targetValue = (ObjectKeys.includes(typeOf($sourceValue)))
+      ? expand($sourceValue, $path, options)
+      : $sourceValue
     if(typeOfPath === ValidPathTypes[0]) {
       target[$sourceKey] = setProperty({}, $path, targetValue, options)
     }

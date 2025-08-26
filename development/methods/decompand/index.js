@@ -3,7 +3,9 @@ import setProperty from '../set-property/index.js'
 import entities from '../entities/index.js'
 import Options from '../../options/index.js'
 export default function decompand($source, $options) {
-  const options = Object.assign({}, Options, $options)
+  const options = Object.assign({}, Options, $options, {
+    ancestors: Object.assign([], $options.ancestors)
+  })
   const typeofSource= typeOf($source)
   const sourceEntries = (
     typeofSource === 'object'
