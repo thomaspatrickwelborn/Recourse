@@ -4,7 +4,7 @@ import isMapLike from '../is-map-like/index.js'
 import { ObjectLiterals, Objects } from  '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function typedObjectLiteral($source, $options) {
-  const { resemble, strict } = Object.assign({}, Options, $options)
+  const { resemble, strict } = Options($options)
   const typeOfSource = typeOf($source)
   if(typeOfSource === 'string') { return ObjectLiterals[$source.toLowerCase()] }
   else if(!resemble) { return ObjectLiterals[typeOfSource] }

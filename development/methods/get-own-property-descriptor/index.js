@@ -5,9 +5,7 @@ import { TensorProxy } from '../../tensors/index.js'
 import { ObjectKeys } from '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function getOwnPropertyDescriptor($source, $propertyKey, $options = {}) {
-  const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
-  })
+  const options = Options($options)
   const { ancestors, maxDepth, path } = options
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   if(options.depth >= maxDepth) { return }

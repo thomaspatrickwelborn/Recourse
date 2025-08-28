@@ -5,16 +5,13 @@ import { ObjectKeys } from '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function entities($source, $type, $options = {}) {
   const sourceEntities = []
-  const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
-  })
+  const options = Options($options)
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
   if(options.depth >= maxDepth) { return sourceEntities }
-  if(!ancestors.includes($source)) { ancestors.unshift($source) }
   options.depth++
+  if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const tensorProxy = new TensorProxy(options)
   const source = tensorProxy.get($source)
-  if(!source) { return sourceEntities }
   const propertyDescriptorKeys = (typeOf(source) === 'map')
     ? source.keys()
     : (nonenumerable) 

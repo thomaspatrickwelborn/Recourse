@@ -5,7 +5,7 @@ import { TypeValidators, TensorProxy, Getters } from '../../tensors/index.js'
 import Options from '../../options/index.js'
 export default function getProperty() {
   const [$target, $path, $options] = [...arguments]
-  const options = Object.assign ({}, Options, $options)
+  const options = Options($options)
   const tensorProxy = new TensorProxy(options)
   if($path === undefined) { return tensorProxy.get($target, options) }
   const subpaths = splitPath($path, options.pathParseInteger)

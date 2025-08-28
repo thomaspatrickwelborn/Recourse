@@ -1,3 +1,4 @@
+import isMapLike from '../../methods/is-map-like/index.js'
 import typeOf from '../../methods/type-of/index.js'
 import { PrimitiveKeys } from '../../variables/index.js'
 // Map Type Validator
@@ -6,15 +7,17 @@ const TypeValidator = ($target) => ($target instanceof Map)
 function Getter(...$arguments) {
   if($arguments.length === 1) {
     let [$receiver] = $arguments
-    return Returner(this.returnValue, $receiver)
+    return Returner($receiver)
   }
   else {
     let [$receiver, $property] = $arguments
-    return Returner(this.returnValue, $property, $receiver.get($property))
+    return Returner($property, $receiver.get($property))
   }
 }
 // Map Setter
 function Setter(...$arguments) {
+  const propertyAssignment = this.options.propertyAssignments[typeOf($arguments[0])]
+  const isTargetMapLike = isMapLike($target, this.options.strict)
   if($arguments.length === 2) {
     let [$receiver, $source] = $arguments
     $receiver.clear()
@@ -23,27 +26,31 @@ function Setter(...$arguments) {
     for(const [$sourceKey, $sourceValue] of sourceEntries) {
       $receiver.set($sourceKey, $sourceValue)
     }
-    return Returner(this.returnValue, $receiver)
+    return Returner($receiver)
   }
   else {
     let [$receiver, $property, $value] = $arguments
+    if(propertyAssignment === 'push' && isTargetMapLike) {
+      $property = $target.size
+    }
     $receiver.set($property, $value)
-    return Returner(this.returnValue, $property, $receiver.get($property))
+    return Returner($property, $receiver.get($property))
   }
 }
 // Map Deleter
 function Deleter(...$arguments) {
   if($arguments.length === 2) {
     let [$receiver, $property] = $arguments
-    return Returner(this.returnValue, $property, $receiver.delete($property))
+    return Returner($property, $receiver.delete($property))
   }
   else {
     let [$receiver] = $arguments
-    return Returner(this.returnValue, $receiver.clear())
+    return Returner($receiver.clear())
   } 
 }
 // Map Returner
-function Returner($returnValue, ...$arguments) {
+function Returner(...$arguments) {
+  const { returnValue } = this.options 
   if($arguments.length === 1) {
     const [$value] = $arguments
     switch($returnValue) {

@@ -5,7 +5,7 @@ import Options from '../../options/index.js'
 import { TensorProxy } from '../../tensors/index.js'
 import getProperty from '../get-property/index.js'
 export default function deleteProperty($target, $path, $options) {
-  const options = Object.assign ({}, Options, $options)
+  const options = Options($options)
   const tensorProxy = new TensorProxy(options)
   if(!options.pathMatch) {
     const subpaths = splitPath($path, options.pathParseInteger)

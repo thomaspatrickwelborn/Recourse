@@ -4,9 +4,7 @@ import { TypeValidators, TensorProxy, Getters } from '../../tensors/index.js'
 import { ObjectKeys } from '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function seal($target, $options = {}) {
-  const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
-  })
+  const options = Options($options)
   const { ancestors, values } = options
   if(options.depth > options.maxDepth) { return } else { options.depth++ }
   const target = new TensorProxy(options).get($target)

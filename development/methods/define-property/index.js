@@ -7,9 +7,7 @@ import { ObjectKeys, Primitives } from '../../variables/index.js'
 import { TensorProxy } from '../../tensors/index.js'
 import Options from '../../options/index.js'
 export default function defineProperty($target, $propertyKey, $propertyDescriptor, $options) {
-  const options = Object.assign({}, Options, $options, {
-    ancestors: Object.assign([], $options.ancestors)
-  })
+  const options = Options($options)
   const { strict, resemble } = options
   const tensorProxy = new TensorProxy(options)
   const propertyDescriptor = Object.assign({}, $propertyDescriptor)

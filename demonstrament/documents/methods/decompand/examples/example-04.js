@@ -2,7 +2,7 @@ import { Recourse } from '/dependencies/recourse.js'
 console.log("--------------------------")
 console.log("Decompand Tree | Example 1")
 console.log("--------------------------")
-const object = [{
+const array = [{
   propertyA: {
     propertyB: {
       propertyC: [{
@@ -23,19 +23,20 @@ const object = [{
     }
   }
 }]
-const objectString = JSON.stringify(object, null, 2)
-const objectCompand = Recourse.compand(object, {
-  values: true, maxDepth: 20
-})
-// const objectCompandString = JSON.stringify(objectCompand, null, 2)
-// console.log("object", objectString)
-// console.log("objectCompand", objectCompand)
-// console.log("objectCompandString", objectCompandString)
-// const objectCompandString = JSON.stringify(objectCompand, null, 2)
-// const objectDecompand = Recourse.decompand(objectCompand)
-// console.log(objectDecompand)
-// const objectDecompandString = JSON.stringify(objectDecompand, null, 2)
-// // console.log("objectCompand", objectCompandString)
-// console.log("objectCompand", objectCompandString)
-// console.log("objectDecompand", objectDecompandString)
-// console.log("pass", objectDecompandString === objectString)
+console.log(Recourse.compand(array, { values: true }))
+// const arrayString = JSON.stringify(array, null, 2)
+// const arrayCompand = Recourse.compand(array, {
+//   values: true, maxDepth: 10
+// })
+// const arrayCompandString = JSON.stringify(arrayCompand, null, 2)
+// console.log("array", arrayString)
+// console.log("arrayCompand", arrayCompand)
+// console.log("arrayCompandString", arrayCompandString)
+// const arrayCompandString = JSON.stringify(arrayCompand, null, 2)
+// const arrayDecompand = Recourse.decompand(arrayCompand)
+// console.log(arrayDecompand)
+// const arrayDecompandString = JSON.stringify(arrayDecompand, null, 2)
+// // console.log("arrayCompand", arrayCompandString)
+// console.log("arrayCompand", arrayCompandString)
+// console.log("arrayDecompand", arrayDecompandString)
+// console.log("pass", arrayDecompandString === arrayString)

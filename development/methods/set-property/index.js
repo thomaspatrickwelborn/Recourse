@@ -8,7 +8,7 @@ import Options from '../../options/index.js'
 export default function setProperty() {
   const $arguments = [...arguments]
   const [$target, $path, $value, $options] = $arguments
-  const options = Object.assign({}, Options, $options)
+  const options = Options($options)
   const tensorProxy = new TensorProxy(options)
   if(!options.pathMatch) {
     if(typeOf($arguments[1]) === 'string') {

@@ -5,9 +5,7 @@ import typedObjectLiteral from '../typed-object-literal/index.js'
 import entities from '../entities/index.js'
 const ValidPathTypes = ['string', 'function']
 export default function expand($source, $path, $options = {}) {
-  const options = Object.assign({}, $options, {
-    ancestors: Object.assign([], $options.ancestors)
-  })
+  const options = Options($options)
   const { resemble, strict } = options
   const typeOfPath = typeOf($path)
   const typeOfSource = typeOf($source)
