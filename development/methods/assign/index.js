@@ -3,30 +3,27 @@ import { ObjectKeys } from '../../variables/index.js'
 import { TensorProxy } from '../../tensors/index.js'
 import entities from '../entities/index.js'
 import Options from '../../options/index.js'
+import { PropertyAssigner } from '../../tensors/property.js'
 export default function assign($target, $options, ...$sources) {
-  // const $options = this.options || {}
   if(!$target) { return $target}
-  const options = Options(Object.assign({ propertyAssignments: {
-    object: 'assign', array: 'assign', map: 'assign', /* set: 'push */
-  } }, $options))
-  const { propertyAssignments/*, type*/ } = options
+  const options = Options($options)
   const tensorProxy = new TensorProxy(options)
   const typeOfTarget = typeOf($target)
   iterateSources: 
   for(const $source of $sources) {
     if(!ObjectKeys.includes(typeOf($source))) continue iterateSources
-    const sourceEntries = entities($source, 'entries', Object.assign({}, ))
+    const sourceEntries = entities($source, 'entries', Object.assign({}, options, { recurse: false }))
     iterateSourceEntries: 
     for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
       const targetPropertyValue = tensorProxy.get($target, $sourcePropertyKey)
       const typeOfTargetPropertyValue = typeOf(targetPropertyValue)
       const typeOfSourcePropertyValue = typeOf($sourcePropertyValue)
-      if(typeOfTarget === 'array' && type === 'assignConcat') {
-        tensorProxy.set($target, $target.length, $sourcePropertyValue)
-      }
-      else if(
+      if(
         ObjectKeys.includes(typeOfSourcePropertyValue) &&
-        ObjectKeys.includes(typeOfTargetPropertyValue)
+        ObjectKeys.includes(typeOfTargetPropertyValue) &&
+        PropertyAssigner(
+          options.propertyAssignments, $target, $sourcePropertyKey, $sourcePropertyValue
+        ) === 'assign'
       ) {
         assign(targetPropertyValue, options, $sourcePropertyValue)
       }

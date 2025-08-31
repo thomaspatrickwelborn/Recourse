@@ -15,7 +15,7 @@ export default function deleteProperty($target, $path, $options) {
   }
   else {
     const subtargets = []
-    const compandEntries = compand($target, Object.assign({}, options, { values: true }))
+    const compandEntries = compand($target, options)
     const propertyPathMatcher = outmatch($path, { separator: '.' })
     iterateCompandEntries:
     for(const [$propertyPath, $propertyValue] of compandEntries) {

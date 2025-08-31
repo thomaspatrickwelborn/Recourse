@@ -3,7 +3,9 @@ const { Getters, Setters, Deleters } = Tensors
 console.log("-------------------------")
 console.log("Assign Concat | Example 1")
 console.log("-------------------------")
-const options = {}
+const options = { propertyAssignments: { 'array': {
+  primitive: 'assign', object: 'push'
+} } }
 const object = {
   propertyA: [{
     propertyB: {
@@ -16,7 +18,7 @@ const object = {
   }]
 }
 const objectString = JSON.stringify(object, null, 2)
-Recourse.assignConcat(object, {
+Recourse.assign(object, options, {
   propertyA: [{
     propertyB: {
       propertyC: [{

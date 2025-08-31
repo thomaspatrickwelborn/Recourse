@@ -2,6 +2,7 @@ import { Recourse } from '/dependencies/recourse.js'
 console.log("-------------------------")
 console.log("Assign Concat | Example 4")
 console.log("-------------------------")
+const options = { propertyAssignments: { 'array': 'push', 'map': 'push' } }
 const array = [
   [1, 11, 111],
   [
@@ -19,7 +20,7 @@ const array = [
 ]
 const arrayString = Recourse.toString(array, { space: 2, replacer: null })
 console.log("arrayString", arrayString)
-Recourse.assignConcat(array, [
+Recourse.assign(array, options, [
   [1111],
   [
     [22222222],

@@ -1,16 +1,16 @@
-| [➲ Recourse](../../README.md) | *`assignConcat`* |
+| [➲ Recourse](../../README.md) | *`assign`* |
 | :-- | :-- |
 
-# `assignConcat` Method
- - [`assignConcat` Method Syntax](#assignconcat-method-syntax)
- - [`assignConcat` Examples](#assignconcat-examples)
+# `assign` Method
+ - [`assign` Method Syntax](#assignconcat-method-syntax)
+ - [`assign` Examples](#assignconcat-examples)
 
-## `assignConcat` Method Syntax
+## `assign` Method Syntax
 ```
-Recourse.assignConcat($target, ...$sources)
+Recourse.assign($target, $options, ...$sources)
 ```
-## `assignConcat` Examples
-### `assignConcat` Example 1
+## `assign` Examples
+### `assign` Example 1
 ```
 const object = {
   propertyA: [{
@@ -23,7 +23,7 @@ const object = {
     }
   }]
 }
-Recourse.assignConcat(object, {
+Recourse.assign(object, { propertyAssignments: { array: { primitive: 'push' } } }, {
   propertyA: [{
     propertyB: {
       propertyC: [{
@@ -35,7 +35,7 @@ Recourse.assignConcat(object, {
   }]
 })
 ```
-*assignConcat*  
+*assign*  
 ```
 {
   "propertyA": [
@@ -58,7 +58,7 @@ Recourse.assignConcat(object, {
 }
 ```
 
-## `assignConcat` Example 2
+## `assign` Example 2
 ```
 const object = {
   propertyA: [{
@@ -71,7 +71,7 @@ const object = {
     }
   }]
 }
-Recourse.assignConcat(object, {
+Recourse.assign(object, { propertyAssignments: { array: { primitive: 'push' } } }, {
   propertyA: [{
     propertyB: {
       propertyC: [{
@@ -83,7 +83,7 @@ Recourse.assignConcat(object, {
   }]
 })
 ```
-*assignConcat*  
+*assign*  
 ```
 {
   "propertyA": [
@@ -112,7 +112,7 @@ Recourse.assignConcat(object, {
 }
 ```
 
-## `assignConcat` Example 3
+## `assign` Example 3
 ```
 const object = {
   propertyA: [{
@@ -125,7 +125,7 @@ const object = {
     }
   }]
 }
-Recourse.assignConcat(object, {
+Recourse.assign(object, { propertyAssignments: array: { primitive: 'push' } }, {
   propertyA: [{
     propertyB: {
       propertyC: [{
@@ -137,7 +137,7 @@ Recourse.assignConcat(object, {
   }]
 })
 ```
-*assignConcat*  
+*assign*  
 ```
 {
   "propertyA": [

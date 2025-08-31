@@ -1,4 +1,3 @@
-// import assign from '../assign/index.js'
 import typeOf from '../type-of/index.js'
 import getOwnPropertyDescriptors from '../get-own-property-descriptors/index.js'
 import { TensorProxy } from '../../tensors/index.js'

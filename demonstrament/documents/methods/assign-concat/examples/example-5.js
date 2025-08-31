@@ -27,7 +27,7 @@ const array = [
     ]
   }
 ]
-Recourse.assignConcat(array, [
+Recourse.assign(array, {}, [
   {
     propertyB: {
       propertyC: "333333",

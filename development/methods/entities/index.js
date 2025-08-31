@@ -8,7 +8,7 @@ export default function entities($source, $type, $options = {}) {
   const options = Options($options)
   const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
   if(options.depth >= maxDepth) { return sourceEntities }
-  options.depth++
+  else { options.depth++ }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const tensorProxy = new TensorProxy(options)
   const source = tensorProxy.get($source)

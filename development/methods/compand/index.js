@@ -1,47 +1,32 @@
 import { TypeValidators, TensorProxy, Getters } from '../../tensors/index.js'
 import { ObjectKeys } from '../../variables/index.js'
 import entities from '../entities/index.js'
+import typeOf from '../type-of/index.js'
 import Options from '../../options/index.js'
-export default function compand($source, $options = {}) {
-  const compandEntries = []
-  // 
-  // OPTIONS CONTAMINATION
-  // PROPERTY POLLUTION
-  // MAX DEPTH, DEPTH
-  // 
+export default function compand($source, $options) {
+  const compandment = []
   const options = Options($options)
-  const { ancestors, maxDepth, values } = options
-  options.depth++
-  if(options.depth > maxDepth) { return compandEntries }
+  const { ancestors, maxDepth } = options
+  if(options.depth >= maxDepth) { return compandment }
+  else { options.depth++ }
   const source = new TensorProxy(options).get($source)
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
-  const sourceEntries = entities($source, 'entries', Object.assign({}, options, {
-    recurse: false
-  }))
+  const sourceEntries = entities($source, 'entries', Object.assign({}, options, { recurse: false }))
   iterateSourceProperties: 
-  for(const [$key, $value] of sourceEntries) {
-    if(!values) { compandEntries.push($key) }
-    // else if(values) { compandEntries.push([$key, $value]) }
-    else if(
-      typeof $value === 'object' &&
-      $value !== null &&
-      !Object.is($value, source) && 
-      !ancestors.includes($value)
+  for(const [$sourceKey, $sourceValue] of sourceEntries) {
+    compandment.push([$sourceKey, $sourceValue])
+    if(
+      typeof $sourceValue === 'object' &&
+      $sourceValue !== null &&
+      !Object.is($sourceValue, source) && 
+      !ancestors.includes($sourceValue)
     ) {
-      const subsources = compand($value, options)
-      if(!values) {
-        for(const $subsource of subsources) {
-          const path = [$key, $subsource].join('.')
-          compandEntries.push(path)
-        }
-      }
-      else if(values) {
-        for(const [$subsourceKey, $subsource] of subsources) {
-          const path = [$key, $subsourceKey].join('.')
-          compandEntries.push([path, $subsource])
-        }
+      const subsourceEntries = compand($sourceValue, Object.assign({}, options, { recurse: false }))
+      for(const [$subsourceKey, $subsourceValue] of subsourceEntries) {
+        const path = [$sourceKey, $subsourceKey].join('.')
+        compandment.push([path, $subsourceValue])
       }
     }
   }
-  return compandEntries
+  return compandment
 }

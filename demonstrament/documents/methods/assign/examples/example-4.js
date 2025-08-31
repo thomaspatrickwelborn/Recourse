@@ -2,6 +2,7 @@ import { Recourse } from '/dependencies/recourse.js'
 console.log("------------------")
 console.log("Assign | Example 4")
 console.log("------------------")
+const options = {}
 const array = [
   [1, 11, 111],
   [
@@ -19,7 +20,7 @@ const array = [
 ]
 const arrayString = Recourse.toString(array, { space: 2, replacer: null })
 console.log("arrayString", arrayString)
-Recourse.assign(array, [
+Recourse.assign(array, options, [
   [1111],
   [
     [22222222],
@@ -34,5 +35,48 @@ Recourse.assign(array, [
   ],
   [88888888888888888888888888888888]
 ])
+console.log(array)
 const arrayString0 = Recourse.toString(array, { space: 2, replacer: null })
-console.log("arrayString0", arrayString0)
+console.log("pass", arrayString0 === `[
+  [
+    1111,
+    11,
+    111
+  ],
+  [
+    [
+      22222222,
+      2222,
+      222222
+    ],
+    [
+      [
+        333333333333,
+        333333,
+        333333333
+      ],
+      [
+        [
+          55555555555555560000,
+          5555555555,
+          555555555555555
+        ]
+      ],
+      [
+        6.666666666666667e+23,
+        666666666666,
+        666666666666666600
+      ]
+    ],
+    [
+      7.777777777777778e+27,
+      77777777777777,
+      777777777777777800000
+    ]
+  ],
+  [
+    8.88888888888889e+31,
+    8888888888888888,
+    8.888888888888889e+23
+  ]
+]`)

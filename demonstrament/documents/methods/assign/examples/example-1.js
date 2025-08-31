@@ -16,7 +16,7 @@ const object = {
   }]
 }
 const objectString = JSON.stringify(object, null, 2)
-Recourse.assign(object, {
+Recourse.assign(object, options, {
   propertyA: [{
     propertyB: {
       propertyC: [{

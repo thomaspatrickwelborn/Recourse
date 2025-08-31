@@ -28,12 +28,13 @@ const Returners = {
   // Set: SetTensors.TypeValidator, 
 }
 function Cess($tensors, ...$arguments) {
-  const {   typeValidators } = this
+  const { returners, typeValidators } = this
   const [$target] = $arguments
   let tensorIndex = 0
   iterateTypeValidators: 
   for(const $typeValidator of typeValidators) {
-    if($typeValidator($target)) { return $tensors[tensorIndex](...$arguments) }
+    const returner = returners[tensorIndex]
+    if($typeValidator($target)) { return $tensors[tensorIndex](returner, ...$arguments) }
     tensorIndex++
     if(tensorIndex === typeValidators.length) { throw new Error(null) }
   }
@@ -42,13 +43,13 @@ class TensorProxy extends EventTarget {
   constructor($options) {
     super()
     this.options = $options
+    this.returners
   }
   get typeValidators() { return Object.defineProperty(this, 'typeValidators', {
     value: this.options.typeValidators
   })['typeValidators'] }
   get getters() {
     const getters = []
-    console.log(this)
     for(const $getter of this.options.getters) { getters.push($getter.bind(this)) }
     return Object.defineProperty(this, 'getters', { value: getters })['getters']
   }
@@ -64,10 +65,9 @@ class TensorProxy extends EventTarget {
   }
   get returners() {
     const returners = []
-    for(const $deleter of this.options.returners) { returners.push($deleter.bind(this)) }
+    for(const $returner of this.options.returners) { returners.push($returner.bind(this)) }
     return Object.defineProperty(this, 'returners', { value: returners })['returners']
   }
-
   get get() { return Object.defineProperty(this, 'get', {
     value: Cess.bind(this, this['getters'])
   })['get'] }

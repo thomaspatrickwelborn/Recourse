@@ -1,12 +1,25 @@
 import { Deleters, Getters, Setters, TypeValidators, Returners  } from '../tensors/index.js'
 const PropertyAssignments = {
-  object: 'assign', // 'push', 
-  array: 'assign', // 'push', 
-  map: 'assign', // 'push', 
-  /* set: 'assign', // push */
+  object: {
+    primitive: 'assign',
+    object: 'assign', 
+  }, 
+  array: {
+    primitive: 'assign',
+    object: 'assign', 
+  }, 
+  map: {
+    primitive: 'assign',
+    object: 'assign', 
+  }, 
+  // set: {
+  //   primitive: 'assign',
+  //   object: 'assign', 
+  // }, 
 }
-export default function Options($options) {
-  const { propertyAssignments } = $options
+export default function Options($options = {}) {
+  $options = $options || {}
+  const propertyAssignments = Object.assign(structuredClone(PropertyAssignments), $options.propertyAssignments)
   const options = Object.assign({
     // Path
     delimiter: '.',
@@ -23,13 +36,11 @@ export default function Options($options) {
     // Entities
     enumerable: true, 
     nonenumerable: false,
-    values: false,
     returnValue: 'receiver',
+    values: false,
     // Recurse
-    // ancestors: [].concat($options.ancestors),
-    ancestors: [],
+    depth: 0,
     recurse: true,
-    depth: 0, 
     maxDepth: 10,
     // Property Descriptors, Definitions
     frozen: false,
@@ -37,13 +48,12 @@ export default function Options($options) {
     type: false,
     typeCoercion: false,
     // Objects
-    propertyAssignments: Object.assign({}, PropertyAssignments, propertyAssignments),
     resemble: false,
     strict: false,
-  }, $options)
-  // 
-  // DEFAULT PROPERTY ASSIGNMENTS
-  // 
-  // if(!options)
+  }, $options, {
+    propertyAssignments: propertyAssignments,
+    ancestors: [].concat($options.ancestors || []),
+  })
+  
   return options
 }

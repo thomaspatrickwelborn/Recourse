@@ -12,9 +12,12 @@ import freeze from './methods/freeze/index.js'
 import seal from './methods/seal/index.js'
 import typedObjectLiteral from './methods/typed-object-literal/index.js'
 import typeOf from './methods/type-of/index.js'
+import typeOfClass from './methods/type-of-class/index.js'
 import isArrayLike from './methods/is-array-like/index.js'
 import isMapLike from './methods/is-map-like/index.js'
 // import isSetLike from './methods/is-set-like/index.js'
+import isObjectClass from './methods/is-object-class/index.js'
+import isPrimitiveClass from './methods/is-primitive-class/index.js'
 import keys from './methods/keys/index.js'
 import values from './methods/values/index.js'
 import entries from './methods/entries/index.js'
@@ -56,13 +59,13 @@ class Recourse extends EventTarget {
   })['entities'] }
   static get get() { return Object.defineProperty(this, 'get', {
     value: getProperty
-  })['getProperty'] }
+  })['get'] }
   static get set() { return Object.defineProperty(this, 'set', {
     value: setProperty
-  })['setProperty'] }
+  })['set'] }
   static get delete() { return Object.defineProperty(this, 'delete', {
     value: deleteProperty
-  })['deleteProperty'] }
+  })['delete'] }
   static get assign() { return Object.defineProperty(this, 'assign', {
     value: assign
   })['assign'] }
@@ -90,9 +93,18 @@ class Recourse extends EventTarget {
   static get isMapLike() { return Object.defineProperty(this, 'isMapLike', {
     value: isMapLike
   })['isMapLike'] }
+  static get isPrimitiveClass() { return Object.defineProperty(this, 'isPrimitiveClass', {
+    value: isPrimitiveClass
+  })['isPrimitiveClass'] }
+  static get isObjectClass() { return Object.defineProperty(this, 'isObjectClass', {
+    value: isObjectClass
+  })['isObjectClass'] }
   static get typeOf() { return Object.defineProperty(this, 'typeOf', {
     value: typeOf
   })['typeOf'] }
+  static get typeOfClass() { return Object.defineProperty(this, 'typeOfClass', {
+    value: typeOfClass
+  })['typeOfClass'] }
   static get toString() { return Object.defineProperty(this, 'toString', {
     value: toString
   })['toString'] }
@@ -157,12 +169,12 @@ class Recourse extends EventTarget {
   get getOwnPropertyDescriptor() { return Object.defineProperty(this, 'getOwnPropertyDescriptor', {
     value: Recourse.getOwnPropertyDescriptor.bind(null, this.target, this.options)
   })['getOwnPropertyDescriptor'] }
-  get isArrayLike() { return Object.defineProperty(this, 'isArrayLike', {
-    value: Recourse.isArrayLike.bind(null, this.target, this.options)
-  })['isArrayLike'] }
-  get isMapLike() { return Object.defineProperty(this, 'isMapLike', {
-    value: Recourse.isMapLike.bind(null, this.target, this.options)
-  })['isMapLike'] }
+  // get isArrayLike() { return Object.defineProperty(this, 'isArrayLike', {
+  //   value: Recourse.isArrayLike.bind(null, this.target, this.options)
+  // })['isArrayLike'] }
+  // get isMapLike() { return Object.defineProperty(this, 'isMapLike', {
+  //   value: Recourse.isMapLike.bind(null, this.target, this.options)
+  // })['isMapLike'] }
   // get isSetLike() { return Object.defineProperty(this, 'isSetLike', {
   //   value: Recourse.isSetLike.bind(null, this.target)
   // })['isSetLike'] }
@@ -189,7 +201,8 @@ export {
   entities, 
   getOwnPropertyDescriptors, getOwnPropertyDescriptor,
   isArrayLike, isMapLike, /* isSetLike, */
-  typedObjectLiteral, typeOf, 
+  isObjectClass, isPrimitiveClass, 
+  typedObjectLiteral, typeOf, typeOfClass, 
   splitPath, 
   valueOf, toString,
 }

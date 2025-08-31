@@ -3,6 +3,7 @@ import setProperty from '../set-property/index.js'
 import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import entities from '../entities/index.js'
+import Options from '../../options/index.js'
 const ValidPathTypes = ['string', 'function']
 export default function expand($source, $path, $options = {}) {
   const options = Options($options)

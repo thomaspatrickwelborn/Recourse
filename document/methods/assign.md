@@ -7,7 +7,7 @@
 
 ## `assign` Method Syntax
 ```
-Recourse.assign($target, ...$sources)
+Recourse.assign($target, $options, ...$sources)
 ```
 ## `assign` Examples
 ### `assign` Example 1
@@ -23,7 +23,7 @@ const object = {
     }
   }]
 }
-Recourse.assign(object, {
+Recourse.assign(object, null, {
   propertyA: [{
     propertyB: {
       propertyC: [{
@@ -71,7 +71,7 @@ const object = {
     }
   }]
 }
-Recourse.assign(object, {
+Recourse.assign(object, null, {
   propertyA: [{
     propertyB: {
       propertyC: [{
@@ -125,7 +125,7 @@ const object = {
     }
   }]
 }
-Recourse.assign(object, {
+Recourse.assign(object, null, {
   propertyA: [{
     propertyB: {
       propertyC: [{

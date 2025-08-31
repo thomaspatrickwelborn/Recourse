@@ -16,7 +16,7 @@ const object = {
   }]
 }
 const objectString = Recourse.toString(object, { space: 2, replacer: null })
-Recourse.assign(object, {
+Recourse.assign(object, options, {
   propertyA: [{
     propertyB: {
       propertyC: [{

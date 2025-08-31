@@ -5,9 +5,7 @@ import typedObjectLiteral from '../typed-object-literal/index.js'
 import entities from '../entities/index.js'
 import Options from '../../options/index.js'
 export default function impand($source, $property, $options = {}) {
-  const options = Object.assign({}, Options, $options, {
-    // ancestors: Object.assign([], $options.ancestors)
-  })
+  const options = Options($options)
   const { ancestors, resemble, strict, values } = options
   if(options.depth > options.maxDepth) { return } else { options.depth++ }
   const source = new TensorProxy(options).get($source)
