@@ -6,9 +6,11 @@ import Options from '../../options/index.js'
 export default function compand($source, $options) {
   const compandment = []
   const options = Options($options)
-  const { ancestors, maxDepth } = options
-  if(options.depth >= maxDepth) { return compandment }
-  else { options.depth++ }
+  // const { recurse } = options
+  const { ancestors, maxDepth } = recurse
+  // const { ancestors, maxDepth } = options.recurse
+  if(recurse.depth >= maxDepth) { return compandment }
+  else { recurse.depth++ }
   const source = new TensorProxy(options).get($source)
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const sourceEntries = entities($source, 'entries', Object.assign({}, options, { recurse: false }))

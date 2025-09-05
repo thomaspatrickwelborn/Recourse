@@ -6,9 +6,11 @@ import Options from '../../options/index.js'
 export default function entities($source, $type, $options = {}) {
   const sourceEntities = []
   const options = Options($options)
-  const { ancestors, maxDepth, enumerable, nonenumerable, recurse } = options
-  if(options.depth >= maxDepth) { return sourceEntities }
-  else { options.depth++ }
+  const { enumerable, nonenumerable, path, recurse } = options
+  const { ancestors, maxDepth } = recurse
+  const { pathParseInteger } = path
+  if(recurse.depth >= maxDepth) { return sourceEntities }
+  else { recurse.depth++ }
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
   const tensorProxy = new TensorProxy(options)
   const source = tensorProxy.get($source)

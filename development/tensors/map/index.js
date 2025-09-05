@@ -24,7 +24,7 @@ function Setter($returner, ...$arguments) {
     iterateSourceEntries: 
     for(let [$sourceProperty, $sourceValue] of sourceEntries) {
       $sourceProperty = PropertyTransformer(
-        this.options.propertyAssignments, $receiver.size, $target, $sourceProperty, $sourceValue
+        this.options.assignments, $receiver.size, $target, $sourceProperty, $sourceValue
       )
       $receiver.set($sourceProperty, $sourceValue)
     }
@@ -33,7 +33,7 @@ function Setter($returner, ...$arguments) {
   else {
     let [$receiver, $property, $value] = $arguments
     $property = PropertyTransformer(
-      this.options.propertyAssignments, $receiver.size, $receiver, $property, $value
+      this.options.assignments, $receiver.size, $receiver, $property, $value
     )
     $receiver.set($property, $value)
     return $returner($property, $receiver.get($property))

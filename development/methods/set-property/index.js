@@ -9,12 +9,13 @@ export default function setProperty() {
   const $arguments = [...arguments]
   const [$target, $path, $value, $options] = $arguments
   const options = Options($options)
+  const { pathMatch, pathParseInteger } = options
   const tensorProxy = new TensorProxy(options)
-  if(!options.pathMatch) {
+  if(!pathMatch) {
     if(typeOf($arguments[1]) === 'string') {
       const { enumerable, nonenumerable } = options
       const target = tensorProxy.get($target)
-      const subpaths = splitPath($path, options.pathParseInteger)
+      const subpaths = splitPath($path, pathParseInteger)
       const key = subpaths.pop()
       let subtarget = $target
       iterateSubpaths: 
@@ -41,7 +42,7 @@ export default function setProperty() {
       const propertyPathMatch = propertyPathMatcher($propertyPath, { separator: '.' })
       if(propertyPathMatch === true) {
         setProperty($target, $propertyPath, $value, {
-          pathMatch: false, pathParseInteger: options.pathParseInteger
+          pathMatch: false, pathParseInteger: pathParseInteger
         })
         subtargets.push([$propertyPath, $value])
       }

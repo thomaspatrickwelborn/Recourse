@@ -46,26 +46,26 @@ class TensorProxy extends EventTarget {
     this.returners
   }
   get typeValidators() { return Object.defineProperty(this, 'typeValidators', {
-    value: this.options.typeValidators
+    value: this.options.tensors.typeValidators
   })['typeValidators'] }
   get getters() {
     const getters = []
-    for(const $getter of this.options.getters) { getters.push($getter.bind(this)) }
+    for(const $getter of this.options.tensors.getters) { getters.push($getter.bind(this)) }
     return Object.defineProperty(this, 'getters', { value: getters })['getters']
   }
   get setters() {
     const setters = []
-    for(const $setter of this.options.setters) { setters.push($setter.bind(this)) }
+    for(const $setter of this.options.tensors.setters) { setters.push($setter.bind(this)) }
     return Object.defineProperty(this, 'setters', { value: setters })['setters']
   }
   get deleters() {
     const deleters = []
-    for(const $deleter of this.options.deleters) { deleters.push($deleter.bind(this)) }
+    for(const $deleter of this.options.tensors.deleters) { deleters.push($deleter.bind(this)) }
     return Object.defineProperty(this, 'deleters', { value: deleters })['deleters']
   }
   get returners() {
     const returners = []
-    for(const $returner of this.options.returners) { returners.push($returner.bind(this)) }
+    for(const $returner of this.options.tensors.returners) { console.log(this.options); returners.push($returner.bind(this)) }
     return Object.defineProperty(this, 'returners', { value: returners })['returners']
   }
   get get() { return Object.defineProperty(this, 'get', {

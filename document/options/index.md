@@ -5,21 +5,12 @@
 ```
 {
   propertyAssignments: {
-    {
-      object: {
-        primitive: 'assign',
-        object: 'assign', 
-      }, 
-      array: {
-        primitive: 'assign',
-        object: 'assign', 
-      }, 
-      map: {
-        primitive: 'assign',
-        object: 'assign', 
-      }
-    }
+    object: { primitive: 'assign', object: 'assign' }, 
+    array: { primitive: 'assign', object: 'assign' }, 
+    map: { primitive: 'assign', object: 'assign' }
   },
+  
+  // Path
   delimiter: '.',
   path: false,
   pathMatch: false,
@@ -27,11 +18,13 @@
   pathParseInteger: false, 
   
   // Tensors
-  getters: [Getters.Object, Getters.Map, /* Getters.Set */],
-  setters: [Setters.Object, Setters.Map, /* Setters.Set */],
-  deleters: [Deleters.Object, Deleters.Map, /* Deleters.Set */],
-  typeValidators: [TypeValidators.Object, TypeValidators.Map, /* TypeValidators.Set */],
-  returners: [Returners.Object, Returners.Map, /* Returners.Set */],
+  tensors: {
+    getters: [Getters.Object, Getters.Map, /* Getters.Set */],
+    setters: [Setters.Object, Setters.Map, /* Setters.Set */],
+    deleters: [Deleters.Object, Deleters.Map, /* Deleters.Set */],
+    typeValidators: [TypeValidators.Object, TypeValidators.Map, /* TypeValidators.Set */],
+    returners: [Returners.Object, Returners.Map, /* Returners.Set */],
+  }
   
   // Entities
   enumerable: true, 

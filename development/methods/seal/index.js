@@ -5,8 +5,9 @@ import { ObjectKeys } from '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function seal($target, $options = {}) {
   const options = Options($options)
-  const { ancestors, values } = options
-  if(options.depth > options.maxDepth) { return } else { options.depth++ }
+  const { recurse, values } = options
+  const { ancestors, maxDepth } = recurse
+  if(recurse.depth > maxDepth) { return } else { recurse.depth++ }
   const target = new TensorProxy(options).get($target)
   if(!ancestors.includes(target)) { ancestors.unshift(target) }
   const targetEntities = entities($target, 'entries', Object.assign(options, {

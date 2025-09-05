@@ -6,8 +6,9 @@ import entities from '../entities/index.js'
 import Options from '../../options/index.js'
 export default function impand($source, $property, $options = {}) {
   const options = Options($options)
-  const { ancestors, resemble, strict, values } = options
-  if(options.depth > options.maxDepth) { return } else { options.depth++ }
+  const { recurse, resemble, strict, values } = options
+  const { ancestors, maxDepth } = recurse
+  if(recurse.depth > maxDepth) { return } else { recurse.depth++ }
   const source = new TensorProxy(options).get($source)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
   const typeOfProperty = typeOf($property)

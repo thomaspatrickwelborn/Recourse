@@ -24,7 +24,7 @@ function Setter($returner, ...$arguments) {
   if(['string', 'number'].includes(typeOf($arguments[1]))) {
     let [$target, $property, $value] = $arguments
     $property = PropertyTransformer(
-      this.options.propertyAssignments, $target.length, ...$arguments
+      this.options.assignments, $target.length, ...$arguments
     )
     $target[$property] = $value
     return $returner($property, $target[$property])
@@ -39,7 +39,7 @@ function Setter($returner, ...$arguments) {
     iterateSourceEntries: 
     for(let [$sourceProperty, $sourceValue] of Object.entries($source)) {
       $sourceProperty = PropertyTransformer(
-        this.options.propertyAssignments, $target.length, $target, $sourceProperty, $sourceValue
+        this.options.assignments, $target.length, $target, $sourceProperty, $sourceValue
       )
       $target[$sourceProperty] = $sourceValue
     }

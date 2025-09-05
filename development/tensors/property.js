@@ -1,8 +1,8 @@
 import typeOf from '../methods/type-of/index.js'
 import typeOfClass from '../methods/type-of-class/index.js'
-function PropertyTransformer($propertyAssignments, $newProperty, $target, $property, $value) {
+function PropertyTransformer($assignments, $newProperty, $target, $property, $value) {
   if(isNaN($property)) { return $property }
-  if(PropertyAssigner($propertyAssignments, $target, $property, $value) === 'push') {
+  if(PropertyAssigner($assignments, $target, $property, $value) === 'push') {
     switch(typeOf($property)) {
       case 'string': return String(Number($newProperty))
       case 'number': return $newProperty
@@ -11,9 +11,9 @@ function PropertyTransformer($propertyAssignments, $newProperty, $target, $prope
   }
   else { return $property }
 }
-function PropertyAssigner($propertyAssignments, $target, $property, $value) {
+function PropertyAssigner($assignments, $target, $property, $value) {
   const targetType = typeOf($target)
-  const targetAssignmentMethodDefinition = $propertyAssignments[targetType]
+  const targetAssignmentMethodDefinition = $assignments[targetType]
   const typeofTargetAssignmentDefinition = typeof targetAssignmentMethodDefinition
   switch(typeofTargetAssignmentDefinition) {
     case 'string': return targetAssignmentMethodDefinition; 

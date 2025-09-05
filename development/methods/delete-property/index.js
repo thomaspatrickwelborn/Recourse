@@ -6,9 +6,10 @@ import { TensorProxy } from '../../tensors/index.js'
 import getProperty from '../get-property/index.js'
 export default function deleteProperty($target, $path, $options) {
   const options = Options($options)
+  const { pathMatch, pathParseInteger } = options.path
   const tensorProxy = new TensorProxy(options)
-  if(!options.pathMatch) {
-    const subpaths = splitPath($path, options.pathParseInteger)
+  if(!pathMatch) {
+    const subpaths = splitPath($path, pathParseInteger)
     const key = subpaths.pop()
     const subtarget = getProperty($target, subpaths.join('.'), options) || $target
     tensorProxy.delete(subtarget, key)
@@ -22,7 +23,7 @@ export default function deleteProperty($target, $path, $options) {
       const propertyPathMatch = propertyPathMatcher($propertyPath, { separator: '.' })
       if(propertyPathMatch === true) {
         deleteProperty($target, $propertyPath, {
-          pathMatch: false, pathParseInteger: options.pathParseInteger
+          pathMatch: false, pathParseInteger: pathParseInteger
         })
         subtargets.push([$propertyPath, undefined])
       }

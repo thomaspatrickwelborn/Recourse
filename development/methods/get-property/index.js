@@ -6,10 +6,12 @@ import Options from '../../options/index.js'
 export default function getProperty() {
   const [$target, $path, $options] = [...arguments]
   const options = Options($options)
+  const { path } = options
+  const { pathMatch, pathParseInteger } = path
   const tensorProxy = new TensorProxy(options)
   if($path === undefined) { return tensorProxy.get($target, options) }
-  const subpaths = splitPath($path, options.pathParseInteger)
-  if(!options.pathMatch) {
+  const subpaths = splitPath($path, pathParseInteger)
+  if(!pathMatch) {
     let subtarget = $target
     iterateSubpaths: 
     for(const $subpath of subpaths) {

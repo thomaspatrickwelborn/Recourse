@@ -7,6 +7,7 @@ import { PropertyAssigner } from '../../tensors/property.js'
 export default function assign($target, $options, ...$sources) {
   if(!$target) { return $target}
   const options = Options($options)
+  const { assignments } = options
   const tensorProxy = new TensorProxy(options)
   const typeOfTarget = typeOf($target)
   iterateSources: 
@@ -22,7 +23,7 @@ export default function assign($target, $options, ...$sources) {
         ObjectKeys.includes(typeOfSourcePropertyValue) &&
         ObjectKeys.includes(typeOfTargetPropertyValue) &&
         PropertyAssigner(
-          options.propertyAssignments, $target, $sourcePropertyKey, $sourcePropertyValue
+          assignments, $target, $sourcePropertyKey, $sourcePropertyValue
         ) === 'assign'
       ) {
         assign(targetPropertyValue, options, $sourcePropertyValue)

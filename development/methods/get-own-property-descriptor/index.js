@@ -5,10 +5,12 @@ import { ObjectKeys } from '../../variables/index.js'
 import Options from '../../options/index.js'
 export default function getOwnPropertyDescriptor($source, $propertyKey, $options = {}) {
   const options = Options($options)
-  const { ancestors, maxDepth, path } = options
+  const { recurse } = options
+  const { ancestors, maxDepth } = recurse
+  const { path } = options.path
   if(!ancestors.includes($source)) { ancestors.unshift($source) }
-  if(options.depth >= maxDepth) { return }
-  else { options.depth++ }
+  if(recurse.depth >= maxDepth) { return }
+  else { recurse.depth++ }
   const tensorProxy = new TensorProxy(options)
   try {
     const propertyValue = tensorProxy.get($source, $propertyKey)
