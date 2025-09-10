@@ -7,7 +7,7 @@ const object = {
 }
 object.propertyA.propertyC = object.propertyA
 const objectPDAST = getOwnPropertyDescriptors(object, {
-  path: true,
+  propertyPath: true,
   type: true,
   // returnValue: 'entries'
 })

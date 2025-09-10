@@ -1,79 +1,29 @@
 import { Deleters, Getters, Setters, TypeValidators, Returners  } from '../tensors/index.js'
-const DefaultOptions = ($defaultOptions = {}) => Object({}, $defaultOptions)
-const MutatorMethodOptions = ($mutatorOptions = {}) => Object.assign({ presetters: [], postsetters: [] }, $mutatorOptions)
-const DefaultOptions = ($nonmutatorMethodOptions = {}) => Object.assign({}, $nonmutatorMethodOptions)
-const AssignmentOption = ($propertyAssignment = {}) => Object.assign({
-  primitive: 'assign', object: 'assign'
-}, $propertyAssignment)
+const AssignmentClassOptions = ($propertyAssignment = {}) => {
+  return (typeof $propertyAssignment === 'string')
+    ? { primitive: $propertyAssignment, object: $propertyAssignment }
+    : Object.assign({ primitive: 'assign', object: 'assign' }, $propertyAssignment)
+}
 const AssignmentOptions = ($assignments = {}) => { return {
-  object: AssignmentOption($assignments.object), 
-  array: AssignmentOption($assignments.array), 
-  map: AssignmentOption($assignments.map), 
+  object: AssignmentClassOptions($assignments.object), 
+  array: AssignmentClassOptions($assignments.array), 
+  map: AssignmentClassOptions($assignments.map), 
   // set: { primitive: 'assign', object: 'assign' }, 
 } }
 const EntityOptions = ($entityOptions = {}) => Object.assign({
-  enumerable: true, 
-  nonenumerable: false,
-  returnValue: 'receiver',
+  enumerable: true, nonenumerable: false, returnValue: 'receiver'
 }, $entityOptions)
-const MethodOptions = {
-  map: {
-    // Mutators
-    get: MutatorMethodOptions(),
-    set: MutatorMethodOptions(),
-    delete: MutatorMethodOptions(),
-  },
-  array: {
-    // Mutators
-    concat: MutatorMethodOptions(),
-    copyWithin: MutatorMethodOptions(),
-    fill: MutatorMethodOptions({ lengthen: true }),
-    pop: MutatorMethodOptions(),
-    push: MutatorMethodOptions(),
-    reverse: MutatorMethodOptions(),
-    shift: MutatorMethodOptions(),
-    splice: MutatorMethodOptions(),
-    unshift: MutatorMethodOptions(),
-  },
-  object: {
-    // Mutators
-    assign: MutatorMethodOptions({
-      sourceTree: true,
-      targetTypedObjectLiteral: false,
-      assignSources: MutatorMethodOptions(),
-      assignSourceProperty: MutatorMethodOptions(),
-      assignSourcePropertyKey: MutatorMethodOptions(),
-    }),
-    compand: MutatorMethodOptions({ values: false }),
-    defineProperties: MutatorMethodOptions({
-      descriptorTree: true,
-    }),
-    defineProperty: MutatorMethodOptions({ descriptorTree: true }),
-    freeze: MutatorMethodOptions(),
-    getOwnPropertyDescriptors: DefaultOptions({
-      frozen: false, sealed: false, type: false, typeCoercion: false,
-    }),
-    isArrayLike: DefaultOptions({ strict: false }),
-    isMapLike: DefaultOptions({ strict: false }),
-    seal: MutatorMethodOptions(),
-    toString: DefaultOptions({ space: 0, replacer: null }),
-  },
-  utilities: {
-    typedObjectLiteral: DefaultOptions({ resemble: false }),
-  },
-}
 const PathOptions = ($pathOptions = {}) => Object.assign({
-  delimiter: '.',
-  path: false,
-  pathMatch: false,
-  pathMatchMax: 100,
-  pathParseInteger: false, 
+  delimiter: '.', pathMatch: false, 
+  pathMatchMax: 100, pathParseInteger: false, 
 }, $pathOptions)
-const RecurseOptions = ($recurseOptions = {}) => Object.assign({
-  ancestors: [].concat($recurseOptions.ancestors || []),
-  depth: 0,
-  recurse: true,
-  maxDepth: 10,
+const RecurseOptions = ($recurseOptions = {}) => (typeof $recurseOptions === 'boolean') ? {
+  ancestors: [], depth: 0, maxDepth: 10, recurse: $recurseOptions
+} : Object.assign({
+  // ancestors: [].concat($recurseOptions.ancestors || []),
+  depth: 0, maxDepth: 10, recurse: true,
+}, $recurseOptions, {
+  ancestors: [].concat($recurseOptions.ancestors || [])
 })
 const TensorOptions = ($tensorOptions = {}) => Object.assign({
   getters: [Getters.Object, Getters.Map, /* Getters.Set */],
@@ -82,23 +32,58 @@ const TensorOptions = ($tensorOptions = {}) => Object.assign({
   typeValidators: [TypeValidators.Object, TypeValidators.Map, /* TypeValidators.Set */],
   returners: [Returners.Object, Returners.Map, /* Returners.Set */],
 }, $tensorOptions)
-
-export default($options) => 
-
-export default ($options = {}, $classGroup, $methodName) => Object.assign({
+const MethodOptions = {
+  map: {
+    get: {}, set: {}, delete: {},
+  },
+  array: {
+    concat: {}, copyWithin: {}, fill: { lengthen: true }, pop: {}, 
+    push: {}, reverse: {}, shift: {}, splice: {}, unshift: {},
+  },
+  object: {
+    assign: { targetTypedObjectLiteral: false },
+    compand: { values: false }, defineProperties: {}, defineProperty: {}, 
+    entities: {}, entries: {}, freeze: {},
+    getOwnPropertyDescriptors: {
+      frozen: false, propertyPath: false, 
+      sealed: false, type: false, typeCoercion: false, 
+    },
+    isArrayLike: { strict: false }, isMapLike: { strict: false },
+    keys: {}, seal: {}, toString: { space: 0, replacer: null }, values: {},
+  },
+  utilities: {
+    typedObjectLiteral: { resemble: false },
+  },
+}
+class Defaults {
+  #options
+  constructor($options = {}) {
+    this.#options = $options
+  }
   get path() { return Object.defineProperty(this, 'path', {
-    value: PathOptions($options.path)
-  })['path'] },
+    value: PathOptions(this.#options.path)
+  })['path'] }
+  set path($path) { return this.path }
   get tensors() { return Object.defineProperty(this, 'tensors', {
-    value: TensorOptions($options.tensors)
-  })['tensors'] },
+    value: TensorOptions(this.#options.tensors)
+  })['tensors'] }
+  set tensors($tensors) { return this.tensors }
   get recurse() { return Object.defineProperty(this, 'recurse', {
-    value: RecurseOptions($options.recurse)
-  })['recurse'] },
+    writable: true, value: RecurseOptions(this.#options.recurse)
+  })['recurse'] }
+  set recurse($recurse) { return Object.assign(this.recurse, $recurse) }
   get assignments() { return Object.defineProperty(this, 'assignments', {
-    value: AssignmentOptions($options.assignments)
-  })['assignments'] },
+    value: AssignmentOptions(this.#options.assignments)
+  })['assignments'] }
+  set assignments($assignments = {}) { return Object.assign(this.assignments, $assignments) }
   get entities() { return Object.defineProperty(this, 'entities', {
-    value: EntityOptions($options.entities)
-  })['entities'] },
-}, MethodOptions[$classGroup][$methodName]($options))
+    value: EntityOptions(this.#options.entities)
+  })['entities'] }
+  set entities($entities = {}) { return Object.assign(this.entities, $entities) }
+}
+function Options($classGroup, $methodName, $options) {
+  const methodOptions = MethodOptions[$classGroup][$methodName]
+  const defaultOptions = new Defaults($options)
+  return Object.assign(defaultOptions, methodOptions, $options)
+}
+export { Defaults, Options }

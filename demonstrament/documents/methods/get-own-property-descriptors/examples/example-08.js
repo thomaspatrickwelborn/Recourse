@@ -20,9 +20,9 @@ const object = {
 object.propertyA.root = object // NO
 object.propertyA.parent = object.propertyA // No
 const objectPDAST = getOwnPropertyDescriptors(object, {
-  path: true,
+  propertyPath: true,
   type: true,
-  maxDepth: 5,
+  recurse: { maxDepth: 5 },
 })
 const objectPDASTString = JSON.stringify(objectPDAST, null, 2)
 console.log("---------------------------------------------------")

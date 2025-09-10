@@ -11,7 +11,7 @@ const object = {
 object.propertyA.propertyC = object.propertyC
 object.propertyC.propertyA = object.propertyA
 const objectPDAST = getOwnPropertyDescriptors(object, {
-  path: true,
+  propertyPath: true,
   type: true,
 })
 const objectPDASTString = JSON.stringify(objectPDAST, null, 2)

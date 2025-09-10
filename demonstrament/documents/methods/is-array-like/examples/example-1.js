@@ -8,7 +8,7 @@ const arrayLikeObject00 = Object.defineProperties({}, {
   "2": { value: 3 },
   "3": { value: 4 },
   "length": { value: 4 },
-}) // true
+}) // false
 const arrayLikeObject01 = Object.defineProperties({}, {
   "0": { enumerable: true, value: 1 },
   "1": { enumerable: true, value: 2 },
@@ -81,7 +81,7 @@ const arrayLikeObject11 = {
 } // false
 
 const arrayLikeObjects = [
-  isArrayLike(arrayLikeObject00, true) === true,
+  isArrayLike(arrayLikeObject00, true) === false,
   isArrayLike(arrayLikeObject01, true) === true,
   isArrayLike(arrayLikeObject02, true) === false,
   isArrayLike(arrayLikeObject03, true) === true,

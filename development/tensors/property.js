@@ -1,5 +1,5 @@
-import typeOf from '../methods/type-of/index.js'
-import typeOfClass from '../methods/type-of-class/index.js'
+import typeOf from '../utilities/type-of/index.js'
+import typeOfClass from '../utilities/type-of-class/index.js'
 function PropertyTransformer($assignments, $newProperty, $target, $property, $value) {
   if(isNaN($property)) { return $property }
   if(PropertyAssigner($assignments, $target, $property, $value) === 'push') {

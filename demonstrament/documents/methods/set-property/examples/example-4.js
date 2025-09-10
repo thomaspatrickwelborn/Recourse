@@ -68,7 +68,7 @@ const object = {
     }
   }
 }
-const getOptionsA = { pathMatch: true }
+const getOptionsA = { path: { pathMatch: true } }
 const pathMatchA = 'propertyA.[0-9].propertyB.[0-9].propertyC.[0-9]'
 const pathMatchB = 'propertyE.propertyF.propertyK.propertyL.property*'
 // const pathMatchC = 'propertyE.propertyF.propertyK.propertyL.*.[2]'

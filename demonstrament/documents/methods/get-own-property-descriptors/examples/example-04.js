@@ -8,7 +8,7 @@ const object = {
   ]
 }
 const objectPDAST = getOwnPropertyDescriptors(object, {
-  path: true,
+  propertyPath: true,
   type: true
 })
 const objectString = JSON.stringify(object, null, 2)

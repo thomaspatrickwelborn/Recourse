@@ -1,5 +1,5 @@
-import isMapLike from '../../methods/is-map-like/index.js'
-import typeOf from '../../methods/type-of/index.js'
+import isMapLike from '../../methods/map/is-map-like/index.js'
+import typeOf from '../../utilities/type-of/index.js'
 import { PrimitiveKeys } from '../../variables/index.js'
 import { PropertyTransformer } from '../../tensors/property.js'
 // Map Type Validator
@@ -52,7 +52,7 @@ function Deleter($returner, ...$arguments) {
 }
 // Map Returner
 function Returner(...$arguments) {
-  const { returnValue } = this.options 
+  const { returnValue } = this.options.entities
   if($arguments.length === 1) {
     const [$value] = $arguments
     switch(returnValue) {

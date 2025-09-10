@@ -7,7 +7,7 @@ object.propertyA.root = object // NO
 object.propertyA.parent = object.propertyA // No
 object.propertyB = object
 const objectPDAST = getOwnPropertyDescriptors(object, {
-  path: true,
+  propertyPath: true,
   type: true,
   maxDepth: 5,
 })

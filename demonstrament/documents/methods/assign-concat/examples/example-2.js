@@ -3,7 +3,7 @@ const { Getters, Setters, Deleters } = Tensors
 console.log("-------------------------")
 console.log("Assign Concat | Example 2")
 console.log("-------------------------")
-const options = { propertyAssignments: { 'array': 'push', 'map': 'push' } }
+const options = { assignments: { 'array': 'push', 'map': 'push' } }
 const object = {
   propertyA: [{
     propertyB: {

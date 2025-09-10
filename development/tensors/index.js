@@ -1,4 +1,4 @@
-import typeOf from '../methods/type-of/index.js'
+import typeOf from '../utilities/type-of/index.js'
 import * as ObjectTensors from './object/index.js'
 import * as MapTensors from './map/index.js'
 // import * as SetTensors from './set/index.js'
@@ -65,7 +65,7 @@ class TensorProxy extends EventTarget {
   }
   get returners() {
     const returners = []
-    for(const $returner of this.options.tensors.returners) { console.log(this.options); returners.push($returner.bind(this)) }
+    for(const $returner of this.options.tensors.returners) { returners.push($returner.bind(this)) }
     return Object.defineProperty(this, 'returners', { value: returners })['returners']
   }
   get get() { return Object.defineProperty(this, 'get', {

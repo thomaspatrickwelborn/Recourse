@@ -44,7 +44,7 @@ const object = new Object({
     ])],
   ]),
 })
-const setOptionsA = { pathMatch: true, pathParseInteger: false }
+const setOptionsA = { path: { pathMatch: true, pathParseInteger: false } }
 const pathMatchA = 'propertyA.propertyB.propertyC.[0-9]'
 const pathMatchB = 'propertyK.*.*.[0-9]'
 const pathMatchC = 'propertyK.propertyL.**'

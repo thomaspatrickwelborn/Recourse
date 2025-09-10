@@ -1,6 +1,6 @@
-import isArrayLike from '../../methods/is-array-like/index.js'
-import typeOf from '../../methods/type-of/index.js'
-import typeOfClass from '../../methods/type-of-class/index.js'
+import isArrayLike from '../../methods/array/is-array-like/index.js'
+import typeOf from '../../utilities/type-of/index.js'
+import typeOfClass from '../../utilities/type-of-class/index.js'
 import { PrimitiveKeys } from '../../variables/index.js'
 import { PropertyTransformer } from '../../tensors/property.js'
 // Object Type Validator

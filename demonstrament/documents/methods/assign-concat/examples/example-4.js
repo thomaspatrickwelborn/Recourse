@@ -2,7 +2,7 @@ import { Recourse } from '/dependencies/recourse.js'
 console.log("-------------------------")
 console.log("Assign Concat | Example 4")
 console.log("-------------------------")
-const options = { propertyAssignments: { 'array': 'push', 'map': 'push' } }
+const options = { assignments: { 'array': 'push', 'map': 'push' } }
 const array = [
   [1, 11, 111],
   [

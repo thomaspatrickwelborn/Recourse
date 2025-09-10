@@ -1,35 +1,40 @@
-import getProperty from './methods/get-property/index.js'
-import setProperty from './methods/set-property/index.js'
-import deleteProperty from './methods/delete-property/index.js'
-import expand from './methods/expand/index.js'
-import impand from './methods/impand/index.js'
-import compand from './methods/compand/index.js'
-import decompand from './methods/decompand/index.js'
-import assign from './methods/assign/index.js'
-import defineProperties from './methods/define-properties/index.js'
-import defineProperty from './methods/define-property/index.js'
-import freeze from './methods/freeze/index.js'
-import seal from './methods/seal/index.js'
-import typedObjectLiteral from './methods/typed-object-literal/index.js'
-import typeOf from './methods/type-of/index.js'
-import typeOfClass from './methods/type-of-class/index.js'
-import isArrayLike from './methods/is-array-like/index.js'
-import isMapLike from './methods/is-map-like/index.js'
+// Map
+import getProperty from './methods/map/get-property/index.js'
+import setProperty from './methods/map/set-property/index.js'
+import deleteProperty from './methods/map/delete-property/index.js'
+// Object
+import expand from './methods/object/expand/index.js'
+import impand from './methods/object/impand/index.js'
+import compand from './methods/object/compand/index.js'
+import decompand from './methods/object/decompand/index.js'
+import assign from './methods/object/assign/index.js'
+import defineProperties from './methods/object/define-properties/index.js'
+import defineProperty from './methods/object/define-property/index.js'
+import freeze from './methods/object/freeze/index.js'
+import seal from './methods/object/seal/index.js'
+import keys from './methods/object/keys/index.js'
+import values from './methods/object/values/index.js'
+import entries from './methods/object/entries/index.js'
+import entities from './methods/object/entities/index.js'
+import getOwnPropertyDescriptors from './methods/object/get-own-property-descriptors/index.js'
+import getOwnPropertyDescriptor from './methods/object/get-own-property-descriptor/index.js'
+import splitPath from './utilities/split-path/index.js'
+import toString from './methods/object/to-string/index.js'
+import valueOf from './methods/object/value-of/index.js'
+// Utilities
+import typedObjectLiteral from './utilities/typed-object-literal/index.js'
+import typeOf from './utilities/type-of/index.js'
+import typeOfClass from './utilities/type-of-class/index.js'
+import isArrayLike from './methods/array/is-array-like/index.js'
+import isMapLike from './methods/map/is-map-like/index.js'
 // import isSetLike from './methods/is-set-like/index.js'
-import isObjectClass from './methods/is-object-class/index.js'
-import isPrimitiveClass from './methods/is-primitive-class/index.js'
-import keys from './methods/keys/index.js'
-import values from './methods/values/index.js'
-import entries from './methods/entries/index.js'
-import entities from './methods/entities/index.js'
-import getOwnPropertyDescriptors from './methods/get-own-property-descriptors/index.js'
-import getOwnPropertyDescriptor from './methods/get-own-property-descriptor/index.js'
-import splitPath from './methods/split-path/index.js'
-import toString from './methods/to-string/index.js'
-import valueOf from './methods/value-of/index.js'
-import Options from './options/index.js'
+import isObjectClass from './utilities/is-object-class/index.js'
+import isPrimitiveClass from './utilities/is-primitive-class/index.js'
+
 import * as Tensors from './tensors/index.js'
 import * as Variables from './variables/index.js'
+
+import { Defaults } from './options/index.js'
 
 class Recourse extends EventTarget {
   // STATIC METHODS
@@ -113,7 +118,7 @@ class Recourse extends EventTarget {
   })['valueOf'] }
   // INSTANCE METHODS
   get toString() { return Object.defineProperty(this, $staticMethodName, {
-    value: $staticMethod.bind(null, this.target, this.options)
+    value: $staticMethod.bind(null, this.target, this.options.methods)
   }) }
   get compand() { return Object.defineProperty(this, 'compand', {
     value: Recourse.compand.bind(null, this.target, this.options)
@@ -182,7 +187,7 @@ class Recourse extends EventTarget {
     value: Recourse.typeOf.bind(null, this.target, this.options)
   })['typeOf'] }
   set options($options) { return Object.defineProperty(this, 'options', {
-    value: Options($options)
+    value: new Defaults($options)
   })['options'] }
   constructor($target, $options = {}) {
     super()
