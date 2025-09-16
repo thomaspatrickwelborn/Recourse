@@ -16,7 +16,7 @@ export default function expand($source, $path, $options = {}) {
   ) { return $source }
   let target = typedObjectLiteral($source, { resemble, strict })
   const sourceEntries = entities(
-    $source, 'entries', Object.assign({}, options, { recurse: false })
+    $source, 'entries', Object.assign({}, options, { recurse: { maxDepth: 1 } })
   )
   for(const [$sourceKey, $sourceValue] of sourceEntries) {
     const targetValue = (ObjectKeys.includes(typeOf($sourceValue)))

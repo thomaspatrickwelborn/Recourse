@@ -6,7 +6,7 @@ import entities from '../entities/index.js'
 import { Options, Defaults } from '../../../options/index.js'
 export default function impand($source, $property, $options = {}) {
   const options = Options('object', 'impand', $options)
-  const { recurse, resemble, strict, values } = options
+  const { recurse, resemble, strict } = options
   const { ancestors, maxDepth } = recurse
   if(recurse.depth > maxDepth) { return } else { recurse.depth++ }
   const source = new TensorProxy(options).get($source)
@@ -15,7 +15,7 @@ export default function impand($source, $property, $options = {}) {
   let target = typedObjectLiteral($source, { resemble, strict })
   iterateSourceEntries: 
   for(const [$sourceKey, $sourceValue] of entities(
-    $source, 'entries', Object.assign({}, options, { recurse: false })
+    $source, 'entries', Object.assign({}, options, { recurse: { maxDepth: 1 } })
   )) {
     if(typeOfProperty === 'string') { target[$sourceKey] = getProperty($sourceValue, $property) }
     else if(typeOfProperty === 'function') { target[$sourceKey] = $property($sourceValue) }

@@ -9,8 +9,8 @@ export default function setProperty() {
   const [$target, $path, $value, $options] = $arguments
   const options = Options('map', 'set', $options)
   const { pathMatch, pathParseInteger } = options.path
-  const tensorProxy = new TensorProxy(options)
   if(!pathMatch) {
+    const tensorProxy = new TensorProxy(options)
     if(typeOf($arguments[1]) === 'string') {
       const { enumerable, nonenumerable } = options.entities
       const target = tensorProxy.get($target)
@@ -41,7 +41,7 @@ export default function setProperty() {
       const propertyPathMatch = propertyPathMatcher($propertyPath, { separator: '.' })
       if(propertyPathMatch === true) {
         setProperty($target, $propertyPath, $value, {
-          pathMatch: false, pathParseInteger: pathParseInteger
+          path: { pathMatch: false, pathParseInteger: pathParseInteger }
         })
         subtargets.push([$propertyPath, $value])
       }

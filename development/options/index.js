@@ -17,21 +17,18 @@ const PathOptions = ($pathOptions = {}) => Object.assign({
   delimiter: '.', pathMatch: false, 
   pathMatchMax: 100, pathParseInteger: false, 
 }, $pathOptions)
-const RecurseOptions = ($recurseOptions = {}) => (typeof $recurseOptions === 'boolean') ? {
-  ancestors: [], depth: 0, maxDepth: 10, recurse: $recurseOptions
-} : Object.assign({
-  // ancestors: [].concat($recurseOptions.ancestors || []),
-  depth: 0, maxDepth: 10, recurse: true,
-}, $recurseOptions, {
-  ancestors: [].concat($recurseOptions.ancestors || [])
-})
+const RecurseOptions = ($recurseOptions = {}) => { 
+  return Object.assign({ depth: 0, maxDepth: 10 }, $recurseOptions, {
+    ancestors: [].concat($recurseOptions.ancestors || [])
+  })
+}
 const TensorOptions = ($tensorOptions = {}) => Object.assign({
-  getters: [Getters.Object, Getters.Map, /* Getters.Set */],
-  setters: [Setters.Object, Setters.Map, /* Setters.Set */],
-  deleters: [Deleters.Object, Deleters.Map, /* Deleters.Set */],
-  typeValidators: [TypeValidators.Object, TypeValidators.Map, /* TypeValidators.Set */],
-  returners: [Returners.Object, Returners.Map, /* Returners.Set */],
-}, $tensorOptions)
+  getters: $tensorOptions.getters || [Getters.Object, Getters.Map, /* Getters.Set */],
+  setters: $tensorOptions.setters || [Setters.Object, Setters.Map, /* Setters.Set */],
+  deleters: $tensorOptions.deleters || [Deleters.Object, Deleters.Map, /* Deleters.Set */],
+  typeValidators: $tensorOptions.typeValidators || [TypeValidators.Object, TypeValidators.Map, /* TypeValidators.Set */],
+  returners: $tensorOptions.returners || [Returners.Object, Returners.Map, /* Returners.Set */],
+})
 const MethodOptions = {
   map: {
     get: {}, set: {}, delete: {},
@@ -49,41 +46,23 @@ const MethodOptions = {
       sealed: false, type: false, typeCoercion: false, 
     },
     isArrayLike: { strict: false }, isMapLike: { strict: false },
-    keys: {}, seal: {}, toString: { space: 0, replacer: null }, values: {},
+    keys: {}, seal: {}, toString: { space: 0, replacer: null }, valueOf: {},
   },
   utilities: {
     typedObjectLiteral: { resemble: false },
   },
 }
-class Defaults {
-  #options
-  constructor($options = {}) {
-    this.#options = $options
-  }
-  get path() { return Object.defineProperty(this, 'path', {
-    value: PathOptions(this.#options.path)
-  })['path'] }
-  set path($path) { return this.path }
-  get tensors() { return Object.defineProperty(this, 'tensors', {
-    value: TensorOptions(this.#options.tensors)
-  })['tensors'] }
-  set tensors($tensors) { return this.tensors }
-  get recurse() { return Object.defineProperty(this, 'recurse', {
-    writable: true, value: RecurseOptions(this.#options.recurse)
-  })['recurse'] }
-  set recurse($recurse) { return Object.assign(this.recurse, $recurse) }
-  get assignments() { return Object.defineProperty(this, 'assignments', {
-    value: AssignmentOptions(this.#options.assignments)
-  })['assignments'] }
-  set assignments($assignments = {}) { return Object.assign(this.assignments, $assignments) }
-  get entities() { return Object.defineProperty(this, 'entities', {
-    value: EntityOptions(this.#options.entities)
-  })['entities'] }
-  set entities($entities = {}) { return Object.assign(this.entities, $entities) }
-}
+const Defaults = ($options) => Object.assign($options, {
+  assignments: AssignmentOptions($options.assignments),
+  entities: EntityOptions($options.entities),
+  path: PathOptions($options.path),
+  recurse: RecurseOptions($options.recurse),
+  tensors: TensorOptions($options.tensors),
+})
 function Options($classGroup, $methodName, $options) {
   const methodOptions = MethodOptions[$classGroup][$methodName]
-  const defaultOptions = new Defaults($options)
-  return Object.assign(defaultOptions, methodOptions, $options)
+  const defaultOptions = Defaults($options)
+  const options = Object.assign(defaultOptions, methodOptions, $options)
+  return Object.assign({}, options)
 }
 export { Defaults, Options }

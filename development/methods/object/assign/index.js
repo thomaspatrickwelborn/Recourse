@@ -4,16 +4,18 @@ import { TensorProxy } from '../../../tensors/index.js'
 import { PropertyAssigner } from '../../../tensors/property.js'
 import entities from '../entities/index.js'
 import { Options, Defaults } from '../../../options/index.js'
-export default function assign($target, $options = {}, ...$sources) {
+export default function assign($target, $options, ...$sources) {
   if(!$target) { return $target}
-  const options = Options('object', 'assign', $options)
+  const options = Options('object', 'assign', $options || {})
   const { assignments } = options
   const tensorProxy = new TensorProxy(options)
   const typeOfTarget = typeOf($target)
   iterateSources: 
   for(const $source of $sources) {
     if(!ObjectKeys.includes(typeOf($source))) continue iterateSources
-    const sourceEntries = entities($source, 'entries', Object.assign({}, options, { recurse: false }))
+    const sourceEntries = entities($source, 'entries', {
+      entities: options.entities , recurse: { maxDepth: 1 }, tensors: options.tensors
+    })
     iterateSourceEntries: 
     for(const [$sourcePropertyKey, $sourcePropertyValue] of sourceEntries) {
       const targetPropertyValue = tensorProxy.get($target, $sourcePropertyKey)

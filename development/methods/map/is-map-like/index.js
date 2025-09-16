@@ -14,7 +14,7 @@ export default function isMapLike($source, $strict = false) {
     else {
       iterateSourceEntries: 
       for(const $sourceEntity of entities(
-        $source, 'entries', { recurse: false }
+        $source, 'entries', { recurse: { maxDepth: 1 } }
       )) {
         if(
           isArrayLike($sourceEntity, $strict) ||

@@ -11,7 +11,7 @@ export default function freeze($target, $options = {}) {
   const target = new TensorProxy(options).get($target)
   if(!ancestors.includes(target)) { ancestors.unshift(target) }
   const targetEntities = entities($target, 'entries', Object.assign(options, {
-    recurse: false
+    recurse: { maxDepth: 1 }
   }))
   iterateTargetEntities: 
   for(const [$propertyKey, $propertyValue] of targetEntities) {

@@ -28,7 +28,7 @@ export default function entities($source, $type, $options = {}) {
     const value = tensorProxy.get($source, $propertyKey)
     const propertyDescriptor = getOwnPropertyDescriptor(
       $source, $propertyKey, Object.assign(
-        {}, options, { recurse: false }
+        {}, options, { recurse: { maxDepth: 1 } }
     ))
     if(!propertyDescriptor) { continue iterateSourcePropertyDescriptors }
     if(
@@ -37,7 +37,7 @@ export default function entities($source, $type, $options = {}) {
     ) {
       const typeOfValue = typeOf(value)
       if(
-        recurse.recurse && 
+        maxDepth > 1 && 
         ObjectKeys.includes(typeOfValue) && 
         !ancestors.includes(value)
       ) {

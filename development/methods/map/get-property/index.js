@@ -5,8 +5,7 @@ import { TensorProxy } from '../../../tensors/index.js'
 import { Options, Defaults } from '../../../options/index.js'
 export default function getProperty($target, $path, $options = {}) {
   const options = Options('map', 'get', $options)
-  const { path } = options
-  const { pathMatch, pathParseInteger } = path
+  const { pathMatch, pathParseInteger } = options.path
   const tensorProxy = new TensorProxy(options)
   if($path === undefined) { return tensorProxy.get($target, options) }
   const subpaths = splitPath($path, pathParseInteger)
@@ -26,7 +25,7 @@ export default function getProperty($target, $path, $options = {}) {
     const subtargets = []
     const compandEntries = compand($target, options)
     const propertyPathMatcher = outmatch($path, { separator: '.' })
-    iterateCompandEntries:
+    iterateCompandEntries: 
     for(const [$propertyPath, $propertyValue] of compandEntries) {
       const propertyPathMatch = propertyPathMatcher($propertyPath, )
       if(propertyPathMatch === true) { subtargets.push([$propertyPath, $propertyValue]) }

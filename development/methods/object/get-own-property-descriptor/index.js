@@ -35,7 +35,7 @@ export default function getOwnPropertyDescriptor($source, $propertyKey, $options
     if(options.type) { propertyDescriptor.type = typeOf(propertyValue) }
     if(options.frozen) { propertyDescriptor.frozen = Object.isFrozen(propertyValue) }
     if(options.sealed) { propertyDescriptor.sealed = Object.isSealed(propertyValue) }
-    if(recurse.recurse && ObjectKeys.includes(typeOf(propertyValue))) {
+    if(maxDepth > 1 && ObjectKeys.includes(typeOf(propertyValue))) {
       propertyDescriptor.value = getOwnPropertyDescriptors(propertyValue, options)
     }
     else {

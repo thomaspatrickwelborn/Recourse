@@ -13,7 +13,7 @@ export default function isArrayLike($source, $strict = false) {
     else {
       iterateSourceKeys: 
       for(const $sourceKey of entities(
-        $source, 'keys', { recurse: false }
+        $source, 'keys', { recurse: { maxDepth: 1 } }
       ).reverse()) {
         const lastIndex = Number($sourceKey)
         if(lastIndex === $source.length - 1) {

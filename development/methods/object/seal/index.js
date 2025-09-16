@@ -6,13 +6,12 @@ import { Options, Defaults } from '../../../options/index.js'
 export default function seal($target, $options = {}) {
   const options = Options('object', 'seal', $options)
   const { recurse } = options
-  const { values } = options.entities
   const { ancestors, maxDepth } = recurse
   if(recurse.depth > maxDepth) { return } else { recurse.depth++ }
   const target = new TensorProxy(options).get($target)
   if(!ancestors.includes(target)) { ancestors.unshift(target) }
   const targetEntities = entities($target, 'entries', Object.assign(options, {
-    recurse: false
+    recurse: { maxDepth: 1 }
   }))
   iterateTargetEntities: 
   for(const [$propertyKey, $propertyValue] of targetEntities) {

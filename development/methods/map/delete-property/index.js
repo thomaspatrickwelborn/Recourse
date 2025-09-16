@@ -5,10 +5,10 @@ import { Options } from '../../../options/index.js'
 import { TensorProxy } from '../../../tensors/index.js'
 import getProperty from '../get-property/index.js'
 export default function deleteProperty($target, $path, $options) {
-  const options = Options('object', 'delete', $options)
+  const options = Options('map', 'delete', $options)
   const { pathMatch, pathParseInteger } = options.path
-  const tensorProxy = new TensorProxy(options)
   if(!pathMatch) {
+    const tensorProxy = new TensorProxy(options)
     const subpaths = splitPath($path, pathParseInteger)
     const key = subpaths.pop()
     const subtarget = getProperty($target, subpaths.join('.'), options) || $target
@@ -23,7 +23,7 @@ export default function deleteProperty($target, $path, $options) {
       const propertyPathMatch = propertyPathMatcher($propertyPath, { separator: '.' })
       if(propertyPathMatch === true) {
         deleteProperty($target, $propertyPath, {
-          pathMatch: false, pathParseInteger: pathParseInteger
+          path: { pathMatch: false, pathParseInteger: pathParseInteger }
         })
         subtargets.push([$propertyPath, undefined])
       }

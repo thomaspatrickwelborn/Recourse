@@ -187,7 +187,7 @@ class Recourse extends EventTarget {
     value: Recourse.typeOf.bind(null, this.target, this.options)
   })['typeOf'] }
   set options($options) { return Object.defineProperty(this, 'options', {
-    value: new Defaults($options)
+    value: Defaults($options)
   })['options'] }
   constructor($target, $options = {}) {
     super()
