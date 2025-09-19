@@ -3,16 +3,16 @@ import getOwnPropertyDescriptor from '../get-own-property-descriptor/index.js'
 import typeOf from '../../../utilities/type-of/index.js'
 import { ObjectKeys } from '../../../variables/index.js'
 import { Options, Defaults } from '../../../options/index.js'
+import isNumerable from '../../../utilities/is-numerable/index.js'
 export default function entities($source, $type, $options = {}) {
   const sourceEntities = []
   const options = Options('object', 'entities', $options)
   const { recurse } = options
   const { enumerable, nonenumerable } = options.entities
   const { pathParseInteger } = options.path
-  const { ancestors, maxDepth } = recurse
-  if(recurse.depth >= maxDepth) { return sourceEntities }
-  else { recurse.depth++ }
-  if(!ancestors.includes($source)) { ancestors.unshift($source) }
+  const { maxDepth } = recurse
+  try { recurse.depth++ } catch($err) { return }
+  try { recurse.ancestors = $source } catch($err) {}
   const tensorProxy = new TensorProxy(options)
   const source = tensorProxy.get($source)
   const propertyDescriptorKeys = (typeOf(source) === 'map')
@@ -28,20 +28,15 @@ export default function entities($source, $type, $options = {}) {
     const value = tensorProxy.get($source, $propertyKey)
     const propertyDescriptor = getOwnPropertyDescriptor(
       $source, $propertyKey, Object.assign(
-        {}, options, { recurse: { maxDepth: 1 } }
+        {}, options, { recurse: { depth: 0, maxDepth: 1 } }
     ))
-    if(!propertyDescriptor) { continue iterateSourcePropertyDescriptors }
-    if(
-      (enumerable && propertyDescriptor.enumerable) ||
-      (nonenumerable && !propertyDescriptor.enumerable)
-    ) {
+    if(isNumerable(options.entities, propertyDescriptor)) {
       const typeOfValue = typeOf(value)
+      try { recurse.ancestors = value } catch($err) { continue iterateSourcePropertyDescriptors }
       if(
         maxDepth > 1 && 
-        ObjectKeys.includes(typeOfValue) && 
-        !ancestors.includes(value)
+        ObjectKeys.includes(typeOfValue)
       ) {
-        ancestors.unshift(value)
         const subentities = entities(value, $type, options)
         if(subentities.length) {
           if($type === 'entries') { sourceEntities.push([$propertyKey, subentities]) }

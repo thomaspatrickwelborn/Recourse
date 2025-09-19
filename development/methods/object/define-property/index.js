@@ -27,7 +27,7 @@ export default function defineProperty($target, $propertyKey, $propertyDescripto
   }
   else if(options.typeCoercion) {
     try { propertyDescriptor.value = new Primitives[propertyDescriptor.type](propertyDescriptorValue) }
-    catch($err) { console.log($err) }
+    catch($err) { console.error($err) }
   }
   Object.defineProperty($target, $propertyKey, propertyDescriptor)
   if(propertyDescriptor.sealed) { Object.seal($target[$propertyKey]) }

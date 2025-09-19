@@ -7,6 +7,9 @@ export default function toString($source, $options = {}) {
   const options = Options('object', 'toString', Object.assign({}, $options, {
     resemble: true, type: true
   }))
+  // console.log(defineProperties(
+  //   typedObjectLiteral($source), getOwnPropertyDescriptors($source, options), options
+  // ))
   return JSON.stringify(
     defineProperties(
       typedObjectLiteral($source), getOwnPropertyDescriptors($source, options), options

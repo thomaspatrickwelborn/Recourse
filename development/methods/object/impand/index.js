@@ -7,10 +7,10 @@ import { Options, Defaults } from '../../../options/index.js'
 export default function impand($source, $property, $options = {}) {
   const options = Options('object', 'impand', $options)
   const { recurse, resemble, strict } = options
-  const { ancestors, maxDepth } = recurse
-  if(recurse.depth > maxDepth) { return } else { recurse.depth++ }
+  const { maxDepth } = recurse
+  try { recurse.depth++ } catch($err) { return }
   const source = new TensorProxy(options).get($source)
-  if(!ancestors.includes(source)) { ancestors.unshift(source) }
+  if(!recurse.ancestors.includes(source)) { recurse.ancestors = source }
   const typeOfProperty = typeOf($property)
   let target = typedObjectLiteral($source, { resemble, strict })
   iterateSourceEntries: 
