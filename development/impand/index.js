@@ -7,14 +7,14 @@ const Options = {
   ancestors: [], 
   getters: [Getters.Object, Getters.Map],
   typeValidators: [TypeValidators.Object, TypeValidators.Map],
-  depth: 0, maxDepth: 10,
+  depth: 0, maxDepth: Infinity,
 }
 export default function impand($source, $property, $options = {}) {
   const options = Object.assign({}, Options, $options, {
     ancestors: Object.assign([], $options.ancestors)
   })
   const { ancestors, values } = options
-  if(options.depth > options.maxDepth) { return } else { options.depth++ }
+  if(options.depth > options.maxDepth) { return {} } else { options.depth++ }
   const source = new Tensors(options.getters, options.typeValidators).cess($source)
   if(!ancestors.includes(source)) { ancestors.unshift(source) }
   const typeOfProperty = typeOf($property)

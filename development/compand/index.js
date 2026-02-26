@@ -5,7 +5,7 @@ const Options = {
   depth: 0, 
   getters: [Getters.Object, Getters.Map],
   typeValidators: [TypeValidators.Object, TypeValidators.Map],
-  maxDepth: 10,
+  maxDepth: Infinity,
   values: false,
   returnValue: 'receiver',
 }

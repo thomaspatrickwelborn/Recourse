@@ -6,37 +6,45 @@ const Options = {
   pathMatch: false,
   pathMatchMaxResults: 1000,
   pathParseInteger: false,
+  maxDepth: Infinity,
   getters: [Getters.Object, Getters.Map],
   typeValidators: [TypeValidators.Object, TypeValidators.Map],
 }
 export default function getProperty() {
   const [$target, $path, $options] = [...arguments]
-  const options = Object.assign ({}, Options, $options)
+  const options = Object.assign({}, Options, $options)
   const getters = new Tensors(options.getters, options.typeValidators)
-  if($path === undefined) { return getters.cess($target, options) }
+  if($path === undefined) {
+    return getters.cess($target, options)
+  }
   const subpaths = splitPath($path, options.pathParseInteger)
+  if(subpaths.length > options.maxDepth) {
+    return undefined
+  }
   if(!options.pathMatch) {
     let subtarget = $target
-    iterateSubpaths: 
-    for(const $subpath of subpaths) {
+    iterateSubpaths: for(const $subpath of subpaths) {
       try {
         subtarget = getters.cess(subtarget, $subpath)
-        if(subtarget === undefined) { break iterateSubpaths } 
+        if(subtarget === undefined) {
+          break iterateSubpaths
+        }
+      } catch($err) {
+        break iterateSubpaths
       }
-      catch($err) { break iterateSubpaths }
     }
     return subtarget
-  }
-  else {
+  } else {
     const subtargets = []
     const compandEntries = compand($target, Object.assign({}, options, { values: true }))
     const propertyPathMatcher = outmatch($path, { separator: '.' })
-    iterateCompandEntries:
-    for(const [$propertyPath, $propertyValue] of compandEntries) {
+    iterateCompandEntries: for(const [$propertyPath, $propertyValue] of compandEntries) {
       const propertyPathMatch = propertyPathMatcher($propertyPath)
-      if(propertyPathMatch === true) { 
-        subtargets.push([$propertyPath, $propertyValue]) 
-        if(subtargets.length >= options.pathMatchMaxResults) { break iterateCompandEntries }
+      if(propertyPathMatch === true) {
+        subtargets.push([$propertyPath, $propertyValue])
+        if(subtargets.length >= options.pathMatchMaxResults) {
+          break iterateCompandEntries
+        }
       }
     }
     return subtargets

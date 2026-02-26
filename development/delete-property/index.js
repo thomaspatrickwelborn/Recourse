@@ -4,8 +4,9 @@ import splitPath from '../split-path/index.js'
 import { TypeValidators, Tensors, Deleters } from '../tensors/index.js'
 const Options = {
   pathMatch: false,
-  pathMatchMax: 100,
-  pathParseInteger: false, 
+  pathMatchMaxResults: 1000,
+  pathParseInteger: false,
+  maxDepth: Infinity,
   deleters: [Deleters.Object, Deleters.Map],
   typeValidators: [TypeValidators.Object, TypeValidators.Map],
 }
@@ -15,6 +16,9 @@ export default function deleteProperty($target, $path, $options) {
   const deleters = new Tensors(options.deleters, options.typeValidators)
   if(!options.pathMatch) {
     const subpaths = splitPath($path, options.pathParseInteger)
+    if(subpaths.length > options.maxDepth) {
+      return false
+    }
     const key = subpaths.pop()
     const subtarget = getProperty($target, subpaths.join('.'), options) || $target
     deleters.cess(subtarget, key)

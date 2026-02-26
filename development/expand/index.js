@@ -4,8 +4,12 @@ import typeOf from '../type-of/index.js'
 import typedObjectLiteral from '../typed-object-literal/index.js'
 import entities from '../entities/index.js'
 const ValidPathTypes = ['string', 'function']
-export default function expand($source, $path, $options = {}) {
-  const options = Object.assign({}, $options)
+const Options = { maxDepth: Infinity }
+export default function expand($source, $path, $options = {}, $depth = 0) {
+  const options = Object.assign({}, Options, $options)
+  if ($depth > options.maxDepth) {
+    return typedObjectLiteral($source)
+  }
   const typeOfPath = typeOf($path)
   const typeOfSource = typeOf($source)
   if(
@@ -18,7 +22,7 @@ export default function expand($source, $path, $options = {}) {
   )) {
     const targetValue = (
       ObjectKeys.includes(typeOf($sourceValue))
-    ) ? expand($sourceValue, $path, options) : $sourceValue
+    ) ? expand($sourceValue, $path, options, $depth + 1) : $sourceValue
     if(typeOfPath === ValidPathTypes[0]) {
       target[$sourceKey] = setProperty({}, $path, targetValue, options)
     }
