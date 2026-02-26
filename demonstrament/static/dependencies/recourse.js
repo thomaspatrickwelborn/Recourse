@@ -949,7 +949,7 @@ function getProperty() {
     const compandEntries = compand($target, Object.assign({}, options, { values: true }));
     const propertyPathMatcher = outmatch($path, { separator: '.' });
     for(const [$propertyPath, $propertyValue] of compandEntries) {
-      const propertyPathMatch = propertyPathMatcher($propertyPath, );
+      const propertyPathMatch = propertyPathMatcher($propertyPath);
       if(propertyPathMatch === true) { subtargets.push([$propertyPath, $propertyValue]); }
     }
     return subtargets

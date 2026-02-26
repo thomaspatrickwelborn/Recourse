@@ -33,7 +33,7 @@ export default function getProperty() {
     const propertyPathMatcher = outmatch($path, { separator: '.' })
     iterateCompandEntries:
     for(const [$propertyPath, $propertyValue] of compandEntries) {
-      const propertyPathMatch = propertyPathMatcher($propertyPath, )
+      const propertyPathMatch = propertyPathMatcher($propertyPath)
       if(propertyPathMatch === true) { subtargets.push([$propertyPath, $propertyValue]) }
     }
     return subtargets
