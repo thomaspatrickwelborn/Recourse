@@ -1,29 +1,38 @@
+import * as tensors from './tensors/index.js'
+
+import splitPath from './split-path/index.js'
+import typedObjectLiteral from './typed-object-literal/index.js'
+import * as variables from './variables/index.js'
+
 import getProperty from './get-property/index.js'
 import setProperty from './set-property/index.js'
 import deleteProperty from './delete-property/index.js'
-import * as tensors from './tensors/index.js'
+
 import expand from './expand/index.js'
 import impand from './impand/index.js'
 import compand from './compand/index.js'
 import decompand from './decompand/index.js'
+
 import assign from './assign/index.js'
 import assignConcat from './assign-concat/index.js'
 import defineProperties from './define-properties/index.js'
 import defineProperty from './define-property/index.js'
+
 import freeze from './freeze/index.js'
 import seal from './seal/index.js'
-import typedObjectLiteral from './typed-object-literal/index.js'
+
 import typeOf from './type-of/index.js'
 import isArrayLike from './is-array-like/index.js'
 import isMapLike from './is-map-like/index.js'
-import * as variables from './variables/index.js'
+
 import keys from './keys/index.js'
 import values from './values/index.js'
 import entries from './entries/index.js'
 import entities from './entities/index.js'
+
 import getOwnPropertyDescriptors from './get-own-property-descriptors/index.js'
 import getOwnPropertyDescriptor from './get-own-property-descriptor/index.js'
-import splitPath from './split-path/index.js'
+
 import toString from './to-string/index.js'
 import valueOf from './value-of/index.js'
 
