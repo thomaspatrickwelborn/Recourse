@@ -14,8 +14,8 @@
    - [`compand`](./document/methods/compand.md)
    - [`decompand`](./document/methods/decompand.md)
  - Mutator Methods
-   - [`assign`](./documents/methods/assign.md)
-   - [`assignConcat`](./documents/methods/assign-concat.md)
+   - [`assign`](./document/methods/assign.md)
+   - [`assignConcat`](./document/methods/assign-concat.md)
    - [`defineProperties`](./document/methods/define-properties.md)
    - `defineProperty` Method
    - [`set`](./document/methods/set.md) 
