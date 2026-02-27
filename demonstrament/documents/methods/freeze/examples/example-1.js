@@ -3,7 +3,6 @@ import * as Recourse from '/dependencies/recourse.js'
 console.log("------------------")
 console.log("Freeze | Example 1")
 console.log("------------------")
-
 const object = {
   propertyA: [{
     propertyB: {
